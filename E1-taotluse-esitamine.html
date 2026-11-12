@@ -1,52 +1,75 @@
 <!doctype html><html lang="et"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>KL-E1 Kutselise kalapüügiloa taotluse esitamine · Kalapüügiloa Epic'ud</title><meta name="robots" content="noindex">
-<style>:root{--bg:#fff;--fg:#1c2430;--mut:#5b6675;--bd:#e2e6ec;--ac:#0b6bcb;--soft:#f4f7fb;--code:#f1f4f8}
-:root[data-theme=dark]{--bg:#10151c;--fg:#e4e9f0;--mut:#9aa6b6;--bd:#27303c;--ac:#6cb2ff;--soft:#171e28;--code:#1b2330}
-@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#10151c;--fg:#e4e9f0;--mut:#9aa6b6;--bd:#27303c;--ac:#6cb2ff;--soft:#171e28;--code:#1b2330}}
-*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:70px}
-body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-a{color:var(--ac)}
-.top{position:sticky;top:0;z-index:20;display:flex;gap:12px;align-items:center;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--bd)}
-.brand{font-weight:700;color:var(--fg);text-decoration:none}.brand small{font-weight:400;color:var(--mut);margin-left:6px}
-#q{margin-left:auto;width:min(320px,40vw);padding:7px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--soft);color:var(--fg)}
-button{background:var(--soft);color:var(--fg);border:1px solid var(--bd);border-radius:8px;padding:6px 10px;cursor:pointer}
+<script>(function(){var r=document.documentElement,t=null;try{t=localStorage.getItem('th')}catch(e){}if(!t)t=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';r.dataset.theme=t;r.classList.toggle('tedi-theme--dark',t==='dark')})()</script>
+<link rel="stylesheet" href="tedi.css"><style>/* Värvid, kirjatüüp ja raadiused tulevad TEDI tokenitest (tedi.css, @tedi-design-system/core).
+   Siin on ainult paigutus ja sait-spetsiifilised osad. Kõvakodeeritud värve ja !important'it ei ole. */
+:root{--hdr:3.5rem;--elev:0 1px 2px var(--general-effect-colors-elevation-general-secondary),0 6px 20px var(--general-effect-colors-elevation-general-secondary)}
+*{box-sizing:border-box}
+html{background:var(--general-surface-secondary);color-scheme:light;scroll-behavior:smooth;scroll-padding-top:calc(var(--hdr) + 1rem)}
+body{margin:0;background:var(--general-surface-secondary);color:var(--general-text-primary);font-family:var(--family-default);font-size:var(--body-regular-size);line-height:1.65}
+a{color:var(--general-text-brand)}
+.top{position:sticky;top:0;z-index:20;display:flex;gap:.75rem;align-items:center;height:var(--hdr);padding:0 1rem;background:var(--general-surface-primary);border-bottom:1px solid var(--general-border-primary);box-shadow:var(--elev)}
+.brand{display:flex;flex-direction:column;line-height:1.2;font-weight:700;color:var(--general-text-primary);text-decoration:none}
+.brand small{font-weight:400;color:var(--general-text-secondary);font-size:.8125rem}
+#q{margin-left:auto;width:min(22rem,40vw);padding:.5rem .75rem;border:1px solid var(--general-border-secondary);border-radius:var(--tedi-radius-03);background:var(--general-surface-primary);color:var(--general-text-primary);font:inherit;font-size:.9rem}
+#q:focus,button:focus-visible,a:focus-visible{outline:2px solid var(--general-border-brand);outline-offset:2px}
+button{background:var(--general-surface-primary);color:var(--general-text-primary);border:1px solid var(--general-border-secondary);border-radius:var(--tedi-radius-03);padding:.4rem .7rem;cursor:pointer;font:inherit}
+button:hover{background:var(--general-state-hover)}
 #menu{display:none}
-.shell{display:grid;grid-template-columns:270px minmax(0,1fr) 220px;max-width:1500px;margin:0 auto}
-.side{position:sticky;top:57px;align-self:start;height:calc(100vh - 57px);overflow:auto;padding:16px;border-right:1px solid var(--bd);font-size:14px}
-.side ul{list-style:none;margin:0;padding:0}.side>ul>li{margin-bottom:6px}.side>ul>li>a{font-weight:600;color:var(--fg);text-decoration:none;display:block;padding:4px 8px;border-radius:6px}
-.side li.active>a{background:var(--soft);color:var(--ac)}
-.sub{display:none;margin:2px 0 6px 10px!important;border-left:2px solid var(--bd)}.active .sub{display:block}
-.sub a{display:block;padding:2px 10px;color:var(--mut);text-decoration:none;font-size:13px}.sub a:hover,.sub a.cur{color:var(--ac)}
-main{padding:24px 40px 60px;min-width:0}article{max-width:860px}
-.toc{position:sticky;top:57px;align-self:start;padding:24px 16px;font-size:13px;max-height:calc(100vh - 57px);overflow:auto}
-.toc ul{list-style:none;padding:0}.toc a{display:block;color:var(--mut);text-decoration:none;padding:2px 0}.toc a:hover{color:var(--ac)}
-h1{font-size:2rem;line-height:1.2}h2{margin-top:2.4em;padding-top:.6em;border-top:1px solid var(--bd)}
-h3{margin-top:2.2em;padding:8px 12px;background:var(--soft);border-left:4px solid var(--ac);border-radius:4px}
+.shell{display:grid;grid-template-columns:17.5rem minmax(0,1fr) 14rem;max-width:96rem;margin:0 auto}
+.side{position:sticky;top:var(--hdr);align-self:start;height:calc(100vh - var(--hdr));overflow:auto;padding:1rem;font-size:.9rem}
+.side ul{list-style:none;margin:0;padding:0}.side>ul>li{margin-bottom:.25rem}
+.side>ul>li>a{display:block;padding:.4rem .7rem;border-radius:var(--tedi-radius-03);font-weight:500;color:var(--general-text-primary);text-decoration:none}
+.side>ul>li>a:hover{background:var(--general-state-hover)}
+.side li.active>a{background:var(--general-surface-brand-secondary);color:var(--general-text-white)}
+.sub{display:none;margin:.2rem 0 .5rem .9rem;border-left:2px solid var(--general-border-primary)}.active .sub{display:block}
+.sub a{display:block;padding:.15rem .75rem;color:var(--general-text-secondary);text-decoration:none;font-size:.8125rem}
+.sub a:hover,.sub a.cur{color:var(--general-text-brand)}.sub a.cur{font-weight:700}
+main{padding:1.5rem 2.5rem 4rem;min-width:0}
+article{max-width:54rem;background:var(--general-surface-primary);border:1px solid var(--general-border-primary);border-radius:var(--tedi-radius-04);padding:2rem 2.5rem;box-shadow:var(--elev)}
+.toc{position:sticky;top:var(--hdr);align-self:start;padding:1.5rem 1rem;font-size:.8125rem;max-height:calc(100vh - var(--hdr));overflow:auto}
+.toc ul{list-style:none;padding:0}.toc a{display:block;color:var(--general-text-secondary);text-decoration:none;padding:.15rem 0}.toc a:hover{color:var(--general-text-brand)}
+h1{font-size:var(--heading-h1-size);line-height:var(--heading-h1-line-height);margin:0 0 .5em}
+h2{font-size:var(--heading-h2-size);margin-top:2.4em;padding-top:.7em;border-top:1px solid var(--general-border-primary)}
+h3{font-size:var(--heading-h3-size);margin-top:2.2em;padding:.5rem .9rem;background:var(--general-surface-brand-quaternary);border-left:.25rem solid var(--general-border-brand);border-radius:var(--tedi-radius-02-default)}
 h4{margin-top:1.6em}
 .anchor{opacity:0;margin-left:-1.1em;padding-right:.3em;text-decoration:none}h2:hover .anchor,h3:hover .anchor,h4:hover .anchor{opacity:.6}
-code{background:var(--code);padding:1px 5px;border-radius:4px;font-size:.88em}
-pre{background:var(--code);padding:14px;border-radius:8px;overflow:auto;border:1px solid var(--bd)}pre code{background:none;padding:0}
-.tw{overflow:auto;margin:1em 0}table{border-collapse:collapse;font-size:14px;min-width:100%}
-th,td{border:1px solid var(--bd);padding:6px 10px;vertical-align:top;text-align:left}th{background:var(--soft)}
-blockquote{margin:1em 0;padding:4px 16px;border-left:4px solid var(--bd);color:var(--mut)}
-.ext{border-bottom:1px dotted var(--mut);cursor:help}
-.hero{margin-bottom:2em}.lead{font-size:1.15rem;color:var(--mut)}
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin:20px 0}
-.card{display:flex;flex-direction:column;gap:6px;padding:16px;border:1px solid var(--bd);border-radius:12px;background:var(--soft);text-decoration:none;color:var(--fg);transition:.15s}
-.card:hover{border-color:var(--ac);transform:translateY(-2px)}.card .k{color:var(--ac);font-weight:700;font-size:13px}.card .m{color:var(--mut);font-size:13px}
-.card.valikuline{border-style:dashed}.card.blokeeritud{opacity:.7;border-style:dashed}
-.btn{display:inline-block;padding:10px 18px;background:var(--ac);color:var(--bg);border-radius:8px;text-decoration:none;font-weight:600}
-.pn{display:flex;justify-content:space-between;margin-top:3em;padding-top:1em;border-top:1px solid var(--bd)}
-footer{margin-top:2em;color:var(--mut);font-size:13px}
-#results{position:fixed;top:56px;right:16px;width:min(520px,calc(100vw - 32px));max-height:70vh;overflow:auto;background:var(--bg);border:1px solid var(--bd);border-radius:10px;box-shadow:0 12px 40px #0004;z-index:30}
-#results a{display:block;padding:10px 14px;border-bottom:1px solid var(--bd);text-decoration:none;color:var(--fg);font-size:14px}#results a:hover{background:var(--soft)}
-#results small{display:block;color:var(--mut)}mark{background:#ffd54a66;color:inherit}
-@media(max-width:1100px){.shell{grid-template-columns:250px minmax(0,1fr)}.toc{display:none}}
-@media(max-width:760px){#menu{display:block}.shell{display:block}.side{display:none;position:fixed;top:57px;left:0;width:84vw;max-width:320px;background:var(--bg);z-index:25;height:calc(100vh - 57px)}body.nav .side{display:block}main{padding:16px}.brand small{display:none}}
-.diagram{margin:1em 0;padding:12px;background:var(--soft);border:1px solid var(--bd);border-radius:10px;overflow:auto;text-align:center}pre.mermaid{background:none;border:0;padding:0;margin:0}
-
-.comp{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap;color:#fff}
-.c-ruuter{background:#1d5fa8}.c-resql{background:#2e7d4f}.c-datamapper{background:#8a5a00}.c-cron{background:#7b3fa0}.c-liquibase{background:#5b6770}.c-service{background:#b23a48}
+code{background:var(--general-surface-tertiary);padding:.05rem .35rem;border-radius:var(--tedi-radius-02-default);font-size:.88em}
+pre{background:var(--general-surface-tertiary);padding:.9rem;border-radius:var(--tedi-radius-03);overflow:auto;border:1px solid var(--general-border-primary)}pre code{background:none;padding:0}
+.tw{overflow:auto;margin:1em 0;border:1px solid var(--general-border-primary);border-radius:var(--tedi-radius-03)}
+table{border-collapse:collapse;font-size:.875rem;min-width:100%}
+th,td{border-bottom:1px solid var(--general-border-primary);padding:.45rem .75rem;vertical-align:top;text-align:left}
+th{background:var(--general-surface-tertiary);font-weight:700}tr:last-child td{border-bottom:0}tbody tr:hover{background:var(--general-state-hover)}
+blockquote{margin:1em 0;padding:.25rem 1rem;border-left:.25rem solid var(--general-status-info-border);background:var(--general-status-info-background-light);color:var(--general-status-info-text);border-radius:0 var(--tedi-radius-03) var(--tedi-radius-03) 0}
+.ext{border-bottom:1px dotted var(--general-text-secondary);cursor:help}
+.hero{margin:-2rem -2.5rem 2rem;padding:2.5rem;background:linear-gradient(135deg,var(--general-surface-brand-primary),var(--general-surface-brand-secondary));color:var(--general-text-white);border-radius:var(--tedi-radius-04) var(--tedi-radius-04) 0 0}
+.hero h1{color:var(--general-text-white)}.lead{font-size:1.15rem;opacity:.92}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap:.9rem;margin:1.5rem 0}
+.card{display:flex;flex-direction:column;gap:.35rem;padding:1rem;border:1px solid var(--general-border-primary);border-radius:var(--tedi-radius-04);background:var(--general-surface-primary);text-decoration:none;color:var(--general-text-primary);transition:box-shadow .15s,transform .15s,border-color .15s}
+.card:hover{border-color:var(--general-border-brand);transform:translateY(-2px);box-shadow:var(--elev)}
+.card .k{color:var(--general-text-brand);font-weight:700;font-size:.8125rem}.card .m{color:var(--general-text-secondary);font-size:.8125rem}
+.card.valikuline{border-style:dashed}.card.blokeeritud{border-style:dashed;border-color:var(--general-status-warning-border);background:var(--general-status-warning-background-light)}
+.btn{display:inline-block;padding:.65rem 1.2rem;background:var(--general-surface-primary);color:var(--general-text-brand);border-radius:var(--tedi-radius-03);text-decoration:none;font-weight:700}
+.btn:hover{background:var(--general-surface-brand-quaternary)}
+.pn{display:flex;justify-content:space-between;max-width:54rem;margin-top:1.5rem}
+.pn a{padding:.5rem .9rem;border:1px solid var(--general-border-primary);border-radius:var(--tedi-radius-03);background:var(--general-surface-primary);text-decoration:none}
+footer{margin-top:1.5rem;color:var(--general-text-secondary);font-size:.8125rem}
+#results{position:fixed;top:calc(var(--hdr) + .25rem);right:1rem;width:min(32rem,calc(100vw - 2rem));max-height:70vh;overflow:auto;background:var(--general-surface-primary);border:1px solid var(--general-border-primary);border-radius:var(--tedi-radius-03);box-shadow:var(--elev);z-index:30}
+#results a{display:block;padding:.6rem .9rem;border-bottom:1px solid var(--general-border-primary);text-decoration:none;color:var(--general-text-primary);font-size:.875rem}#results a:hover{background:var(--general-state-hover)}
+#results small{display:block;color:var(--general-text-secondary)}
+mark{background:var(--general-status-warning-background-light);color:inherit}
+.diagram{margin:1em 0;padding:.75rem;background:var(--general-surface-secondary);border:1px solid var(--general-border-primary);border-radius:var(--tedi-radius-03);overflow:auto;text-align:center}pre.mermaid{background:none;border:0;padding:0;margin:0}
+/* Komponendimärgis: üks vorming kõikjal (tekst, tabel, loend). Värvid on TEDI olekutokenid. */
+.comp{display:inline-block;padding:0 .55em;border:1px solid;border-radius:var(--tedi-radius-08);font-size:.8125em;font-weight:700;line-height:1.5;white-space:nowrap}
+.c-ruuter{background:var(--general-status-info-background-light);color:var(--general-status-info-text);border-color:var(--general-status-info-border)}
+.c-resql{background:var(--general-status-success-background-primary);color:var(--general-status-success-text);border-color:var(--general-status-success-border)}
+.c-datamapper{background:var(--general-status-warning-background-light);color:var(--general-status-warning-text);border-color:var(--general-status-warning-border)}
+.c-cron{background:var(--general-surface-brand-tertiary);color:var(--general-text-brand);border-color:var(--general-border-brand)}
+.c-liquibase{background:var(--general-status-neutral-background-light);color:var(--general-status-neutral-text);border-color:var(--general-status-neutral-border)}
+.c-service{background:var(--general-status-danger-background-primary);color:var(--general-status-danger-text);border-color:var(--general-status-danger-border)}
+@media(max-width:1100px){.shell{grid-template-columns:16rem minmax(0,1fr)}.toc{display:none}}
+@media(max-width:760px){#menu{display:block}.shell{display:block}.side{display:none;position:fixed;top:var(--hdr);left:0;width:84vw;max-width:20rem;background:var(--general-surface-primary);z-index:25;height:calc(100vh - var(--hdr));box-shadow:var(--elev)}body.nav .side{display:block}main{padding:.75rem}article{padding:1.25rem 1rem}.hero{margin:-1.25rem -1rem 1.5rem;padding:1.5rem 1rem}.brand small{display:none}}
+:root.tedi-theme--dark{color-scheme:dark}
 </style></head><body>
 <header class="top"><button id="menu" aria-label="Menüü">☰</button><a class="brand" href="index.html">Kalapüügiloa väljastamine <small>Epic'ud ja Task'id</small></a>
 <input id="q" type="search" placeholder="Otsi (/)" autocomplete="off"><button id="theme" aria-label="Teema">◐</button></header>
@@ -85,7 +108,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <ul>
 <li>Välisregistrid (Rahvastikuregister, Äriregister, Pääsuke, Karistusregister, LAEVIS) võivad olla ajutiselt kättesaamatud: esitamine blokeeritakse, kontrolli läbimist ei eeldata (A-10).</li>
 <li>Esitamisaken ja parameetrite vaikeväärtused on eeldused (A-07, A-14), mida PTA_ADMIN saab muuta.</li>
-<li>MO teenuse karkassi (Ruuter-route&#39;id, Resql-kaust, Liquibase changelog) loob see Task, sest süsteem ehitatakse nullist (MO_DR-01).</li>
+<li>MO teenuse karkassi (<span class="comp c-ruuter">Ruuter</span>-route&#39;id, <span class="comp c-resql">Resql</span>-kaust, <span class="comp c-liquibase">Liquibase</span> changelog) loob see Task, sest süsteem ehitatakse nullist (MO_DR-01).</li>
 </ul>
 <h2 id="mittefunktsionaalsed-nõuded"><a class="anchor" href="#mittefunktsionaalsed-nõuded">#</a>Mittefunktsionaalsed nõuded</h2>
 <p>Ühise ploki järgi (<a href="00-uldkontekst.html">6.2</a>). Esitamise kontrollid (v.a välisregistrid) ≤ 2 s p95 ja lehe API vastus ≤ 500 ms p95 (<a href="00-uldkontekst.html">A-15</a>, väärtused kinnitamata, vt OQ-09).</p>
@@ -189,7 +212,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   LICENCE_ISSUED --&gt; [*]
   CANCELLED --&gt; [*]</pre></div>
 <p><strong>Sub-task&#39;id (komponentide jaotus)</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
-<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td><span class="comp c-liquibase">Liquibase</span></td><td><code>mo/changelog/application.xml</code></td><td>tabelid <code>application</code>, <code>application_state_history</code>, number-järjend</td></tr><tr><td><span class="comp c-ruuter">Ruuter</span></td><td><code>Ruuter.private/mo/application/PATCH/state.yml</code></td><td>sisemine route: kontrollib üleminekut tabelist, kutsub Resqli, audit (AL), avaldab sündmuse</td></tr><tr><td><span class="comp c-resql">Resql</span></td><td><code>mo/GET/allowed-transitions.sql</code>, <code>mo/POST/application-set-state.sql</code></td><td>lubatud üleminekute lugemine; olek + ajalugu ühe CTE-lausega (üks tehing)</td></tr><tr><td><span class="comp c-datamapper">DataMapper</span></td><td><code>mo/application-state-changed-event.hbs</code></td><td><code>ApplicationStateChanged</code> sündmuse payload</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td><span class="comp c-liquibase">Liquibase</span></td><td><code>mo/changelog/application.xml</code></td><td>tabelid <code>application</code>, <code>application_state_history</code>, number-järjend</td></tr><tr><td><span class="comp c-ruuter">Ruuter</span></td><td><code>Ruuter.private/mo/application/PATCH/state.yml</code></td><td>sisemine route: kontrollib üleminekut tabelist, kutsub <span class="comp c-resql">Resqli</span>, audit (AL), avaldab sündmuse</td></tr><tr><td><span class="comp c-resql">Resql</span></td><td><code>mo/GET/allowed-transitions.sql</code>, <code>mo/POST/application-set-state.sql</code></td><td>lubatud üleminekute lugemine; olek + ajalugu ühe CTE-lausega (üks tehing)</td></tr><tr><td><span class="comp c-datamapper">DataMapper</span></td><td><code>mo/application-state-changed-event.hbs</code></td><td><code>ApplicationStateChanged</code> sündmuse payload</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Registreeri menetlustüüp <code>FISHING_LICENCE_APPLICATION</code> menetlustüüpide konfiguratsioonis. Olekud ja lubatud üleminekud on täpselt <a href="00-uldkontekst.html">3.1 tabelis</a>. Üleminekuid kontrollib olekumasin serveris, klient ei saa olekut otse kirjutada.</li>
@@ -333,7 +356,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   M --&gt; UI[&quot;Eeltäidetud vorm&quot;]
   UI --&gt;|&quot;PATCH koos version&quot;| M</pre></div>
 <p><strong>Sub-task&#39;id (komponentide jaotus)</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
-<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td><span class="comp c-liquibase">Liquibase</span></td><td><code>mo/changelog/application-draft.xml</code></td><td>taotluse väljad, <code>requested_opportunity</code>, <code>application_document</code></td></tr><tr><td><span class="comp c-ruuter">Ruuter</span></td><td>`Ruuter.private/mo/application/POST</td><td>GET</td></tr><tr><td><span class="comp c-resql">Resql</span></td><td><code>mo/POST/application-create.sql</code>, <code>application-patch.sql</code>, <code>application-delete.sql</code>, <code>GET/applications-by-party.sql</code></td><td>andmepääs</td></tr><tr><td><span class="comp c-datamapper">DataMapper</span></td><td><code>mo/prefill-from-laevis.hbs</code>, <code>mo/prefill-from-previous.hbs</code></td><td>eeltäite allikate teisendus taotluse vormi struktuuriks</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td><span class="comp c-liquibase">Liquibase</span></td><td><code>mo/changelog/application-draft.xml</code></td><td>taotluse väljad, <code>requested_opportunity</code>, <code>application_document</code></td></tr><tr><td><span class="comp c-ruuter">Ruuter</span></td><td>`<span class="comp c-ruuter">Ruuter</span>.private/mo/application/POST</td><td>GET</td></tr><tr><td><span class="comp c-resql">Resql</span></td><td><code>mo/POST/application-create.sql</code>, <code>application-patch.sql</code>, <code>application-delete.sql</code>, <code>GET/applications-by-party.sql</code></td><td>andmepääs</td></tr><tr><td><span class="comp c-datamapper">DataMapper</span></td><td><code>mo/prefill-from-laevis.hbs</code>, <code>mo/prefill-from-previous.hbs</code></td><td>eeltäite allikate teisendus taotluse vormi struktuuriks</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>API: <code>POST /api/v1/fishing-licence-applications</code>, <code>GET /api/v1/fishing-licence-applications/{id}</code>, <code>PATCH /api/v1/fishing-licence-applications/{id}</code> (osaline uuendus, nõuab <code>If-Match</code>/<code>version</code>), <code>DELETE /api/v1/fishing-licence-applications/{id}</code> (ainult <code>DRAFT</code>, viib olekusse <code>CANCELLED</code> põhjusega <code>DRAFT_DELETED</code>), <code>GET /?party_id=&amp;state=&amp;fishing_year=</code>.</li>
@@ -607,7 +630,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   C --&gt; AL[&quot;Audit ja teavitus&quot;]
   C --&gt; U[&quot;Kasutavad: T05 aken, E2 käivitus, E3 tähtajad&quot;]</pre></div>
 <p><strong>Sub-task&#39;id (komponentide jaotus)</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
-<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td><span class="comp c-liquibase">Liquibase</span></td><td><code>mo/changelog/fishing-year-config.xml</code></td><td>versioonitud tabel <code>fishing_year_config</code></td></tr><tr><td><span class="comp c-ruuter">Ruuter</span></td><td>`Ruuter.private/mo/admin/PUT</td><td>GET/fishing-year-configs.yml`</td></tr><tr><td><span class="comp c-resql">Resql</span></td><td><code>mo/POST/year-config-save.sql</code>, <code>mo/GET/year-config.sql</code></td><td>versioonitud salvestus; vaikeväärtused puuduva rea korral</td></tr><tr><td><span class="comp c-datamapper">DataMapper</span></td><td><code>notify/year-config-changed.hbs</code></td><td>teavitus muudatusest</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td><span class="comp c-liquibase">Liquibase</span></td><td><code>mo/changelog/fishing-year-config.xml</code></td><td>versioonitud tabel <code>fishing_year_config</code></td></tr><tr><td><span class="comp c-ruuter">Ruuter</span></td><td>`<span class="comp c-ruuter">Ruuter</span>.private/mo/admin/PUT</td><td>GET/fishing-year-configs.yml`</td></tr><tr><td><span class="comp c-resql">Resql</span></td><td><code>mo/POST/year-config-save.sql</code>, <code>mo/GET/year-config.sql</code></td><td>versioonitud salvestus; vaikeväärtused puuduva rea korral</td></tr><tr><td><span class="comp c-datamapper">DataMapper</span></td><td><code>notify/year-config-changed.hbs</code></td><td>teavitus muudatusest</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Andmemudel <code>fishing_year_config</code>: <code>fishing_year</code> (unikaalne), P-01…P-09 väärtused, <code>valid_from</code>, <code>changed_by</code>, <code>changed_at</code>, <code>change_reason</code>. Muudatused on versioonitud (vana kirje jääb alles).</li>
@@ -633,8 +656,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <footer>Ettepanek, mitte kinnitatud. Allikas: wiki leht 321262813.</footer></main>
 <aside class="toc"><b>Sellel lehel</b><ul><li><a href="#taust-ja-seosed">Taust ja seosed</a></li><li><a href="#mida-tahame-saavutada">Mida tahame saavutada</a></li><li><a href="#piir">Piir</a></li><li><a href="#vastuvõtukriteeriumid">Vastuvõtukriteeriumid</a></li><li><a href="#vastuvõtutestid">Vastuvõtutestid</a></li><li><a href="#riskid-ja-sõltuvused">Riskid ja sõltuvused</a></li><li><a href="#mittefunktsionaalsed-nõuded">Mittefunktsionaalsed nõuded</a></li><li><a href="#avatud-küsimused-äripoolele">Avatud küsimused äripoolele</a></li></ul></aside></div>
 <script>(function(){
-var r=document.documentElement;try{var t=localStorage.getItem('th');if(t)r.dataset.theme=t}catch(e){}
-document.getElementById('theme').onclick=function(){var d=r.dataset.theme||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');d=d==='dark'?'light':'dark';r.dataset.theme=d;try{localStorage.setItem('th',d)}catch(e){}};
+var r=document.documentElement;function setTheme(d){r.dataset.theme=d;r.classList.toggle('tedi-theme--dark',d==='dark')}
+document.getElementById('theme').onclick=function(){var d=r.dataset.theme||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');d=d==='dark'?'light':'dark';setTheme(d);try{localStorage.setItem('th',d)}catch(e){}};
 document.getElementById('menu').onclick=function(){document.body.classList.toggle('nav')};
 var q=document.getElementById('q'),box=document.getElementById('results'),idx=null;
 function load(){return idx?Promise.resolve(idx):fetch('search.json').then(function(x){return x.json()}).then(function(j){return idx=j})}
