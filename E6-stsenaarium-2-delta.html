@@ -44,6 +44,9 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 @media(max-width:1100px){.shell{grid-template-columns:250px minmax(0,1fr)}.toc{display:none}}
 @media(max-width:760px){#menu{display:block}.shell{display:block}.side{display:none;position:fixed;top:57px;left:0;width:84vw;max-width:320px;background:var(--bg);z-index:25;height:calc(100vh - 57px)}body.nav .side{display:block}main{padding:16px}.brand small{display:none}}
 .diagram{margin:1em 0;padding:12px;background:var(--soft);border:1px solid var(--bd);border-radius:10px;overflow:auto;text-align:center}pre.mermaid{background:none;border:0;padding:0;margin:0}
+
+.comp{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap;color:#fff}
+.c-ruuter{background:#1d5fa8}.c-resql{background:#2e7d4f}.c-datamapper{background:#8a5a00}.c-cron{background:#7b3fa0}.c-liquibase{background:#5b6770}.c-service{background:#b23a48}
 </style></head><body>
 <header class="top"><button id="menu" aria-label="Menüü">☰</button><a class="brand" href="index.html">Kalapüügiloa väljastamine <small>Epic'ud ja Task'id</small></a>
 <input id="q" type="search" placeholder="Otsi (/)" autocomplete="off"><button id="theme" aria-label="Teema">◐</button></header>
@@ -151,7 +154,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   ENG --&gt; OUT[&quot;allocation_result&quot;]
   RS --&gt; LATER[&quot;Reserv ümber reserve_release_date&quot;]</pre></div>
 <p><strong>Sub-task&#39;id (komponentide jaotus)</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
-<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Liquibase</td><td><code>pvt/changelog/new-entrant-reserve.xml</code></td><td><code>new_entrant_reserve_share</code>, <code>reserve_release_date</code></td></tr><tr><td>Teenusemoodul</td><td><code>allocation-engine</code></td><td>mode <code>PROACTIVE</code> (laiendus)</td></tr><tr><td>CronManager</td><td><code>proactive-run.yml</code></td><td>käivitus, kui <code>scenario = PROACTIVE</code></td></tr><tr><td>Ruuter</td><td><code>Ruuter.private/pvt/allocation-run/POST/start-proactive.yml</code></td><td>sama voog mis E2-T04, osalejad taotluseta</td></tr><tr><td>Resql</td><td><code>pvt/GET/participants-by-history.sql</code></td><td>osalejad ajaloo järgi</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td><span class="comp c-liquibase">Liquibase</span></td><td><code>pvt/changelog/new-entrant-reserve.xml</code></td><td><code>new_entrant_reserve_share</code>, <code>reserve_release_date</code></td></tr><tr><td><span class="comp c-service">Teenusemoodul</span></td><td><code>allocation-engine</code></td><td>mode <code>PROACTIVE</code> (laiendus)</td></tr><tr><td><span class="comp c-cron">CronManager</span></td><td><code>proactive-run.yml</code></td><td>käivitus, kui <code>scenario = PROACTIVE</code></td></tr><tr><td><span class="comp c-ruuter">Ruuter</span></td><td><code>Ruuter.private/pvt/allocation-run/POST/allocation-runs.yml</code> (<code>POST /api/v1/internal/allocation-runs</code>, body <code>scenario=PROACTIVE</code>)</td><td>sama voog mis E2-T04, osalejad taotluseta</td></tr><tr><td><span class="comp c-resql">Resql</span></td><td><code>pvt/GET/participants-by-history.sql</code></td><td>osalejad ajaloo järgi</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Lisa <code>catch_opportunity.new_entrant_reserve_share</code> (decimal 0…1, vaikimisi P-14 = 0) ja <code>reserve_release_date</code> (tähtaeg, millal kasutamata reserv ümber jagatakse; vaikimisi puudub, st käsitsi).</li>
@@ -202,9 +205,9 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   MO-&gt;&gt;N: pakkumine koos lingiga
   T-&gt;&gt;MO: avab, autentib
   alt kinnitab
-    T-&gt;&gt;MO: accept -&gt; E3 tasu ja luba
+    T-&gt;&gt;MO: nõustub, E3 tasu ja luba
   else loobub
-    T-&gt;&gt;MO: decline
+    T-&gt;&gt;MO: loobub
   else vaidlustab
     T-&gt;&gt;MO: dispute (E5)
   end">sequenceDiagram
@@ -215,25 +218,25 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   MO-&gt;&gt;N: pakkumine koos lingiga
   T-&gt;&gt;MO: avab, autentib
   alt kinnitab
-    T-&gt;&gt;MO: accept -&gt; E3 tasu ja luba
+    T-&gt;&gt;MO: nõustub, E3 tasu ja luba
   else loobub
-    T-&gt;&gt;MO: decline
+    T-&gt;&gt;MO: loobub
   else vaidlustab
     T-&gt;&gt;MO: dispute (E5)
   end</pre></div>
 <p><strong>Sub-task&#39;id (komponentide jaotus)</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
-<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Ruuter</td><td><code>Ruuter.private/mo/offer/POST/create-offer-based.yml</code>, <code>confirm.yml</code></td><td><code>OFFER_BASED</code> taotlus ja kinnitus</td></tr><tr><td>DataMapper</td><td><code>notify/proactive-offer.hbs</code>, <code>mo/offer-prefill.hbs</code></td><td>teade ja eeltäide</td></tr><tr><td>CronManager</td><td><code>offer-not-accepted.yml</code></td><td>P-05 möödudes <code>CANCELLED(OFFER_NOT_ACCEPTED)</code></td></tr><tr><td>Resql</td><td><code>mo/POST/application-create-offer-based.sql</code></td><td>taotluse loomine</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td><span class="comp c-ruuter">Ruuter</span></td><td><code>Ruuter.private/mo/offer/POST/offer-based-applications.yml</code>, <code>Ruuter.private/mo/application/PATCH/applications.yml</code></td><td><code>OFFER_BASED</code> taotlus ja nõustumine (state)</td></tr><tr><td><span class="comp c-datamapper">DataMapper</span></td><td><code>notify/proactive-offer.hbs</code>, <code>mo/offer-prefill.hbs</code></td><td>teade ja eeltäide</td></tr><tr><td><span class="comp c-cron">CronManager</span></td><td><code>offer-not-accepted.yml</code></td><td>P-05 möödudes <code>CANCELLED(OFFER_NOT_ACCEPTED)</code></td></tr><tr><td><span class="comp c-resql">Resql</span></td><td><code>mo/POST/application-create-offer-based.sql</code></td><td>taotluse loomine</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
-<li>Kinnitatud otsuse järel (E2-T06) loo iga osalejale <strong><code>application</code> tüübiga <code>OFFER_BASED</code></strong> olekusse <code>AWAITING_FEE_PAYMENT</code> (E1-T01 olekumasin kasutab sama; <strong>lisa üleminek <code>OFFER_BASED</code>: loomisel <code>AWAITING_ALLOCATION</code> jäetakse vahele</strong>). <code>requested_opportunity</code> ridu ei ole; <code>allocated_opportunity</code> on pakkumise sisu. Taotluse puuduolevad väljad (kontakt, laev/kalur) eeltäidetakse KOT-ist, LAEVIS-est ja eelmise aasta loast; puudu jääv küsitakse nõustumisel (E3-T01 <code>accept</code> sisend).</li>
-<li><strong>Eelkontroll (A-30):</strong> enne pakkumise loomist käivita CHK-01…CHK-05. <code>FAIL</code> → pakkumist ei looda, jaotus <code>exclusion_reason</code> ja PTA ülesanne. <strong>Järelkontroll:</strong> pärast <code>accept</code>&#39;i korratakse (E1-T04, E3-T04 punkt 3).</li>
+<li>Kinnitatud otsuse järel (E2-T06) loo iga osalejale <strong><code>application</code> tüübiga <code>OFFER_BASED</code></strong> olekusse <code>AWAITING_FEE_PAYMENT</code> (E1-T01 olekumasin kasutab sama; <strong>lisa üleminek <code>OFFER_BASED</code>: loomisel <code>AWAITING_ALLOCATION</code> jäetakse vahele</strong>). <code>requested_opportunity</code> ridu ei ole; <code>allocated_opportunity</code> on pakkumise sisu. Taotluse puuduolevad väljad (kontakt, laev/kalur) eeltäidetakse KOT-ist, LAEVIS-est ja eelmise aasta loast; puudu jääv küsitakse nõustumisel (E3-T01 nõustumise sisend).</li>
+<li><strong>Eelkontroll (A-30):</strong> enne pakkumise loomist käivita CHK-01…CHK-05. <code>FAIL</code> → pakkumist ei looda, jaotus <code>exclusion_reason</code> ja PTA ülesanne. <strong>Järelkontroll:</strong> pärast nõustumist korratakse (E1-T04, E3-T04 punkt 3).</li>
 <li><strong>Teavituse link:</strong> teavitus (<code>offer.available</code>) sisaldab turvalist lingi (juhuslik ühekordne token, 30 päeva, seotud osapoolega). Link viib kalaluba.ee-sse ja nõuab autentimist; token ainult suunab, ei autendi. Linki avades pärast tähtaega: viimane seis.</li>
-<li>E3-T01 <code>accept</code>/<code>decline</code> ja E5 vaie kasutatakse muutmata. <strong>Lisandub:</strong> <code>POST …/offer/confirm</code> (= <code>accept</code>), mille eeldus on taustakontroll edukalt läbitud (E3-T04 punkt 3 jookseb juba nõustumise ajal): <code>FAIL</code> → vastuses <code>ERR_OFFER_NOT_POSSIBLE</code> („Püügivõimaluse saamine ei ole võimalik“) ja olek jääb <code>AWAITING_FEE_PAYMENT</code>, kuni PTA otsustab (ülesanne).</li>
+<li>E3-T01 nõustumine (<code>PUT …/offer/acceptance</code>) ja loobumine (<code>POST …/offer/rejections</code>) ning E5 vaie kasutatakse muutmata. <strong>Lisandub:</strong> pakkumispõhise taotluse nõustumine <code>PUT /api/v1/fishing-licence-applications/{id}/offer/acceptance</code> (sama mis E3-T01), mille eeldus on taustakontroll edukalt läbitud (E3-T04 punkt 3 jookseb juba nõustumise ajal): <code>FAIL</code> → vastuses <code>ERR_OFFER_NOT_POSSIBLE</code> („Püügivõimaluse saamine ei ole võimalik“) ja olek jääb <code>AWAITING_FEE_PAYMENT</code>, kuni PTA otsustab (ülesanne).</li>
 <li><strong>Maksmata püügivõimaluste tühistamine:</strong> E3-T06 töö kehtib ka <code>OFFER_BASED</code> taotlustele (tühistamise põhjus <code>FEE_NOT_PAID</code> või <code>OFFER_NOT_ACCEPTED</code>).</li>
 <li>Taotlustüüp <code>OFFER_BASED</code> on kõigis aruannetes eristatav.</li>
 </ol>
 <p><strong>Vastuvõtutestid.</strong></p>
-<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Pakkumise loomine</strong></td><td>kinnitatud proaktiivne jaotus, osaleja X läbis eelkontrolli</td><td>–</td><td>X-ile on loodud OFFER_BASED taotlus AWAITING_FEE_PAYMENT, allocated_opportunity täidetud ja e-kiri saadetud</td></tr><tr><td><strong>Eelkontroll FAIL</strong></td><td>X CHK-04 FAIL</td><td>–</td><td>pakkumist ei looda ja PTA ülesanne on olemas</td></tr><tr><td><strong>Järelkontroll FAIL nõustumisel</strong></td><td>X läbis eelkontrolli, aga nõustumisel on LAEVIS-e omanik muutunud</td><td>confirm</td><td>ERR_OFFER_NOT_POSSIBLE ja luba ei väljastata</td></tr><tr><td><strong>Link</strong></td><td>–</td><td>X avab lingi</td><td>teda suunatakse autentimisele ja pärast seda tema pakkumisele</td></tr><tr><td><strong>Tühistamine</strong></td><td>X ei teinud midagi P-05-ks</td><td>–</td><td>OFFER_BASED taotlus CANCELLED(OFFER_NOT_ACCEPTED) ja kogus on released_opportunity</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Pakkumise loomine</strong></td><td>kinnitatud proaktiivne jaotus, osaleja X läbis eelkontrolli</td><td>–</td><td>X-ile on loodud OFFER_BASED taotlus AWAITING_FEE_PAYMENT, allocated_opportunity täidetud ja e-kiri saadetud</td></tr><tr><td><strong>Eelkontroll FAIL</strong></td><td>X CHK-04 FAIL</td><td>–</td><td>pakkumist ei looda ja PTA ülesanne on olemas</td></tr><tr><td><strong>Järelkontroll FAIL nõustumisel</strong></td><td>X läbis eelkontrolli, aga nõustumisel on LAEVIS-e omanik muutunud</td><td>nõustub</td><td>ERR_OFFER_NOT_POSSIBLE ja luba ei väljastata</td></tr><tr><td><strong>Link</strong></td><td>–</td><td>X avab lingi</td><td>teda suunatakse autentimisele ja pärast seda tema pakkumisele</td></tr><tr><td><strong>Tühistamine</strong></td><td>X ei teinud midagi P-05-ks</td><td>–</td><td>OFFER_BASED taotlus CANCELLED(OFFER_NOT_ACCEPTED) ja kogus on released_opportunity</td></tr></tbody></table></div>
 <p><strong>Riskid ja sõltuvused.</strong></p>
 <ul>
 <li>Sõltub KL-E6-T01 ja E3-T01…T07 mehhanismidest; vaie kasutab E5 muutmata.</li>
@@ -270,11 +273,11 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   S -- APPLICATION_BASED --&gt; A[&quot;E1 taotlusvoor + E2-T04 käivitus&quot;]
   S -- PROACTIVE --&gt; B[&quot;E6-T01 käivitus, ANNUAL taotlus -&gt; ERR_SCENARIO_NOT_APPLICABLE&quot;]</pre></div>
 <p><strong>Sub-task&#39;id (komponentide jaotus)</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
-<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Liquibase</td><td><code>mo/changelog/scenario-config.xml</code></td><td>veerg <code>fishing_year_config.scenario</code></td></tr><tr><td>Ruuter</td><td><code>Ruuter.private/mo/application/POST/create.yml</code> (muudatus)</td><td><code>ERR_SCENARIO_NOT_APPLICABLE</code> PROACTIVE aastal</td></tr><tr><td>CronManager</td><td><code>allocation-run.yml</code>, <code>proactive-run.yml</code> (tingimus)</td><td>ainult õige stsenaariumi töö käivitub</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td><span class="comp c-liquibase">Liquibase</span></td><td><code>mo/changelog/scenario-config.xml</code></td><td>veerg <code>fishing_year_config.scenario</code></td></tr><tr><td><span class="comp c-ruuter">Ruuter</span></td><td><code>Ruuter.private/mo/application/POST/create.yml</code> (muudatus)</td><td><code>ERR_SCENARIO_NOT_APPLICABLE</code> PROACTIVE aastal</td></tr><tr><td><span class="comp c-cron">CronManager</span></td><td><code>allocation-run.yml</code>, <code>proactive-run.yml</code> (tingimus)</td><td>ainult õige stsenaariumi töö käivitub</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li><code>fishing_year_config.scenario</code> (vaikimisi <code>APPLICATION_BASED</code>).</li>
-<li><code>PROACTIVE</code> aastal: <code>POST /fishing-licence-applications</code> (ANNUAL) annab <code>ERR_SCENARIO_NOT_APPLICABLE</code>, taotlusvooru kuupäevad ei kehti, E2-T04 ajastatud käivitus asendub E6-T01 käivitusega. <code>APPLICATION_BASED</code>: E6 ajastatud tööd ei käivitu.</li>
+<li><code>PROACTIVE</code> aastal: <code>POST /api/v1/fishing-licence-applications</code> (ANNUAL) annab <code>ERR_SCENARIO_NOT_APPLICABLE</code>, taotlusvooru kuupäevad ei kehti, E2-T04 ajastatud käivitus asendub E6-T01 käivitusega. <code>APPLICATION_BASED</code>: E6 ajastatud tööd ei käivitu.</li>
 <li>Andmemudelis ei ole kahe stsenaariumi vahel konflikti: <code>application_type</code> eristab. Aruanded filtreerivad seda.</li>
 <li>Üleminekujuhend dokumendis <code>docs/operations/scenario-switch.md</code>: kontrollnimekiri (õigusmuudatus jõus, parameetrid, test-käivitus enne aasta algust).</li>
 </ol>

@@ -44,6 +44,9 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 @media(max-width:1100px){.shell{grid-template-columns:250px minmax(0,1fr)}.toc{display:none}}
 @media(max-width:760px){#menu{display:block}.shell{display:block}.side{display:none;position:fixed;top:57px;left:0;width:84vw;max-width:320px;background:var(--bg);z-index:25;height:calc(100vh - 57px)}body.nav .side{display:block}main{padding:16px}.brand small{display:none}}
 .diagram{margin:1em 0;padding:12px;background:var(--soft);border:1px solid var(--bd);border-radius:10px;overflow:auto;text-align:center}pre.mermaid{background:none;border:0;padding:0;margin:0}
+
+.comp{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap;color:#fff}
+.c-ruuter{background:#1d5fa8}.c-resql{background:#2e7d4f}.c-datamapper{background:#8a5a00}.c-cron{background:#7b3fa0}.c-liquibase{background:#5b6770}.c-service{background:#b23a48}
 </style></head><body>
 <header class="top"><button id="menu" aria-label="Menüü">☰</button><a class="brand" href="index.html">Kalapüügiloa väljastamine <small>Epic'ud ja Task'id</small></a>
 <input id="q" type="search" placeholder="Otsi (/)" autocomplete="off"><button id="theme" aria-label="Teema">◐</button></header>
@@ -102,7 +105,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   participant V as Kontroll (verify API)
   K-&gt;&gt;R: otsi isik, vaata kaarte
   R--&gt;&gt;K: kaardid (ACTIVE / SUSPENDED)
-  K-&gt;&gt;R: suspend / reactivate + põhjendus + alus
+  K-&gt;&gt;R: PATCH state=SUSPENDED / ACTIVE + põhjendus + alus
   R-&gt;&gt;L: staatuse muutus (üks tehing)
   L-&gt;&gt;N: omanikule teavitus
   V-&gt;&gt;L: kehtivuse kontroll (peatatud = ei kehti)">sequenceDiagram
@@ -113,7 +116,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   participant V as Kontroll (verify API)
   K-&gt;&gt;R: otsi isik, vaata kaarte
   R--&gt;&gt;K: kaardid (ACTIVE / SUSPENDED)
-  K-&gt;&gt;R: suspend / reactivate + põhjendus + alus
+  K-&gt;&gt;R: PATCH state=SUSPENDED / ACTIVE + põhjendus + alus
   R-&gt;&gt;L: staatuse muutus (üks tehing)
   L-&gt;&gt;N: omanikule teavitus
   V-&gt;&gt;L: kehtivuse kontroll (peatatud = ei kehti)</pre></div>
@@ -150,18 +153,18 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   SUSPENDED --&gt; EXPIRED: kehtivus lõppes
   EXPIRED --&gt; [*]</pre></div>
 <p><strong>Sub-task&#39;id (komponentide jaotus)</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
-<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Liquibase</td><td><code>lto/changelog/fishing-card-suspension.xml</code></td><td><code>fishing_card.status</code> laiendus, <code>fishing_card_status_history</code></td></tr><tr><td>Ruuter</td><td><code>Ruuter.public/lto/fishing-card/GET/verify.yml</code></td><td>kehtivuse kontroll (kontrollorganid, avalik number)</td></tr><tr><td>Resql</td><td><code>lto/GET/fishing-card-verify.sql</code>, <code>lto/POST/fishing-card-status-set.sql</code></td><td>kontroll ja olekumuutus koos ajalooga</td></tr><tr><td>DataMapper</td><td><code>lto/fishing-card-verify-view.hbs</code>, <code>notify/fishing-card-suspended.hbs</code>, <code>notify/fishing-card-reactivated.hbs</code></td><td>vastuse kuju ja teavitused</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td><span class="comp c-liquibase">Liquibase</span></td><td><code>lto/changelog/fishing-card-suspension.xml</code></td><td><code>fishing_card.status</code> laiendus, <code>fishing_card_status_history</code></td></tr><tr><td><span class="comp c-ruuter">Ruuter</span></td><td><code>Ruuter.public/lto/fishing-card/GET/list.yml</code> (<code>GET /api/v1/public/fishing-cards?number=…</code>)</td><td>kehtivuse kontroll (kontrollorganid, avalik number)</td></tr><tr><td><span class="comp c-resql">Resql</span></td><td><code>lto/GET/fishing-card-by-number.sql</code>, <code>lto/POST/fishing-card-status-set.sql</code></td><td>kontroll ja olekumuutus koos ajalooga</td></tr><tr><td><span class="comp c-datamapper">DataMapper</span></td><td><code>lto/fishing-card-validity-view.hbs</code>, <code>notify/fishing-card-suspended.hbs</code>, <code>notify/fishing-card-reactivated.hbs</code></td><td>vastuse kuju ja teavitused</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Kaardi staatused: <code>ACTIVE</code>, <code>SUSPENDED</code>, <code>EXPIRED</code> (<a href="00-uldkontekst.html">A-50</a>). Lubatud üleminekud: <code>ACTIVE→SUSPENDED</code>, <code>SUSPENDED→ACTIVE</code>, <code>ACTIVE|SUSPENDED→EXPIRED</code> (kehtivuse lõpp). Muud: <code>ERR_INVALID_STATE_TRANSITION</code>.</li>
 <li>Staatuse muutus on üks tehing: <code>fishing_card.status</code>, rida <code>fishing_card_status_history</code> (<code>from</code>, <code>to</code>, <code>changed_at</code>, <code>changed_by</code>, <code>legal_basis_ref</code>, <code>reason</code>), auditisündmus (AL_UC-01).</li>
-<li><strong>Kehtivuse kontroll:</strong> <code>GET /fishing-cards/verify?number=…</code> tagastab <code>{valid: true|false, status, valid_from, valid_to}</code>. <code>SUSPENDED</code> ja <code>EXPIRED</code> annavad <code>valid=false</code>. Vastuses ei ole isikuandmeid peale kaardi numbri ja nime esimese tähe/perekonnanime lühendi (GDPR, minimaalne andmemaht).</li>
+<li><strong>Kehtivuse kontroll:</strong> <code>GET /api/v1/public/fishing-cards?number=…</code> tagastab kirje <code>{valid: true|false, status, valid_from, valid_to}</code> (otsing numbri järgi, mitte tegusõnaga tee). <code>SUSPENDED</code> ja <code>EXPIRED</code> annavad <code>valid=false</code>. Vastuses ei ole isikuandmeid peale kaardi numbri ja nime esimese tähe/perekonnanime lühendi (GDPR, minimaalne andmemaht).</li>
 <li><strong>BLOKEERITUD (OQ-07):</strong> kas peatatud aeg pikendab kaardi kehtivust, ei ole teada. Kuni vastuseni <code>valid_to</code> taasaktiveerimisel <strong>ei muudeta</strong> (see on andmete mittemuutmine, mitte otsus). Seadistus <code>fishing_card.extend_on_reactivation</code> lisatakse alles pärast vastust.</li>
 <li>Omanik saab teavituse peatamisest ja taasaktiveerimisest (e-post/SMS vastavalt kontaktandmetele), mis sisaldab põhjuse (kohtutäituri põhjendus lühidalt) ja kontakti vaide esitamiseks.</li>
 <li>Kaardi omaniku vaates (kalaluba.ee) kuvatakse olek ja märge „peatatud“ ning peatamise alus.</li>
 </ol>
 <p><strong>Vastuvõtutestid.</strong></p>
-<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Peatatud ei kehti</strong></td><td>kaart SUSPENDED</td><td>verify</td><td>valid=false, status=SUSPENDED</td></tr><tr><td><strong>Aktiivne kehtib</strong></td><td>ACTIVE, valid_to tulevikus</td><td>verify</td><td>valid=true</td></tr><tr><td><strong>Aegunud</strong></td><td>valid_to eile</td><td>verify</td><td>valid=false, EXPIRED</td></tr><tr><td><strong>Ajalugu</strong></td><td>kaart peatatud ja taasaktiveeritud</td><td>–</td><td>history sisaldab kaks rida koos põhjusega</td></tr><tr><td><strong>Lubamatu üleminek</strong></td><td>kaart EXPIRED</td><td>reactivate</td><td>ERR_INVALID_STATE_TRANSITION</td></tr><tr><td>Blokeeritud: <strong>Kehtivus (OQ-07)</strong></td><td>kaardi valid_to 2027-12-31</td><td>peatatud ja taasaktiveeritud</td><td>kuni vastuseni valid_to 2027-12-31, lõplik reegel OQ-07 järgi</td></tr><tr><td><strong>Teavitus</strong></td><td>kaart peatatud</td><td>–</td><td>omanik sai teate põhjusega</td></tr><tr><td><strong>Andmemaht</strong></td><td>–</td><td>verify</td><td>vastuses pole isikukoodi ega täisnime</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Peatatud ei kehti</strong></td><td>kaart SUSPENDED</td><td>verify</td><td>valid=false, status=SUSPENDED</td></tr><tr><td><strong>Aktiivne kehtib</strong></td><td>ACTIVE, valid_to tulevikus</td><td>verify</td><td>valid=true</td></tr><tr><td><strong>Aegunud</strong></td><td>valid_to eile</td><td>verify</td><td>valid=false, EXPIRED</td></tr><tr><td><strong>Ajalugu</strong></td><td>kaart peatatud ja taasaktiveeritud</td><td>–</td><td>history sisaldab kaks rida koos põhjusega</td></tr><tr><td><strong>Lubamatu üleminek</strong></td><td>kaart EXPIRED</td><td>PATCH state=ACTIVE</td><td>ERR_INVALID_STATE_TRANSITION</td></tr><tr><td>Blokeeritud: <strong>Kehtivus (OQ-07)</strong></td><td>kaardi valid_to 2027-12-31</td><td>peatatud ja taasaktiveeritud</td><td>kuni vastuseni valid_to 2027-12-31, lõplik reegel OQ-07 järgi</td></tr><tr><td><strong>Teavitus</strong></td><td>kaart peatatud</td><td>–</td><td>omanik sai teate põhjusega</td></tr><tr><td><strong>Andmemaht</strong></td><td>–</td><td>verify</td><td>vastuses pole isikukoodi ega täisnime</td></tr></tbody></table></div>
 <p><strong>Riskid ja sõltuvused.</strong></p>
 <ul>
 <li>Sõltub E8-T02-st</li>
@@ -194,37 +197,37 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 </ul>
 <p><strong>Diagramm: toiming</strong></p>
 <div class="diagram"><pre class="mermaid" data-src="flowchart TD
-  A[&quot;GET /bailiff/persons/id/fishing-cards&quot;] --&gt; V{&quot;authorised_party BAILIFF ja scope?&quot;}
+  A[&quot;GET /api/v1/bailiff/persons/id/fishing-cards&quot;] --&gt; V{&quot;authorised_party BAILIFF ja scope?&quot;}
   V -- ei --&gt; E[&quot;ERR_NOT_AUTHORISED_PARTY&quot;]
   V -- jah --&gt; L[&quot;Kaardid ja olek&quot;]
-  L --&gt; T[&quot;POST .../suspend või .../reactivate&quot;]
+  L --&gt; T[&quot;PATCH /api/v1/fishing-cards/id state=SUSPENDED või ACTIVE&quot;]
   T --&gt; P{&quot;bailiff_confirmation_required?&quot;}
   P -- &quot;false (OQ-06 vastusel)&quot; --&gt; APPLY[&quot;T02 staatuse muutus kohe&quot;]
   P -- &quot;true (vaikimisi)&quot; --&gt; CONF[&quot;PTA ülesanne kinnitamiseks&quot;]
   CONF --&gt; APPLY
   APPLY --&gt; N[&quot;Teavitus omanikule&quot;]">flowchart TD
-  A[&quot;GET /bailiff/persons/id/fishing-cards&quot;] --&gt; V{&quot;authorised_party BAILIFF ja scope?&quot;}
+  A[&quot;GET /api/v1/bailiff/persons/id/fishing-cards&quot;] --&gt; V{&quot;authorised_party BAILIFF ja scope?&quot;}
   V -- ei --&gt; E[&quot;ERR_NOT_AUTHORISED_PARTY&quot;]
   V -- jah --&gt; L[&quot;Kaardid ja olek&quot;]
-  L --&gt; T[&quot;POST .../suspend või .../reactivate&quot;]
+  L --&gt; T[&quot;PATCH /api/v1/fishing-cards/id state=SUSPENDED või ACTIVE&quot;]
   T --&gt; P{&quot;bailiff_confirmation_required?&quot;}
   P -- &quot;false (OQ-06 vastusel)&quot; --&gt; APPLY[&quot;T02 staatuse muutus kohe&quot;]
   P -- &quot;true (vaikimisi)&quot; --&gt; CONF[&quot;PTA ülesanne kinnitamiseks&quot;]
   CONF --&gt; APPLY
   APPLY --&gt; N[&quot;Teavitus omanikule&quot;]</pre></div>
 <p><strong>Sub-task&#39;id (komponentide jaotus)</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
-<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Ruuter</td><td><code>Ruuter.private/lto/fishing-card/GET/bailiff-list.yml</code>, <code>POST/suspend.yml</code>, <code>POST/reactivate.yml</code>, <code>POST/confirm.yml</code></td><td>vaade, toimingud, valikuline kinnitus</td></tr><tr><td>Resql</td><td><code>lto/GET/fishing-cards-by-person.sql</code>, <code>lto/POST/fishing-card-action-create.sql</code></td><td>andmepääs</td></tr><tr><td>DataMapper</td><td><code>lto/bailiff-card-view.hbs</code></td><td>kaartide vaade</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td><span class="comp c-ruuter">Ruuter</span></td><td><code>Ruuter.private/lto/fishing-card/GET/bailiff-list.yml</code>, <code>PATCH/state.yml</code>, <code>POST/confirmations.yml</code></td><td>vaade, olekumuutus (peatamine ja taasaktiveerimine), valikuline kinnitus</td></tr><tr><td><span class="comp c-resql">Resql</span></td><td><code>lto/GET/fishing-cards-by-person.sql</code>, <code>lto/POST/fishing-card-action-create.sql</code></td><td>andmepääs</td></tr><tr><td><span class="comp c-datamapper">DataMapper</span></td><td><code>lto/bailiff-card-view.hbs</code></td><td>kaartide vaade</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li><strong>Õigus.</strong> Roll <code>BAILIFF</code> (kirje <code>authorised_party</code>, <a href="E11-kalapuugiloa-peatamine.html">E11-T02</a> mudel, <a href="00-uldkontekst.html">A-42</a>). Kohtutäitur näeb ainult isikuid, kelle suhtes tal on aktiivne <code>scope</code> (menetluse number). Päringud logitakse (kes, millal, kelle andmeid) ja on auditeeritavad.</li>
-<li><code>GET /bailiff/persons/{person_id}/fishing-cards</code> (otsing isikukoodi järgi): kaardid (number, tootekood/veekogu, olek, kehtivus). Muud isikuandmed ei kuvata.</li>
-<li><code>POST /fishing-cards/{id}/suspend</code> ja <code>…/reactivate</code>, body <code>{&quot;legal_basis_ref&quot;:&quot;täitemenetluse number või kohtuotsuse viide&quot;,&quot;reason&quot;:&quot;≥ 10 märki&quot;,&quot;document_id&quot;:&quot;DF viide&quot;?}</code>. Põhjendus ja alus on kohustuslikud. Blokeeritud: <strong>OQ-06:</strong> vaikeväärtus on kuni vastuseni <code>true</code> (AS-IS). Kui <code>decision.bailiff_confirmation_required=false</code>, kutsutakse kohe <a href="#kl-e13-t02-kalastuskaardi-staatus-ja-mõju">T02</a> staatuse muutus. Kui <code>true</code>, luuakse PTA ülesanne <code>POST …/confirm</code> jaoks ja staatus muutub alles pärast kinnitust.</li>
+<li><code>GET /api/v1/bailiff/persons/{person_id}/fishing-cards</code> (otsing isikukoodi järgi): kaardid (number, tootekood/veekogu, olek, kehtivus). Muud isikuandmed ei kuvata.</li>
+<li><code>PATCH /api/v1/fishing-cards/{id}</code> (peatamisel <code>state=SUSPENDED</code>, taasaktiveerimisel <code>state=ACTIVE</code>), body <code>{&quot;state&quot;:&quot;…&quot;,&quot;legal_basis_ref&quot;:&quot;täitemenetluse number või kohtuotsuse viide&quot;,&quot;reason&quot;:&quot;≥ 10 märki&quot;,&quot;document_id&quot;:&quot;DF viide&quot;?}</code>. Põhjendus ja alus on kohustuslikud. Blokeeritud: <strong>OQ-06:</strong> vaikeväärtus on kuni vastuseni <code>true</code> (AS-IS). Kui <code>decision.bailiff_confirmation_required=false</code>, kutsutakse kohe <a href="#kl-e13-t02-kalastuskaardi-staatus-ja-mõju">T02</a> staatuse muutus. Kui <code>true</code>, luuakse PTA ülesanne kinnituse jaoks (<code>PATCH</code> vastab <code>202</code> ja loob <code>fishing_card_action</code> oleku <code>PENDING</code>; PTA kinnitab <code>POST /api/v1/fishing-card-actions/{id}/confirmations</code>) ja staatus muutub alles pärast kinnitust.</li>
 <li>Toimingu kinnitamiseks kuvatakse eelvaade (kaart, tegevus, põhjendus), seejärel <code>confirm_token</code>, millega kohtutäitur kinnitab (kaitse juhusliku vajutuse vastu).</li>
 <li>Taasaktiveerimiseks sobib ainult kaart, mis on <code>SUSPENDED</code>. <strong>BLOKEERITUD (OQ-08):</strong> kes võib taasaktiveerida (sama menetluse alusel peatanud kohtutäitur, mõni teine kohtutäitur, PTA), on tellija vastuseta. Kuni vastuseni lubatakse taasaktiveerida ainult <code>PTA_OFFICER</code>il, kohtutäituri taasaktiveerimine tagastab <code>ERR_NOT_IMPLEMENTED_PENDING_DECISION</code>.</li>
 <li>Teavitus omanikule (T02). Kohtutäitur saab kinnituse oma vaates.</li>
 </ol>
 <p><strong>Vastuvõtutestid.</strong></p>
-<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Peatamine, kinnituseta (lüliti false)</strong></td><td>BAILIFF, scope olemas, kaart ACTIVE, lüliti false</td><td>suspend koos põhjenduse ja alusega</td><td>kaart SUSPENDED kohe, omanik teavitatud</td></tr><tr><td><strong>Taasaktiveerimine PTA poolt</strong></td><td>kaart SUSPENDED, roll PTA_OFFICER</td><td>reactivate</td><td>kaart ACTIVE</td></tr><tr><td><strong>Vale scope</strong></td><td>kohtutäituril pole scope&#39;i isiku suhtes</td><td>GET</td><td>ERR_NOT_AUTHORISED_PARTY, päring on logis</td></tr><tr><td><strong>Põhjendus puudub</strong></td><td>–</td><td>suspend</td><td>ERR_VALIDATION</td></tr><tr><td>Blokeeritud: <strong>Kohtutäitur taasaktiveerib (OQ-08)</strong></td><td>kaart SUSPENDED</td><td>BAILIFF reactivate</td><td>ERR_NOT_IMPLEMENTED_PENDING_DECISION kuni OQ-08 vastuseni</td></tr><tr><td><strong>Kinnitus nõutud (vaikimisi kuni OQ-06)</strong></td><td>bailiff_confirmation_required=true</td><td>suspend</td><td>PTA ülesanne ja kaart jääb ACTIVE kuni confirm</td></tr><tr><td><strong>Kinnitamata kuni</strong></td><td>–</td><td>PTA kinnitab</td><td>kaart SUSPENDED</td></tr><tr><td><strong>Loogimine</strong></td><td>–</td><td>mis tahes päring</td><td>kirje logis: kes, millal, isik</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Peatamine, kinnituseta (lüliti false)</strong></td><td>BAILIFF, scope olemas, kaart ACTIVE, lüliti false</td><td>PATCH state=SUSPENDED koos põhjenduse ja alusega</td><td>kaart SUSPENDED kohe, omanik teavitatud</td></tr><tr><td><strong>Taasaktiveerimine PTA poolt</strong></td><td>kaart SUSPENDED, roll PTA_OFFICER</td><td>PATCH state=ACTIVE</td><td>kaart ACTIVE</td></tr><tr><td><strong>Vale scope</strong></td><td>kohtutäituril pole scope&#39;i isiku suhtes</td><td>GET</td><td>ERR_NOT_AUTHORISED_PARTY, päring on logis</td></tr><tr><td><strong>Põhjendus puudub</strong></td><td>–</td><td>PATCH state=SUSPENDED</td><td>ERR_VALIDATION</td></tr><tr><td>Blokeeritud: <strong>Kohtutäitur taasaktiveerib (OQ-08)</strong></td><td>kaart SUSPENDED</td><td>BAILIFF PATCH state=ACTIVE</td><td>ERR_NOT_IMPLEMENTED_PENDING_DECISION kuni OQ-08 vastuseni</td></tr><tr><td><strong>Kinnitus nõutud (vaikimisi kuni OQ-06)</strong></td><td>bailiff_confirmation_required=true</td><td>PATCH state=SUSPENDED</td><td>PTA ülesanne ja kaart jääb ACTIVE kuni PTA kinnituse</td></tr><tr><td><strong>Kinnitamata kuni</strong></td><td>–</td><td>PTA kinnitab</td><td>kaart SUSPENDED</td></tr><tr><td><strong>Loogimine</strong></td><td>–</td><td>mis tahes päring</td><td>kirje logis: kes, millal, isik</td></tr></tbody></table></div>
 <p><strong>Riskid ja sõltuvused.</strong></p>
 <ul>
 <li>Blokeeriv risk: OQ-06 ja OQ-08 vastuseta</li>

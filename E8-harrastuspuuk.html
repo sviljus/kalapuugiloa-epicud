@@ -44,6 +44,9 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 @media(max-width:1100px){.shell{grid-template-columns:250px minmax(0,1fr)}.toc{display:none}}
 @media(max-width:760px){#menu{display:block}.shell{display:block}.side{display:none;position:fixed;top:57px;left:0;width:84vw;max-width:320px;background:var(--bg);z-index:25;height:calc(100vh - 57px)}body.nav .side{display:block}main{padding:16px}.brand small{display:none}}
 .diagram{margin:1em 0;padding:12px;background:var(--soft);border:1px solid var(--bd);border-radius:10px;overflow:auto;text-align:center}pre.mermaid{background:none;border:0;padding:0;margin:0}
+
+.comp{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap;color:#fff}
+.c-ruuter{background:#1d5fa8}.c-resql{background:#2e7d4f}.c-datamapper{background:#8a5a00}.c-cron{background:#7b3fa0}.c-liquibase{background:#5b6770}.c-service{background:#b23a48}
 </style></head><body>
 <header class="top"><button id="menu" aria-label="Menüü">☰</button><a class="brand" href="index.html">Kalapüügiloa väljastamine <small>Epic'ud ja Task'id</small></a>
 <input id="q" type="search" placeholder="Otsi (/)" autocomplete="off"><button id="theme" aria-label="Teema">◐</button></header>
@@ -152,12 +155,12 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   S-&gt;&gt;PVT: õigusaktis määratud kuupäev
   PVT-&gt;&gt;P: avalikusta</pre></div>
 <p><strong>Sub-task&#39;id (komponentide jaotus)</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
-<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Liquibase</td><td><code>pvt/changelog/recreational-opportunity.xml</code></td><td><code>recreational_opportunity</code>, <code>opportunity_base</code></td></tr><tr><td>Ruuter</td><td>`Ruuter.private/pvt/recreational/POST</td><td>PUT/*.yml<code>, </code>Ruuter.public/pvt/recreational/GET/list.yml`</td></tr><tr><td>CronManager</td><td><code>recreational-publish.yml</code></td><td>avalikustamine määratud kuupäeval</td></tr><tr><td>Resql</td><td><code>pvt/GET/recreational-public.sql</code>, <code>POST/recreational-upsert.sql</code></td><td>andmepääs</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td><span class="comp c-liquibase">Liquibase</span></td><td><code>pvt/changelog/recreational-opportunity.xml</code></td><td><code>recreational_opportunity</code>, <code>opportunity_base</code></td></tr><tr><td><span class="comp c-ruuter">Ruuter</span></td><td><code>Ruuter.private/pvt/recreational/POST/recreational-opportunities.yml</code>, <code>PUT/recreational-opportunities.yml</code>, <code>PATCH/state.yml</code>, <code>POST/imports.yml</code>, <code>Ruuter.public/pvt/recreational/GET/recreational-opportunities.yml</code></td><td>haldus ja avalik loend</td></tr><tr><td><span class="comp c-cron">CronManager</span></td><td><code>recreational-publish.yml</code></td><td>avalikustamine määratud kuupäeval</td></tr><tr><td><span class="comp c-resql">Resql</span></td><td><code>pvt/GET/recreational-public.sql</code>, <code>POST/recreational-upsert.sql</code></td><td>andmepääs</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Andmemudel <code>recreational_opportunity</code> (PVT, teise tüübina E2-T01 <code>catch_opportunity</code> kõrval, ühise baastabeliga <code>opportunity_base</code> vastavalt PVT_DR-02): <code>id</code>, <code>season</code> (aasta või <code>valid_from</code>/<code>valid_to</code>), <code>product_code</code> (tootekood), <code>water_area_code</code>, <code>water_body_code</code> (veekogu, Eesti looduse infosüsteemi registrikood), <code>gear_type_code</code>, <code>gear_count_limit</code> (lubatud püügivahendite arv kaardi kohta), <code>angler_limit</code> (püüdjate piirarv; <code>null</code> = piirarvuta), <code>conditions</code> (tekst + koodid), <code>price_cents</code> (viide tasumäärale, T02), <code>publish_at</code> (avalikustamise aeg), <code>status</code> (<code>DRAFT</code>, <code>APPROVED</code>, <code>PUBLISHED</code>, <code>CLOSED</code>), <code>version</code>.</li>
-<li>API ametnikule (<code>KEA_OFFICER</code>): <code>POST/PUT /admin/recreational-opportunities</code>, <code>POST …/{id}/approve</code> (<code>DRAFT→APPROVED</code>), massimport CSV (<code>POST …/import</code>, kõik-või-mitte-midagi, kuna uue hooaja kirjeid on palju). Neli silma ei ole nõutud (wikis puudub).</li>
-<li><code>publish_at</code> vaikimisi sisestatakse ametniku poolt (õigusakti kuupäev); <code>SYSTEM</code> ajastatud töö (iga minut) muudab <code>APPROVED</code> kirjed, mille <code>publish_at ≤ now</code>, olekusse <code>PUBLISHED</code>. Avaldatud kirjed on nähtavad kalaluba.ee API-s (<code>GET /public/recreational-opportunities?season=</code>), ilma autentimiseta.</li>
+<li>API ametnikule (<code>KEA_OFFICER</code>): <code>POST /api/v1/admin/recreational-opportunities</code> (loo), <code>PUT /api/v1/admin/recreational-opportunities/{id}</code> (asenda), <code>PATCH /api/v1/admin/recreational-opportunities/{id}</code> body <code>{&quot;state&quot;:&quot;APPROVED&quot;}</code> (<code>DRAFT→APPROVED</code>), massimport CSV (<code>POST /api/v1/admin/recreational-opportunity-imports</code>, kõik-või-mitte-midagi, kuna uue hooaja kirjeid on palju). Neli silma ei ole nõutud (wikis puudub).</li>
+<li><code>publish_at</code> vaikimisi sisestatakse ametniku poolt (õigusakti kuupäev); <code>SYSTEM</code> ajastatud töö (iga minut) muudab <code>APPROVED</code> kirjed, mille <code>publish_at ≤ now</code>, olekusse <code>PUBLISHED</code>. Avaldatud kirjed on nähtavad kalaluba.ee API-s (<code>GET /api/v1/public/recreational-opportunities?season=</code>), ilma autentimiseta.</li>
 <li><code>PUBLISHED</code> kirjeid ei kustutata, ainult <code>CLOSED</code> (PVT_UC-03). Piirarvu või hinda <strong>ei muudeta</strong> pärast esimest müüki (<code>ERR_OPPORTUNITY_IN_USE</code>), ainult sulgemine ja uus kirje.</li>
 <li>Audit ja versioon (PVT_DR-04/07).</li>
 </ol>
@@ -165,7 +168,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Lisamine ja kinnitus</strong></td><td>–</td><td>ametnik loob kirje ja kinnitab, publish_at=2027-01-01 00:00</td><td>status APPROVED ja avalikuks ei muutu enne publish_at</td></tr><tr><td><strong>Automaatne avalikustamine</strong></td><td>APPROVED kirje, publish_at=2027-01-01 00:00</td><td>on 2027-01-01 00:00:30</td><td>PUBLISHED ja nähtav avalikus API-s</td></tr><tr><td><strong>CSV import</strong></td><td>–</td><td>üks rida on vigane</td><td>midagi ei laadita ja ridade vead on tagastatud</td></tr><tr><td><strong>Piirarv pärast müüki</strong></td><td>kalastuskaarte on müüdud</td><td>angler_limit muudetakse</td><td>ERR_OPPORTUNITY_IN_USE</td></tr><tr><td><strong>Piirarvuta</strong></td><td>angler_limit=null</td><td>–</td><td>kirje on piirarvuta ja T02 ei kontrolli saadavust</td></tr><tr><td><strong>Õigused</strong></td><td>–</td><td>APPLICANT proovib luua</td><td>ERR_FORBIDDEN</td></tr></tbody></table></div>
 <p><strong>Riskid ja sõltuvused.</strong></p>
 <ul>
-<li>Sõltub PVT teenuse karkassist (E2-T01 samas teenuses).</li>
+<li>PVT teenuse karkassi loob KL-E2-T01.</li>
 <li>Avalikustamise kuupäev tuleb õigusaktist ja on kirje andmeväli.</li>
 </ul>
 <p><strong>Mittefunktsionaalsed nõuded.</strong> Ühise ploki järgi (<a href="00-uldkontekst.html">6.2</a>).</p>
@@ -173,7 +176,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <ul>
 <li>Puuduvad.</li>
 </ul>
-<p><strong>Eeldused.</strong> A-12, A-14. <strong>Sõltub:</strong> PVT teenuse karkass (E2-T01 samas teenuses).</p>
+<p><strong>Eeldused.</strong> A-12, A-14. <strong>Sõltub:</strong> KL-E2-T01 (PVT teenuse karkass).</p>
 <hr>
 <h3 id="kl-e8-t02-kalastuskaardi-soetamine-to-be-07"><a class="anchor" href="#kl-e8-t02-kalastuskaardi-soetamine-to-be-07">#</a>KL-E8-T02 Kalastuskaardi soetamine (TO-BE.07)</h3>
 <p><strong>Parent Epic:</strong> KL-E8</p>
@@ -204,7 +207,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   participant LTO as LTO
   participant PVT as PVT
   participant PAY as Makse
-  K-&gt;&gt;LTO: POST fishing-cards/orders
+  K-&gt;&gt;LTO: POST /api/v1/fishing-cards/orders
   LTO-&gt;&gt;PVT: piirarvu kontroll ja reserveerimine
   LTO-&gt;&gt;PAY: maksekorraldus
   PAY--&gt;&gt;LTO: PAID
@@ -214,23 +217,23 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   participant LTO as LTO
   participant PVT as PVT
   participant PAY as Makse
-  K-&gt;&gt;LTO: POST fishing-cards/orders
+  K-&gt;&gt;LTO: POST /api/v1/fishing-cards/orders
   LTO-&gt;&gt;PVT: piirarvu kontroll ja reserveerimine
   LTO-&gt;&gt;PAY: maksekorraldus
   PAY--&gt;&gt;LTO: PAID
   LTO-&gt;&gt;LTO: kaart kehtivaks valid_from alusel
   LTO--&gt;&gt;K: elektrooniline kaart</pre></div>
 <p><strong>Sub-task&#39;id (komponentide jaotus)</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
-<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Ruuter</td><td><code>Ruuter.public/lto/fishing-card/POST/order.yml</code></td><td>tellimus; piirarvu kontroll; makse; kaart</td></tr><tr><td>Resql</td><td><code>pvt/POST/recreational-reserve.sql</code>, <code>lto/POST/fishing-card-create.sql</code></td><td>reserveerimine ja kaart</td></tr><tr><td>DataMapper</td><td><code>lto/fishing-card-document.hbs</code>, <code>notify/fishing-card.hbs</code></td><td>kaardi andmed ja teavitus</td></tr><tr><td>CronManager</td><td><code>fishing-card-reservation-expire.yml</code></td><td>vabastab maksmata reservatsioonid</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td><span class="comp c-ruuter">Ruuter</span></td><td><code>Ruuter.public/lto/fishing-card/POST/orders.yml</code></td><td>tellimus; piirarvu kontroll; makse; kaart</td></tr><tr><td><span class="comp c-resql">Resql</span></td><td><code>pvt/POST/recreational-reserve.sql</code>, <code>lto/POST/fishing-card-create.sql</code></td><td>reserveerimine ja kaart</td></tr><tr><td><span class="comp c-datamapper">DataMapper</span></td><td><code>lto/fishing-card-document.hbs</code>, <code>notify/fishing-card.hbs</code></td><td>kaardi andmed ja teavitus</td></tr><tr><td><span class="comp c-cron">CronManager</span></td><td><code>fishing-card-reservation-expire.yml</code></td><td>vabastab maksmata reservatsioonid</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
-<li>API: <code>GET /public/recreational-opportunities</code> (T01), <code>POST /fishing-cards/orders</code> body <code>{opportunity_id, holder: {…}, valid_from, channel: &quot;KALALUBA&quot;}</code>. Autentimata ja autenditud kasutaja: autenditult eeltäidetakse isikuandmed (KL_UC-01, KOT), autentimata sisestatakse riik ja isikukood/muu tunnus ja nimi/sünniaeg (AS-IS.01_2.1.4.1). <code>holder</code>: nimi, sünniaeg, isikukood (või isikut tõendava dokumendi number välismaalasel), riik.</li>
+<li>API: <code>GET /api/v1/public/recreational-opportunities</code> (T01), <code>POST /api/v1/fishing-cards/orders</code> body <code>{opportunity_id, holder: {…}, valid_from, channel: &quot;KALALUBA&quot;}</code>. Autentimata ja autenditud kasutaja: autenditult eeltäidetakse isikuandmed (KL_UC-01, KOT), autentimata sisestatakse riik ja isikukood/muu tunnus ja nimi/sünniaeg (AS-IS.01_2.1.4.1). <code>holder</code>: nimi, sünniaeg, isikukood (või isikut tõendava dokumendi number välismaalasel), riik.</li>
 <li><strong>Piirarvu kontroll</strong> (ainult <code>angler_limit != null</code>): reserveeri koht tellimuse loomisel (<code>reservation</code> 15 minutiks), <strong>transaktsiooniliselt</strong> (ei tohi müüa üle piirarvu samaaegsel koormusel; kasuta andmebaasi piirangut või atomaarset loendurit). Piirarvu täitumisel <code>ERR_SOLD_OUT</code>. Aegunud reservatsioon vabaneb. Makse kinnitusel reservatsioon realiseerub.</li>
 <li><strong>Kehtivuse algus</strong> (KPS § 25 lg 3): <code>valid_from</code> ei ole varasem kui <code>max(makse aeg + 1 tund, valitud kuupäev)</code>. Kui kaardiga lubatakse eri aegadel erinevaid püügivõimalusi, tekib õigus kaardile märgitud kuupäeval (§ 25 lg 4). Kehtivus ei ole pikem kui üks kalendriaasta (§ 25 lg 6).</li>
 <li><strong>Tasu</strong> (E3-T02 mehhanism): <code>fishing_right_fee_rate</code> laiendus <code>licence_kind=FISHING_CARD</code> ja <code>HOBBY_FISHING_RIGHT</code> (allikas <span class="ext" title="Viide repo dokumendile, mida siin ei avaldata">harrastuspüügi tasumäärade määrus</span>). Tasu makstakse <strong>kohe tellimuse esitamisel</strong> (KPS § 26 lg 6), kaardi annab Keskkonnaamet pärast tasu maksmist (§ 26 lg 5).</li>
 <li><strong>Makse</strong> E3-T03 <code>PaymentGatewayPort</code> kaudu (sama adapter).</li>
 <li><strong>Kaardi väljastamine</strong> <code>PAID</code> järel: LTO <code>licence</code> tüübiga <code>FISHING_CARD</code>, <code>status=ACTIVE</code>, väljaandja Keskkonnaamet, <strong>KPS § 26 lg 3 väljad</strong>: kaardi andja, andmise aeg, kehtivusaeg, püügipiirkond, õiguse omaniku isikukood või nimi ja sünniaeg (vajaduse korral isikut tõendava dokumendi number), kasutada lubatud püügivahendid ja nende arv, püüda lubatud kalaliigi isendite arv. Kaart on elektrooniline dokument (PDF/HTML ja QR; KPS § 26 lg 3: andmekogus). Saadetakse e-postiga ja allalaaditav kalaluba.ee-s.</li>
-<li>Kontrollitav avalikult / ametnikule: <code>GET /public/fishing-cards/verify?code=</code> (kinnituskoodi järgi, tagastab ainult kehtivuse, nime ja kehtivusaja).</li>
+<li>Kontrollitav avalikult / ametnikule: <code>GET /api/v1/public/fishing-cards?code=</code> (kinnituskoodi järgi, tagastab ainult kehtivuse, nime ja kehtivusaja).</li>
 <li><strong>Erandprotsess 2.1.2.3</strong> (taotlus ametniku kaudu) <strong>ei muutu</strong> ja ei ole selle Task&#39;i osa. Kuid andmemudel peab võimaldama loa väljastamise kanalit <code>OFFICER_CHANNEL</code> (LTO <code>issued_via</code> väli).</li>
 <li>Jõudlus: ostmise lõpp-punktid peavad taluma hooaja alguse tippu: sihtväärtus 100 tellimust sekundis (A-15 tüüpi vaikeväärtus, seadistatav test).</li>
 </ol>
@@ -238,7 +241,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Piirarvuga kaardi ost</strong></td><td>kirje angler_limit=100, müüdud 99</td><td>kasutaja tellib ja maksab</td><td>kaart väljastatakse ja 100/100 täis</td></tr><tr><td><strong>Üle piirarvu</strong></td><td>100/100</td><td>uus tellimus</td><td>ERR_SOLD_OUT</td></tr><tr><td><strong>Samaaegsus</strong></td><td>1 koht vaba ja 50 paralleelset tellimust</td><td>–</td><td>täpselt üks saab reservatsiooni</td></tr><tr><td><strong>Reservatsiooni aegumine</strong></td><td>reservatsioon ja makset ei tule 15 minuti jooksul</td><td>–</td><td>koht vabaneb</td></tr><tr><td><strong>Kehtivuse algus</strong></td><td>makse kell 10:00</td><td>–</td><td>valid_from ≥ 11:00 sama päeval</td></tr><tr><td><strong>Kuupäev tulevikus</strong></td><td>valitud algus 2027-06-01 ja makse 2027-05-20</td><td>–</td><td>valid_from = 2027-06-01</td></tr><tr><td><strong>Kaardi väljad</strong></td><td>–</td><td>–</td><td>kaart sisaldab KPS § 26 lg 3 kõiki välju</td></tr><tr><td><strong>Kontroll</strong></td><td>–</td><td>verify koodi järgi</td><td>tagastatakse kehtivus ja nimi, mitte isikukood</td></tr><tr><td><strong>Makse ebaõnnestus</strong></td><td>–</td><td>–</td><td>kaarti ei väljastata ja reservatsioon vabaneb</td></tr></tbody></table></div>
 <p><strong>Riskid ja sõltuvused.</strong></p>
 <ul>
-<li>Sõltub KL-E8-T01, E3-T02/T03 (tasu ja makse mehhanismid) ja LTO karkassist.</li>
+<li>Sõltub KL-E8-T01, E3-T02/T03 (tasu ja makse mehhanismid) ja LTO karkassist (loob KL-E3-T04).</li>
 <li>Maksevahendaja on väline sõltuvus (LTO_IF-13).</li>
 </ul>
 <p><strong>Mittefunktsionaalsed nõuded.</strong> Ühise ploki järgi (<a href="00-uldkontekst.html">6.2</a>).</p>
@@ -246,7 +249,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <ul>
 <li>Puuduvad.</li>
 </ul>
-<p><strong>Eeldused.</strong> A-12, A-14, A-24. <strong>Sõltub:</strong> KL-E8-T01, E3-T02/T03 (tasu ja makse mehhanismid), LTO karkass.</p>
+<p><strong>Eeldused.</strong> A-12, A-14, A-24. <strong>Sõltub:</strong> KL-E8-T01, E3-T02/T03 (tasu ja makse mehhanismid), LTO karkass (loob KL-E3-T04).</p>
 <hr>
 <h3 id="kl-e8-t03-harrastuspüügiõiguse-soetamine-to-be-08"><a class="anchor" href="#kl-e8-t03-harrastuspüügiõiguse-soetamine-to-be-08">#</a>KL-E8-T03 Harrastuspüügiõiguse soetamine (TO-BE.08)</h3>
 <p><strong>Parent Epic:</strong> KL-E8</p>
@@ -284,16 +287,16 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   PAY --&gt; R[(&quot;Õigus LTO-s&quot;)]
   R --&gt; OUT[&quot;Kinnitus kanalisse&quot;]</pre></div>
 <p><strong>Sub-task&#39;id (komponentide jaotus)</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
-<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Teenusemoodul</td><td><code>hobby-right-service</code></td><td><code>HobbyRightService.purchase</code> (ühine tuum)</td></tr><tr><td>Ruuter</td><td><code>Ruuter.public/lto/hobby-right/POST/order.yml</code>, <code>Ruuter.public/lto/hobby-right/POST/sms.yml</code></td><td>veebi- ja SMS-kanal</td></tr><tr><td>DataMapper</td><td><code>lto/sms-input.hbs</code>, <code>lto/sms-output.hbs</code></td><td>SMS-operaatori formaat</td></tr><tr><td>Resql</td><td><code>lto/POST/hobby-right-create.sql</code></td><td>õigus</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td><span class="comp c-service">Teenusemoodul</span></td><td><code>hobby-right-service</code></td><td><code>HobbyRightService.purchase</code> (ühine tuum)</td></tr><tr><td><span class="comp c-ruuter">Ruuter</span></td><td><code>Ruuter.public/lto/hobby-right/POST/orders.yml</code>, <code>Ruuter.public/lto/hobby-right/POST/sms-orders.yml</code></td><td>veebi- ja SMS-kanal</td></tr><tr><td><span class="comp c-datamapper">DataMapper</span></td><td><code>lto/sms-input.hbs</code>, <code>lto/sms-output.hbs</code></td><td>SMS-operaatori formaat</td></tr><tr><td><span class="comp c-resql">Resql</span></td><td><code>lto/POST/hobby-right-create.sql</code></td><td>õigus</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li><strong>Ühine tuum</strong> <code>HobbyRightService.purchase(subject, duration_option, channel, payment_ref)</code>. Kanalid ainult kohandavad sisend- ja väljundkanalit.</li>
-<li><strong>kalaluba.ee autentimata:</strong> kasutaja valib harrastuspüügiõiguse (kehtivuse variant: nt päev, nädal, aasta, seadistatav <code>hobby_right_option</code> tabelist: <code>code</code>, <code>duration_days</code>, <code>price_rate_id</code>), riik, isikukood või muu tunnus, makseviis. <code>POST /hobby-rights/orders</code>. Isikukoodi <strong>ei kontrollita</strong> registrist (nagu AS-IS), aga formaat kontrollitakse Eesti isikukoodi kontrollnumbriga ja välisriigi tunnus vabalt (≤ 30 märki).</li>
+<li><strong>kalaluba.ee autentimata:</strong> kasutaja valib harrastuspüügiõiguse (kehtivuse variant: nt päev, nädal, aasta, seadistatav <code>hobby_right_option</code> tabelist: <code>code</code>, <code>duration_days</code>, <code>price_rate_id</code>), riik, isikukood või muu tunnus, makseviis. <code>POST /api/v1/hobby-rights/orders</code>. Isikukoodi <strong>ei kontrollita</strong> registrist (nagu AS-IS), aga formaat kontrollitakse Eesti isikukoodi kontrollnumbriga ja välisriigi tunnus vabalt (≤ 30 märki).</li>
 <li><strong>kalaluba.ee autenditud:</strong> isikuandmed autentimisteenusest (KL_UC-01), eeltäidetud.</li>
-<li><strong>SMS-kanal:</strong> operaator (MobiGW) edastab teenuse tellimuse (<code>POST /integrations/sms/hobby-right</code> allkirjastatud, idempotentne <code>operator_message_id</code>) sisendiga <code>{service_code, national_id, msisdn, operator_message_id, paid: true}</code>. KALATUUM registreerib õiguse ja saadab operaatorile vastuse, mille alusel operaator saadab kinnitus-SMS-i <strong>samale numbrile, millelt tasu maksti</strong> (KPS § 25 lg 5). Ebakorrektse formaadi korral vastab KALATUUM veakoodiga, mille operaator edastab kasutajale (tekst seadistatav, et/en).</li>
+<li><strong>SMS-kanal:</strong> operaator (MobiGW) edastab teenuse tellimuse (<code>POST /api/v1/integrations/sms/hobby-right-orders</code> allkirjastatud, idempotentne <code>operator_message_id</code>) sisendiga <code>{service_code, national_id, msisdn, operator_message_id, paid: true}</code>. KALATUUM registreerib õiguse ja saadab operaatorile vastuse, mille alusel operaator saadab kinnitus-SMS-i <strong>samale numbrile, millelt tasu maksti</strong> (KPS § 25 lg 5). Ebakorrektse formaadi korral vastab KALATUUM veakoodiga, mille operaator edastab kasutajale (tekst seadistatav, et/en).</li>
 <li><strong>Õiguse tekkimine</strong> (KPS § 25 lg 2, 5, 6): tavamakse korral hetkel <code>paid_at + 1 tund</code> või kasutaja valitud hilisem kuupäev, mis ei ole hilisem kui 30 päeva tasumisest; SMS-i korral <code>kinnitus-SMS-i aeg + 1 tund</code>. Kehtib kuni üheks aastaks (§ 25 lg 6), kui valik ei ole lühem. Kehtivus on <code>valid_from</code>…<code>valid_to</code>.</li>
 <li><strong>Registreerimine:</strong> LTO <code>licence</code> tüüp <code>HOBBY_FISHING_RIGHT</code>, <code>status=ACTIVE</code> pärast kehtivuse algust (kuni selleni <code>PENDING_START</code>), <code>holder_identifier</code>, <code>channel</code>, <code>payment_id</code>. Ametniku sekkumist ei ole.</li>
-<li><strong>Kontroll:</strong> <code>GET /public/hobby-rights/verify?national_id=&amp;…</code> või kinnituskoodi järgi (väljaspool ulatust: kontrolli rakendus). Tagastab ainult kehtivuse (jah/ei, kehtib kuni), ilma lisaandmeteta.</li>
+<li><strong>Kontroll:</strong> <code>GET /api/v1/public/hobby-rights?national_id=&amp;…</code> või kinnituskoodi järgi (väljaspool ulatust: kontrolli rakendus). Tagastab ainult kehtivuse (jah/ei, kehtib kuni), ilma lisaandmeteta.</li>
 <li><strong>Mahutavus:</strong> üle 70 000 õiguse aastas, tipud hooaja alguses. Sihtväärtus 100 tellimust sekundis ja tellimuse töötlus ≤ 2 s p95 (välisüsteemidest sõltuv aeg välja arvatud).</li>
 <li>Isikuandmed: isikukood on salvestatud krüpteeritult (veerutasemel) ja logides maskeeritud (LTO_DR-17…19).</li>
 </ol>
@@ -301,7 +304,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Autentimata ost</strong></td><td>–</td><td>kasutaja valib aastapileti, sisestab Eesti isikukoodi, tasub</td><td>õigus on registreeritud, valid_from=makse+1h ja kinnitus saadetud</td></tr><tr><td><strong>Vale isikukood</strong></td><td>–</td><td>kontrollnumber ei klapi</td><td>ERR_VALIDATION enne makset</td></tr><tr><td><strong>Autenditud</strong></td><td>kasutaja on autenditud</td><td>–</td><td>isikuandmed on eeltäidetud ja muutmatud</td></tr><tr><td><strong>SMS</strong></td><td>–</td><td>operaator edastab õige tellimuse</td><td>õigus registreeritud, valid_from = kinnitus-SMS-i aeg + 1h ja vastus operaatorile OK</td></tr><tr><td><strong>SMS topelt</strong></td><td>–</td><td>sama operator_message_id tuleb kaks korda</td><td>teine on no-op ja vastus sama</td></tr><tr><td><strong>Hilisem algus</strong></td><td>kasutaja valis algusaja 20 päeva pärast makset</td><td>–</td><td>luba, aga 31 päeva korral ERR_VALIDATION</td></tr><tr><td><strong>Ühe aasta ülempiir</strong></td><td>–</td><td>–</td><td>valid_to - valid_from ≤ 1 kalendriaasta</td></tr><tr><td><strong>Isikukoodi kaitse</strong></td><td>–</td><td>–</td><td>logides ja verify vastuses ei ole täielikku isikukoodi</td></tr></tbody></table></div>
 <p><strong>Riskid ja sõltuvused.</strong></p>
 <ul>
-<li>Sõltub E3-T02/T03 ja LTO karkassist.</li>
+<li>Sõltub E3-T02/T03 ja LTO karkassist (loob KL-E3-T04).</li>
 <li>SMS-operaatori ja maksevahendaja (MobiGW) sõltuvus.</li>
 </ul>
 <p><strong>Mittefunktsionaalsed nõuded.</strong> Ühise ploki järgi (<a href="00-uldkontekst.html">6.2</a>).</p>
@@ -309,7 +312,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <ul>
 <li>Puuduvad.</li>
 </ul>
-<p><strong>Eeldused.</strong> A-12, A-14, A-24. <strong>Sõltub:</strong> E3-T02/T03, LTO karkass.</p>
+<p><strong>Eeldused.</strong> A-12, A-14, A-24. <strong>Sõltub:</strong> E3-T02/T03, LTO karkass (loob KL-E3-T04).</p>
 </article>
 <div class="pn"><a href="E7-vesiviljelus.html">← E7 Vesiviljeluse tegevusloa taotlemine ja väljastamine (TO-BE.05)</a><a href="E9-automaatotsusega-load.html">E9 Reeglipõhised load: eripüük, elektripüügivahendi tõend, asustamisluba (TO-BE.09–11) →</a></div>
 <footer>Ettepanek, mitte kinnitatud. Allikas: wiki leht 321262813.</footer></main>

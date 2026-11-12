@@ -44,6 +44,9 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 @media(max-width:1100px){.shell{grid-template-columns:250px minmax(0,1fr)}.toc{display:none}}
 @media(max-width:760px){#menu{display:block}.shell{display:block}.side{display:none;position:fixed;top:57px;left:0;width:84vw;max-width:320px;background:var(--bg);z-index:25;height:calc(100vh - 57px)}body.nav .side{display:block}main{padding:16px}.brand small{display:none}}
 .diagram{margin:1em 0;padding:12px;background:var(--soft);border:1px solid var(--bd);border-radius:10px;overflow:auto;text-align:center}pre.mermaid{background:none;border:0;padding:0;margin:0}
+
+.comp{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap;color:#fff}
+.c-ruuter{background:#1d5fa8}.c-resql{background:#2e7d4f}.c-datamapper{background:#8a5a00}.c-cron{background:#7b3fa0}.c-liquibase{background:#5b6770}.c-service{background:#b23a48}
 </style></head><body>
 <header class="top"><button id="menu" aria-label="Menüü">☰</button><a class="brand" href="index.html">Kalapüügiloa väljastamine <small>Epic'ud ja Task'id</small></a>
 <input id="q" type="search" placeholder="Otsi (/)" autocomplete="off"><button id="theme" aria-label="Teema">◐</button></header>
@@ -106,7 +109,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   MO-&gt;&gt;OK: planInspection
   OK--&gt;&gt;MO: InspectionResultReceived
   MO-&gt;&gt;PTA: otsusepakett
-  PTA-&gt;&gt;MO: decide APPROVE / REFUSE
+  PTA-&gt;&gt;MO: otsus APPROVE või REFUSE
   MO-&gt;&gt;LTO: tegevusluba (kui APPROVE)
   MO--&gt;&gt;E: teavitus">sequenceDiagram
   actor E as Ettevõtja
@@ -120,7 +123,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   MO-&gt;&gt;OK: planInspection
   OK--&gt;&gt;MO: InspectionResultReceived
   MO-&gt;&gt;PTA: otsusepakett
-  PTA-&gt;&gt;MO: decide APPROVE / REFUSE
+  PTA-&gt;&gt;MO: otsus APPROVE või REFUSE
   MO-&gt;&gt;LTO: tegevusluba (kui APPROVE)
   MO--&gt;&gt;E: teavitus</pre></div>
 <h3 id="kl-e7-t01-vesiviljeluse-tegevusloa-taotlus-esitamine-eeltäide-taustakontroll"><a class="anchor" href="#kl-e7-t01-vesiviljeluse-tegevusloa-taotlus-esitamine-eeltäide-taustakontroll">#</a>KL-E7-T01 Vesiviljeluse tegevusloa taotlus (esitamine, eeltäide, taustakontroll)</h3>
@@ -168,7 +171,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   INSPECTION_DONE --&gt; DECIDED_REFUSED
   DECIDED_APPROVED --&gt; LICENCE_ISSUED</pre></div>
 <p><strong>Sub-task&#39;id (komponentide jaotus)</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
-<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Liquibase</td><td><code>mo/changelog/aquaculture.xml</code></td><td><code>aquaculture_application</code> ja seadistatav väljade kirjeldus</td></tr><tr><td>Ruuter</td><td><code>Ruuter.private/mo/aquaculture/*.yml</code></td><td>mustand, eeltäide, esitamine</td></tr><tr><td>Teenusemoodul</td><td><code>check-engine</code></td><td>seadistatavad kontrollid</td></tr><tr><td>Resql</td><td><code>mo/POST/aquaculture-create.sql</code>, <code>PATCH/aquaculture-patch.sql</code></td><td>andmepääs</td></tr><tr><td>DataMapper</td><td><code>mo/aquaculture-prefill.hbs</code></td><td>eeltäide</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td><span class="comp c-liquibase">Liquibase</span></td><td><code>mo/changelog/aquaculture.xml</code></td><td><code>aquaculture_application</code> ja seadistatav väljade kirjeldus</td></tr><tr><td><span class="comp c-ruuter">Ruuter</span></td><td><code>Ruuter.private/mo/aquaculture/POST/aquaculture-applications.yml</code>, <code>PATCH/aquaculture-applications.yml</code>, <code>GET/aquaculture-applications.yml</code></td><td>mustand, eeltäide, esitamine (state <code>SUBMITTED</code>)</td></tr><tr><td><span class="comp c-service">Teenusemoodul</span></td><td><code>check-engine</code></td><td>seadistatavad kontrollid</td></tr><tr><td><span class="comp c-resql">Resql</span></td><td><code>mo/POST/aquaculture-create.sql</code>, <code>PATCH/aquaculture-patch.sql</code></td><td>andmepääs</td></tr><tr><td><span class="comp c-datamapper">DataMapper</span></td><td><code>mo/aquaculture-prefill.hbs</code></td><td>eeltäide</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Menetlustüüp <code>AQUACULTURE_LICENCE_APPLICATION</code> (MO): olekud <code>DRAFT</code>, <code>SUBMITTED</code>, <code>INSPECTION_SCHEDULED</code>, <code>INSPECTION_DONE</code>, <code>DECIDED_APPROVED</code>, <code>DECIDED_REFUSED</code>, <code>LICENCE_ISSUED</code>, <code>CANCELLED</code>. Üleminekud: <code>DRAFT→SUBMITTED→INSPECTION_SCHEDULED→INSPECTION_DONE→DECIDED_APPROVED→LICENCE_ISSUED</code> ja <code>INSPECTION_DONE→DECIDED_REFUSED</code>, <code>DRAFT→CANCELLED</code>, <code>SUBMITTED→CANCELLED</code> (taotleja tagasivõtmine kuni <code>INSPECTION_SCHEDULED</code>). Kasuta E1-T01 olekumasina mehhanismi (menetlustüübi konfiguratsioon).</li>
@@ -239,13 +242,13 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   OK-&gt;&gt;MO: InspectionResultReceived (result, findings, protokoll)
   MO-&gt;&gt;MO: INSPECTION_SCHEDULED -&gt; INSPECTION_DONE</pre></div>
 <p><strong>Sub-task&#39;id (komponentide jaotus)</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
-<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Teenusemoodul</td><td><code>inspection-adapter</code></td><td><code>InspectionPort</code> (OKAS-2) HTTP-adapter ja mock</td></tr><tr><td>Ruuter</td><td><code>Ruuter.private/mo/aquaculture/POST/plan-inspection.yml</code>, <code>Ruuter.public/mo/inspection/POST/result.yml</code></td><td>planeerimine ja tulemuse vastuvõtt</td></tr><tr><td>DataMapper</td><td><code>mo/inspection-request.hbs</code>, <code>mo/inspection-result.hbs</code></td><td>OKAS-2 formaatide teisendus</td></tr><tr><td>CronManager</td><td><code>inspection-poll.yml</code></td><td>tulemuse küsitlus, kui sündmust ei tule</td></tr><tr><td>Resql</td><td><code>mo/POST/inspection-save.sql</code></td><td>tulemuse salvestus</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td><span class="comp c-service">Teenusemoodul</span></td><td><code>inspection-adapter</code></td><td><code>InspectionPort</code> (OKAS-2) HTTP-adapter ja mock</td></tr><tr><td><span class="comp c-ruuter">Ruuter</span></td><td><code>Ruuter.private/mo/aquaculture/POST/inspections.yml</code>, <code>Ruuter.public/mo/inspection/POST/inspection-results.yml</code></td><td>planeerimine ja tulemuse vastuvõtt</td></tr><tr><td><span class="comp c-datamapper">DataMapper</span></td><td><code>mo/inspection-request.hbs</code>, <code>mo/inspection-result.hbs</code></td><td>OKAS-2 formaatide teisendus</td></tr><tr><td><span class="comp c-cron">CronManager</span></td><td><code>inspection-poll.yml</code></td><td>tulemuse küsitlus, kui sündmust ei tule</td></tr><tr><td><span class="comp c-resql">Resql</span></td><td><code>mo/POST/inspection-save.sql</code></td><td>tulemuse salvestus</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
-<li>Liides <code>InspectionPort</code> (OKAS-2): <code>planInspection(application_ref, site, requested_window) → {inspection_id}</code>, <code>getInspection(inspection_id) → {state, date, result, findings[], protocol_doc_ref}</code>. Realiseeri HTTP-adapter ja mock. <strong>Konkreetsed OKAS-2 API-d on väljaspool ulatust.</strong> Port on lepingu pind: sündmus <code>InspectionResultReceived {inspection_id, result: COMPLIANT|NON_COMPLIANT|PARTIAL, findings[], protocol_doc_ref}</code> võetakse vastu REST-lõpp-punktis <code>POST /integrations/inspections/result</code> (autentimine ühiskasutatava saladuse või allkirjaga, idempotentne <code>inspection_id</code> + <code>event_id</code>).</li>
-<li><strong>Planeerimine:</strong> <code>SUBMITTED</code> taotlusele luuakse automaatselt PTA ülesanne (MO_UC-09), ametnik valib kontrolli kuupäeva (<code>POST /admin/aquaculture/{id}/schedule</code>, <code>date</code>, <code>inspector_id</code>) → <code>planInspection</code>, <code>SUBMITTED→INSPECTION_SCHEDULED</code>. Taotleja saab teavituse kuupäevaga.</li>
+<li>Liides <code>InspectionPort</code> (OKAS-2): <code>planInspection(application_ref, site, requested_window) → {inspection_id}</code>, <code>getInspection(inspection_id) → {state, date, result, findings[], protocol_doc_ref}</code>. Realiseeri HTTP-adapter ja mock. <strong>Konkreetsed OKAS-2 API-d on väljaspool ulatust.</strong> Port on lepingu pind: sündmus <code>InspectionResultReceived {inspection_id, result: COMPLIANT|NON_COMPLIANT|PARTIAL, findings[], protocol_doc_ref}</code> võetakse vastu REST-lõpp-punktis <code>POST /api/v1/integrations/inspection-results</code> (autentimine ühiskasutatava saladuse või allkirjaga, idempotentne <code>inspection_id</code> + <code>event_id</code>).</li>
+<li><strong>Planeerimine:</strong> <code>SUBMITTED</code> taotlusele luuakse automaatselt PTA ülesanne (MO_UC-09), ametnik valib kontrolli kuupäeva (<code>POST /api/v1/admin/aquaculture/{id}/inspections</code>, <code>date</code>, <code>inspector_id</code>) → <code>planInspection</code>, <code>SUBMITTED→INSPECTION_SCHEDULED</code>. Taotleja saab teavituse kuupäevaga.</li>
 <li><strong>Ajapiirang:</strong> kui kuupäev on varasem kui täna või kontrolli planeerimine ebaõnnestub OKAS-2 poolel, tagastatakse vastav viga (<code>ERR_DEPENDENCY_UNAVAILABLE</code> või <code>ERR_VALIDATION</code>), olek ei muutu.</li>
-<li><strong>Tulemuse vastuvõtt:</strong> <code>InspectionResultReceived</code> → salvesta tulemus ja protokoll (DF-i viide), <code>INSPECTION_SCHEDULED→INSPECTION_DONE</code>. Kui tulemus tuleb teisest allikast (ametnik sisestab portaalis käsitsi, kuni integratsioon ei ole valmis): <code>POST /admin/aquaculture/{id}/inspection-result</code> sama sisuga (roll <code>PTA_OFFICER</code>), sama olekumuutus. Kumbki tee ei tohi teist üle kirjutada, teine annab <code>ERR_INVALID_STATE_TRANSITION</code>.</li>
+<li><strong>Tulemuse vastuvõtt:</strong> <code>InspectionResultReceived</code> → salvesta tulemus ja protokoll (DF-i viide), <code>INSPECTION_SCHEDULED→INSPECTION_DONE</code>. Kui tulemus tuleb teisest allikast (ametnik sisestab portaalis käsitsi, kuni integratsioon ei ole valmis): <code>POST /api/v1/admin/aquaculture/{id}/inspection-results</code> sama sisuga (roll <code>PTA_OFFICER</code>), sama olekumuutus. Kumbki tee ei tohi teist üle kirjutada, teine annab <code>ERR_INVALID_STATE_TRANSITION</code>.</li>
 <li>Taotleja ei pääse OKAS-2 sisemistele andmetele. Ta näeb ainult kontrolli kuupäeva ja tulemuse üldseisu.</li>
 <li>Kui kontrolli kuupäev möödub ilma tulemuseta 14 päeva, loob süsteem PTA ülesande „Kontrolli tulemus puudub“.</li>
 </ol>
@@ -294,21 +297,21 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   L --&gt; N[&quot;Teavitus&quot;]
   R --&gt; N</pre></div>
 <p><strong>Sub-task&#39;id (komponentide jaotus)</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
-<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Ruuter</td><td>`Ruuter.private/mo/aquaculture/GET</td><td>POST/decision-pack.yml<code>, </code>decide.yml`</td></tr><tr><td>Resql</td><td><code>mo/GET/decision-pack.sql</code>, <code>lto/POST/licence-create.sql</code></td><td>andmepääs</td></tr><tr><td>DataMapper</td><td><code>notify/aquaculture-decision.hbs</code>, <code>mo/decision-document-data.hbs</code></td><td>teavitus ja dokument</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td><span class="comp c-ruuter">Ruuter</span></td><td><code>Ruuter.private/mo/aquaculture/GET/decision-pack.yml</code>, <code>POST/decisions.yml</code></td><td>otsusepakett ja otsus (<code>PTA_OFFICER</code>)</td></tr><tr><td><span class="comp c-resql">Resql</span></td><td><code>mo/GET/decision-pack.sql</code>, <code>lto/POST/licence-create.sql</code></td><td>andmepääs</td></tr><tr><td><span class="comp c-datamapper">DataMapper</span></td><td><code>notify/aquaculture-decision.hbs</code>, <code>mo/decision-document-data.hbs</code></td><td>teavitus ja dokument</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
-<li>API (<code>PTA_OFFICER</code>): <code>GET /admin/aquaculture/{id}/decision-pack</code> (taotlus, kontrollitulemused, kohapealse kontrolli tulemus ja leiud, ajalugu), <code>POST …/decide</code> <code>{outcome: APPROVE|REFUSE, reasoning ≥ 100 märki, conditions[]?, valid_from, valid_to?}</code>.</li>
-<li><strong>Automaatotsust ei ole</strong> (A-32). <code>decide</code> nõuab inimest. Kui kohapealse kontrolli tulemus on <code>NON_COMPLIANT</code>, tagastab süsteem hoiatuse, aga ei keela otsust. Otsus peab sisaldama põhjenduse.</li>
+<li>API (<code>PTA_OFFICER</code>): <code>GET /api/v1/admin/aquaculture/{id}/decision-pack</code> (taotlus, kontrollitulemused, kohapealse kontrolli tulemus ja leiud, ajalugu), <code>POST /api/v1/admin/aquaculture/{id}/decisions</code> <code>{outcome: APPROVE|REFUSE, reasoning ≥ 100 märki, conditions[]?, valid_from, valid_to?}</code>.</li>
+<li><strong>Automaatotsust ei ole</strong> (A-32). otsus nõuab inimest. Kui kohapealse kontrolli tulemus on <code>NON_COMPLIANT</code>, tagastab süsteem hoiatuse, aga ei keela otsust. Otsus peab sisaldama põhjenduse.</li>
 <li><code>APPROVE</code>: <code>INSPECTION_DONE→DECIDED_APPROVED→LICENCE_ISSUED</code>. Loo LTO-s luba (<code>kind=AQUACULTURE</code>, <code>licence_number</code> formaat <code>VVL-&lt;aasta&gt;-&lt;nr 6 kohta&gt;</code>, kehtivus: <code>valid_from</code> kohustuslik, <code>valid_to</code> tähtajatu kui puudub), seo osapoolega, tegevuskohaga ja otsusega; <code>status=ACTIVE</code>; dokument DF-i (otsus ja luba); registrikanne; teavitus. <code>conditions[]</code> kanduvad loale.</li>
 <li><code>REFUSE</code>: <code>INSPECTION_DONE→DECIDED_REFUSED</code>. Otsus sisaldab: kuupäev, õigusnorm (ametnik valib <code>legal_basis</code> tekstina, kohustuslik), sisu, põhjendus, ametniku nimi (HMS nõuded). Dokument DF-i, kiri taotlejale, vaide info.</li>
 <li>Kogu menetlus on auditis. Ajaloo säilitamine MO_UC-21.</li>
 <li><strong>Vaie</strong> pärast keeldumist käsitletakse HMS üldkorras väljaspool KALATUUM-it (ulatusest väljas, kuni E5 laiendatakse sellele menetlustüübile).</li>
 </ol>
 <p><strong>Vastuvõtutestid.</strong></p>
-<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Väljastamine</strong></td><td>INSPECTION_DONE, kontroll COMPLIANT</td><td>ametnik APPROVE põhjendusega</td><td>luba VVL-2027-000001 ACTIVE, dokument DF-s, olek LICENCE_ISSUED, teavitus saadetud</td></tr><tr><td><strong>Keeldumine</strong></td><td>–</td><td>REFUSE õigusnormi ja põhjendusega</td><td>DECIDED_REFUSED, otsusedokument ja kiri taotlejale</td></tr><tr><td><strong>Põhjenduseta</strong></td><td>–</td><td>–</td><td>ERR_VALIDATION</td></tr><tr><td><strong>Vale olek</strong></td><td>SUBMITTED</td><td>decide</td><td>ERR_INVALID_STATE_TRANSITION</td></tr><tr><td><strong>Tingimused</strong></td><td>–</td><td>APPROVE koos conditions</td><td>tingimused on loal ja dokumendil</td></tr><tr><td><strong>Õigused</strong></td><td>–</td><td>APPLICANT kutsub decide</td><td>ERR_FORBIDDEN</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Väljastamine</strong></td><td>INSPECTION_DONE, kontroll COMPLIANT</td><td>ametnik APPROVE põhjendusega</td><td>luba VVL-2027-000001 ACTIVE, dokument DF-s, olek LICENCE_ISSUED, teavitus saadetud</td></tr><tr><td><strong>Keeldumine</strong></td><td>–</td><td>REFUSE õigusnormi ja põhjendusega</td><td>DECIDED_REFUSED, otsusedokument ja kiri taotlejale</td></tr><tr><td><strong>Põhjenduseta</strong></td><td>–</td><td>–</td><td>ERR_VALIDATION</td></tr><tr><td><strong>Vale olek</strong></td><td>SUBMITTED</td><td>otsus</td><td>ERR_INVALID_STATE_TRANSITION</td></tr><tr><td><strong>Tingimused</strong></td><td>–</td><td>APPROVE koos conditions</td><td>tingimused on loal ja dokumendil</td></tr><tr><td><strong>Õigused</strong></td><td>–</td><td>APPLICANT teeb otsuse</td><td>ERR_FORBIDDEN</td></tr></tbody></table></div>
 <p><strong>Riskid ja sõltuvused.</strong></p>
 <ul>
-<li>Sõltub KL-E7-T02 ja LTO karkassist.</li>
+<li>Sõltub KL-E7-T02 ja LTO karkassist (loob KL-E3-T04).</li>
 <li>Automaatotsust ei ole, sest materiaalõiguse akt puudub (A-32) ja seadus ei luba (A-31).</li>
 </ul>
 <p><strong>Mittefunktsionaalsed nõuded.</strong> Ühise ploki järgi (<a href="00-uldkontekst.html">6.2</a>).</p>
@@ -316,7 +319,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <ul>
 <li>Puuduvad.</li>
 </ul>
-<p><strong>Eeldused.</strong> A-12, A-31, A-32. <strong>Sõltub:</strong> KL-E7-T02, LTO karkass.</p>
+<p><strong>Eeldused.</strong> A-12, A-31, A-32. <strong>Sõltub:</strong> KL-E7-T02, LTO karkass (loob KL-E3-T04).</p>
 </article>
 <div class="pn"><a href="E6-stsenaarium-2-delta.html">← E6 Alternatiivne stsenaarium: proaktiivne jaotus ja pakkumine (delta)</a><a href="E8-harrastuspuuk.html">E8 Harrastuspüük: püügivõimaluste haldus, kalastuskaart, püügiõigus (TO-BE.06–08) →</a></div>
 <footer>Ettepanek, mitte kinnitatud. Allikas: wiki leht 321262813.</footer></main>

@@ -44,6 +44,9 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 @media(max-width:1100px){.shell{grid-template-columns:250px minmax(0,1fr)}.toc{display:none}}
 @media(max-width:760px){#menu{display:block}.shell{display:block}.side{display:none;position:fixed;top:57px;left:0;width:84vw;max-width:320px;background:var(--bg);z-index:25;height:calc(100vh - 57px)}body.nav .side{display:block}main{padding:16px}.brand small{display:none}}
 .diagram{margin:1em 0;padding:12px;background:var(--soft);border:1px solid var(--bd);border-radius:10px;overflow:auto;text-align:center}pre.mermaid{background:none;border:0;padding:0;margin:0}
+
+.comp{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap;color:#fff}
+.c-ruuter{background:#1d5fa8}.c-resql{background:#2e7d4f}.c-datamapper{background:#8a5a00}.c-cron{background:#7b3fa0}.c-liquibase{background:#5b6770}.c-service{background:#b23a48}
 </style></head><body>
 <header class="top"><button id="menu" aria-label="Menüü">☰</button><a class="brand" href="index.html">Kalapüügiloa väljastamine <small>Epic'ud ja Task'id</small></a>
 <input id="q" type="search" placeholder="Otsi (/)" autocomplete="off"><button id="theme" aria-label="Teema">◐</button></header>
@@ -140,17 +143,17 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   MO-&gt;&gt;PTA: ülesanne
   MO--&gt;&gt;T: kinnitus</pre></div>
 <p><strong>Sub-task&#39;id (komponentide jaotus)</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
-<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Liquibase</td><td><code>mo/changelog/dispute.xml</code></td><td><code>allocation_dispute</code>, tõendid, <code>dispute_hold</code></td></tr><tr><td>Ruuter</td><td><code>Ruuter.private/mo/dispute/POST/create.yml</code></td><td>esitamine, tõendid DF-i, taotluse olek, PTA ülesanne</td></tr><tr><td>Resql</td><td><code>mo/POST/dispute-create.sql</code>, <code>pvt/POST/dispute-hold-set.sql</code></td><td>andmepääs</td></tr><tr><td>DataMapper</td><td><code>notify/dispute-received.hbs</code></td><td>kinnitus</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td><span class="comp c-liquibase">Liquibase</span></td><td><code>mo/changelog/dispute.xml</code></td><td><code>allocation_dispute</code>, tõendid, <code>dispute_hold</code></td></tr><tr><td><span class="comp c-ruuter">Ruuter</span></td><td><code>Ruuter.private/mo/dispute/POST/disputes.yml</code></td><td>esitamine, tõendid DF-i, taotluse olek, PTA ülesanne</td></tr><tr><td><span class="comp c-resql">Resql</span></td><td><code>mo/POST/dispute-create.sql</code>, <code>pvt/POST/dispute-hold-set.sql</code></td><td>andmepääs</td></tr><tr><td><span class="comp c-datamapper">DataMapper</span></td><td><code>notify/dispute-received.hbs</code></td><td>kinnitus</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Menetlustüüp <code>ALLOCATION_DISPUTE</code> (MO): olekud <code>SUBMITTED</code>, <code>UNDER_REVIEW</code>, <code>RESOLVED_ACCEPTED</code>, <code>RESOLVED_PARTIALLY</code>, <code>RESOLVED_REJECTED</code>, <code>WITHDRAWN</code>.</li>
-<li><code>POST /allocation-decisions/{decision_id}/disputes</code> (esindusõigusega taotleja, olek taotlusel <code>AWAITING_FEE_PAYMENT</code>):<pre><code class="lang-json">{&quot;application_id&quot;:&quot;…&quot;,&quot;grounds&quot;:[{&quot;type&quot;:&quot;WRONG_HISTORICAL_DATA|METHODOLOGY_ERROR|OTHER&quot;,&quot;catch_opportunity_id&quot;:&quot;…&quot;,&quot;description&quot;:&quot;≥ 50 märki&quot;}],
+<li><code>POST /api/v1/allocation-decisions/{decision_id}/disputes</code> (esindusõigusega taotleja, olek taotlusel <code>AWAITING_FEE_PAYMENT</code>):<pre><code class="lang-json">{&quot;application_id&quot;:&quot;…&quot;,&quot;grounds&quot;:[{&quot;type&quot;:&quot;WRONG_HISTORICAL_DATA|METHODOLOGY_ERROR|OTHER&quot;,&quot;catch_opportunity_id&quot;:&quot;…&quot;,&quot;description&quot;:&quot;≥ 50 märki&quot;}],
  &quot;claimed_quantity&quot;: 6, &quot;document_ids&quot;: [&quot;…&quot;]}</code></pre>
 Kontrollid: tähtaeg <code>decision.published_at + P-12 päeva</code> (kuni 23:59:59 Europe/Tallinn); ühe taotluse ja otsuse kohta üks aktiivne vaie (<code>ERR_DUPLICATE_DISPUTE</code>); põhjendus pikkuse nõue; tõendid DF-i kaudu. Tähtaja ületamisel <code>ERR_DISPUTE_WINDOW_CLOSED</code> ja viide kohtusse pöördumise infole (HMS, üldjuhend tekst seadistatud).</li>
 <li><strong>Mõju:</strong> taotlus <code>AWAITING_FEE_PAYMENT→ALLOCATION_DISPUTED</code>; vaidlustaja <code>allocated_opportunity</code> read <code>dispute_hold=true</code>; <code>released_opportunity</code>-d, mis tekiksid temast, <code>dispute_hold=true</code>. <strong>Tasu tähtaega E3-T06 töös enam ei kohaldata</strong> (A-26). Teiste taotluste menetlus jätkub.</li>
 <li>Kinnitus-e-kiri vaidlustajale, ülesanne PTA-le (MO_UC-09) „Menetle vaie“.</li>
 <li>Taotleja saab vaide tagasi võtta (<code>WITHDRAWN</code>) enne lahendamist: taotlus tagasi <code>AWAITING_FEE_PAYMENT</code>, <code>dispute_hold=false</code>, tähtaeg A-28.</li>
-<li><code>GET /disputes?party_id=</code>, <code>GET /disputes/{id}</code> (staatus, ajalugu, tähtajad: kuidas menetlus edeneb).</li>
+<li><code>GET /api/v1/disputes?party_id=</code>, <code>GET /api/v1/disputes/{id}</code> (staatus, ajalugu, tähtajad: kuidas menetlus edeneb).</li>
 </ol>
 <p><strong>Vastuvõtutestid.</strong></p>
 <div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Vaide esitamine</strong></td><td>taotlus AWAITING_FEE_PAYMENT, otsus avaldati 10 päeva tagasi</td><td>taotleja esitab vaide põhjendusega 80 märki</td><td>dispute SUBMITTED, taotlus ALLOCATION_DISPUTED, dispute_hold=true, PTA ülesanne ja kinnituskiri</td></tr><tr><td><strong>Tähtaeg möödas</strong></td><td>otsus avaldati 31 päeva tagasi</td><td>–</td><td>ERR_DISPUTE_WINDOW_CLOSED</td></tr><tr><td><strong>Topeltvaie</strong></td><td>aktiivne vaie</td><td>–</td><td>ERR_DUPLICATE_DISPUTE</td></tr><tr><td><strong>Teiste menetlus jätkub</strong></td><td>–</td><td>–</td><td>teise taotleja taotlus saab tasuda ja luba väljastada</td></tr><tr><td><strong>Tagasivõtmine</strong></td><td>–</td><td>vaie WITHDRAWN</td><td>taotlus AWAITING_FEE_PAYMENT, dispute_hold=false, tasu tähtaeg = max(P-05, täna + P-13)</td></tr><tr><td><strong>Põhjendus liiga lühike</strong></td><td>–</td><td>–</td><td>ERR_VALIDATION</td></tr></tbody></table></div>
@@ -184,7 +187,7 @@ Kontrollid: tähtaeg <code>decision.published_at + P-12 päeva</code> (kuni 23:5
 <p><strong>Diagramm: vaide olekud</strong></p>
 <div class="diagram"><pre class="mermaid" data-src="stateDiagram-v2
   [*] --&gt; SUBMITTED
-  SUBMITTED --&gt; UNDER_REVIEW: start-review
+  SUBMITTED --&gt; UNDER_REVIEW: PATCH state UNDER_REVIEW
   SUBMITTED --&gt; WITHDRAWN: tagasivõtmine
   UNDER_REVIEW --&gt; RESOLVED_ACCEPTED
   UNDER_REVIEW --&gt; RESOLVED_PARTIALLY
@@ -194,7 +197,7 @@ Kontrollid: tähtaeg <code>decision.published_at + P-12 päeva</code> (kuni 23:5
   RESOLVED_REJECTED --&gt; [*]
   WITHDRAWN --&gt; [*]">stateDiagram-v2
   [*] --&gt; SUBMITTED
-  SUBMITTED --&gt; UNDER_REVIEW: start-review
+  SUBMITTED --&gt; UNDER_REVIEW: PATCH state UNDER_REVIEW
   SUBMITTED --&gt; WITHDRAWN: tagasivõtmine
   UNDER_REVIEW --&gt; RESOLVED_ACCEPTED
   UNDER_REVIEW --&gt; RESOLVED_PARTIALLY
@@ -204,13 +207,13 @@ Kontrollid: tähtaeg <code>decision.published_at + P-12 päeva</code> (kuni 23:5
   RESOLVED_REJECTED --&gt; [*]
   WITHDRAWN --&gt; [*]</pre></div>
 <p><strong>Sub-task&#39;id (komponentide jaotus)</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
-<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Ruuter</td><td>`Ruuter.private/mo/dispute/GET</td><td>POST/*.yml`</td></tr><tr><td>Resql</td><td><code>mo/POST/dispute-resolve.sql</code>, <code>pvt/PUT/result-correct.sql</code></td><td>otsus ja sisendi parandus (kaetakse <code>released_opportunity</code>-st)</td></tr><tr><td>Teenusemoodul</td><td><code>allocation-engine</code></td><td>ümberarvutus vaidlustaja sisendiga</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td><span class="comp c-ruuter">Ruuter</span></td><td><code>Ruuter.private/mo/dispute/GET/disputes.yml</code>, <code>PATCH/disputes.yml</code>, <code>POST/decisions.yml</code></td><td>lugemine, menetlusse võtmine (state), otsus (<code>PTA_OFFICER</code>)</td></tr><tr><td><span class="comp c-resql">Resql</span></td><td><code>mo/POST/dispute-resolve.sql</code>, <code>pvt/PUT/result-correct.sql</code></td><td>otsus ja sisendi parandus (kaetakse <code>released_opportunity</code>-st)</td></tr><tr><td><span class="comp c-service">Teenusemoodul</span></td><td><code>allocation-engine</code></td><td>ümberarvutus vaidlustaja sisendiga</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
-<li>Töölaua API (<code>PTA_OFFICER</code>): <code>GET /admin/disputes?state=</code>, <code>GET …/{id}</code> (vaie, tõendid, arvutuse väljad <code>allocation_result</code>, <code>historical_sum_t</code> ja selle allikad), <code>POST …/{id}/start-review</code> (<code>SUBMITTED→UNDER_REVIEW</code>, ametnik määratakse).</li>
-<li><strong>Otsuse tegemine</strong> <code>POST …/{id}/resolve</code> body <code>{outcome: ACCEPTED|PARTIALLY|REJECTED, reasoning (≥ 100 märki), corrected_input: {party_id, catch_opportunity_id, historical_sum_t}?, corrected_quantity}</code>:<ul>
+<li>Töölaua API (<code>PTA_OFFICER</code>): <code>GET /api/v1/admin/disputes?state=</code>, <code>GET /api/v1/admin/disputes/{id}</code> (vaie, tõendid, arvutuse väljad <code>allocation_result</code>, <code>historical_sum_t</code> ja selle allikad), <code>PATCH /api/v1/admin/disputes/{id}</code> body <code>{&quot;state&quot;:&quot;UNDER_REVIEW&quot;}</code> (<code>SUBMITTED→UNDER_REVIEW</code>, ametnik määratakse).</li>
+<li><strong>Otsuse tegemine</strong> <code>POST /api/v1/admin/disputes/{id}/decisions</code> body <code>{outcome: ACCEPTED|PARTIALLY|REJECTED, reasoning (≥ 100 märki), corrected_input: {party_id, catch_opportunity_id, historical_sum_t}?, corrected_quantity}</code>:<ul>
 <li><code>REJECTED</code>: esialgne jaotus kinnitatud, ei muutu.</li>
-<li><code>ACCEPTED</code>/<code>PARTIALLY</code>: ametnik sisestab <code>corrected_input</code> (nt parandatud <code>T</code>). Süsteem arvutab vaidlustaja uue koguse mootoriga (E2-T02 ühe taotleja variandis, <code>S</code> kohandatud erinevuse võrra), <strong>ilma teisi taotlejaid ümber arvutamata</strong> (A-29). Erinevus <code>Δ = uus − vana &gt; 0</code> kaetakse samas jaotusüksuses <code>released_opportunity</code> <code>AVAILABLE</code> kogusest (vana ostetud järjekord). Kui <code>Δ</code> ei ole kaetav, on <code>resolve</code> blokeeritud <code>ERR_INSUFFICIENT_RELEASED</code> ja ametnik valib: vähendada <code>corrected_quantity</code> kättesaadavale või suunata erijuhtumina käsitsi otsuseks (PTA ülesanne ja põhjendus). Kui <code>Δ &lt; 0</code> (vähenemine), vabanenud osa → <code>released_opportunity</code> (<code>OFFICER</code>).</li>
+<li><code>ACCEPTED</code>/<code>PARTIALLY</code>: ametnik sisestab <code>corrected_input</code> (nt parandatud <code>T</code>). Süsteem arvutab vaidlustaja uue koguse mootoriga (E2-T02 ühe taotleja variandis, <code>S</code> kohandatud erinevuse võrra), <strong>ilma teisi taotlejaid ümber arvutamata</strong> (A-29). Erinevus <code>Δ = uus − vana &gt; 0</code> kaetakse samas jaotusüksuses <code>released_opportunity</code> <code>AVAILABLE</code> kogusest (vana ostetud järjekord). Kui <code>Δ</code> ei ole kaetav, on otsus blokeeritud <code>ERR_INSUFFICIENT_RELEASED</code> ja ametnik valib: vähendada <code>corrected_quantity</code> kättesaadavale või suunata erijuhtumina käsitsi otsuseks (PTA ülesanne ja põhjendus). Kui <code>Δ &lt; 0</code> (vähenemine), vabanenud osa → <code>released_opportunity</code> (<code>OFFICER</code>).</li>
 </ul>
 </li>
 <li>Salvesta uus <code>allocated_opportunity</code> versioon (eelmine jääb ajalukku), uus otsusedokument (E2-T06 mall, märge „vaide alusel muudetud“), seo vaide otsusega (MO_UC-15…18).</li>
@@ -219,7 +222,7 @@ Kontrollid: tähtaeg <code>decision.published_at + P-12 päeva</code> (kuni 23:5
 <li><strong>Kohtusse pöördumise info</strong> (kui <code>REJECTED</code> või <code>PARTIALLY</code>): otsusedokument sisaldab HMS/halduskohtu viidet (seadistatav tekst).</li>
 </ol>
 <p><strong>Vastuvõtutestid.</strong></p>
-<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Vaie rahuldatud</strong></td><td>vaidlustaja T oli 10, õige on 14 ja released AVAILABLE kogus on 2</td><td>ametnik resolve ACCEPTED corrected T=14</td><td>vaidlustaja kogus tõuseb Δ võrra (kuni 2), released_opportunity väheneb sama võrra ja uus otsusedokument on loodud</td></tr><tr><td><strong>Δ ei ole kaetav</strong></td><td>Δ=3 ja released=1</td><td>–</td><td>ERR_INSUFFICIENT_RELEASED</td></tr><tr><td><strong>Rahuldamata</strong></td><td>–</td><td>REJECTED põhjendusega</td><td>jaotus ei muutu ja otsus sisaldab kohtusse pöördumise infot</td></tr><tr><td><strong>Teisi ei puututa</strong></td><td>–</td><td>–</td><td>teiste taotlejate allocated_opportunity versioonid on muutumata</td></tr><tr><td><strong>Neli silma</strong></td><td>sama ametnik kinnitas jaotuse</td><td>–</td><td>ERR_FOUR_EYES</td></tr><tr><td><strong>Audit</strong></td><td>–</td><td>–</td><td>iga samm (algus, otsus, parandus) on auditis, tõendid DF-s seotud vaidega</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Vaie rahuldatud</strong></td><td>vaidlustaja T oli 10, õige on 14 ja released AVAILABLE kogus on 2</td><td>ametnik teeb otsuse ACCEPTED corrected T=14</td><td>vaidlustaja kogus tõuseb Δ võrra (kuni 2), released_opportunity väheneb sama võrra ja uus otsusedokument on loodud</td></tr><tr><td><strong>Δ ei ole kaetav</strong></td><td>Δ=3 ja released=1</td><td>–</td><td>ERR_INSUFFICIENT_RELEASED</td></tr><tr><td><strong>Rahuldamata</strong></td><td>–</td><td>REJECTED põhjendusega</td><td>jaotus ei muutu ja otsus sisaldab kohtusse pöördumise infot</td></tr><tr><td><strong>Teisi ei puututa</strong></td><td>–</td><td>–</td><td>teiste taotlejate allocated_opportunity versioonid on muutumata</td></tr><tr><td><strong>Neli silma</strong></td><td>sama ametnik kinnitas jaotuse</td><td>–</td><td>ERR_FOUR_EYES</td></tr><tr><td><strong>Audit</strong></td><td>–</td><td>–</td><td>iga samm (algus, otsus, parandus) on auditis, tõendid DF-s seotud vaidega</td></tr></tbody></table></div>
 <p><strong>Riskid ja sõltuvused.</strong></p>
 <ul>
 <li>Sõltub E2-T02 mootorist ja E3-T06 tühistamise märkest.</li>
@@ -247,28 +250,28 @@ Kontrollid: tähtaeg <code>decision.published_at + P-12 päeva</code> (kuni 23:5
 </ul>
 <p><strong>Diagramm: tulemus ja tähtaeg</strong></p>
 <div class="diagram"><pre class="mermaid" data-src="flowchart TD
-  RES[&quot;resolve&quot;] --&gt; ST[&quot;ALLOCATION_DISPUTED -&gt; AWAITING_FEE_PAYMENT&quot;]
+  RES[&quot;Otsus&quot;] --&gt; ST[&quot;ALLOCATION_DISPUTED -&gt; AWAITING_FEE_PAYMENT&quot;]
   ST --&gt; DL[&quot;fee_deadline_override = max(P-05, resolved_at + P-13)&quot;]
   ST --&gt; HOLD[&quot;dispute_hold=false&quot;]
   RES --&gt; Q{&quot;Kogus muutus?&quot;}
-  Q -- jah --&gt; RE[&quot;Tasu uuesti, licence_draft kustutatakse, taotleja teeb accept uuesti&quot;]
+  Q -- jah --&gt; RE[&quot;Tasu uuesti, licence_draft kustutatakse, taotleja nõustub uuesti&quot;]
   Q -- ei --&gt; KEEP[&quot;Sama pakkumine&quot;]
   DL --&gt; N[&quot;Teavitus dispute.resolved&quot;]">flowchart TD
-  RES[&quot;resolve&quot;] --&gt; ST[&quot;ALLOCATION_DISPUTED -&gt; AWAITING_FEE_PAYMENT&quot;]
+  RES[&quot;Otsus&quot;] --&gt; ST[&quot;ALLOCATION_DISPUTED -&gt; AWAITING_FEE_PAYMENT&quot;]
   ST --&gt; DL[&quot;fee_deadline_override = max(P-05, resolved_at + P-13)&quot;]
   ST --&gt; HOLD[&quot;dispute_hold=false&quot;]
   RES --&gt; Q{&quot;Kogus muutus?&quot;}
-  Q -- jah --&gt; RE[&quot;Tasu uuesti, licence_draft kustutatakse, taotleja teeb accept uuesti&quot;]
+  Q -- jah --&gt; RE[&quot;Tasu uuesti, licence_draft kustutatakse, taotleja nõustub uuesti&quot;]
   Q -- ei --&gt; KEEP[&quot;Sama pakkumine&quot;]
   DL --&gt; N[&quot;Teavitus dispute.resolved&quot;]</pre></div>
 <p><strong>Sub-task&#39;id (komponentide jaotus)</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
-<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Ruuter</td><td><code>Ruuter.private/mo/dispute/POST/finalize.yml</code></td><td>olek tagasi, <code>fee_deadline_override</code>, tasu uuesti</td></tr><tr><td>Resql</td><td><code>mo/POST/application-set-fee-deadline.sql</code>, <code>pvt/POST/dispute-hold-clear.sql</code></td><td>tähtaeg ja hold</td></tr><tr><td>DataMapper</td><td><code>notify/dispute-resolved.hbs</code></td><td>tulemuse teavitus</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td><span class="comp c-ruuter">Ruuter</span></td><td><code>Ruuter.private/mo/dispute/POST/dispute-finalizations.yml</code> (<code>POST /api/v1/internal/dispute-finalizations</code>)</td><td>olek tagasi, <code>fee_deadline_override</code>, tasu uuesti</td></tr><tr><td><span class="comp c-resql">Resql</span></td><td><code>mo/POST/application-set-fee-deadline.sql</code>, <code>pvt/POST/dispute-hold-clear.sql</code></td><td>tähtaeg ja hold</td></tr><tr><td><span class="comp c-datamapper">DataMapper</span></td><td><code>notify/dispute-resolved.hbs</code></td><td>tulemuse teavitus</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
-<li>Pärast <code>resolve</code>: taotlus <code>ALLOCATION_DISPUTED→AWAITING_FEE_PAYMENT</code> ja uus tasu tähtaeg <code>max(P-05, resolved_at + P-13 päeva)</code> (salvesta <code>application.fee_deadline_override</code>; E3-T06 töö peab selle eelistama P-05-le).</li>
-<li><code>dispute_hold=false</code> kõigil seotud ridadel. Uue koguse korral arvutatakse tasu uuesti (E3-T02) ja <code>licence_draft</code> kustutatakse, taotleja peab uuesti <code>accept</code> tegema.</li>
+<li>Pärast otsust: taotlus <code>ALLOCATION_DISPUTED→AWAITING_FEE_PAYMENT</code> ja uus tasu tähtaeg <code>max(P-05, resolved_at + P-13 päeva)</code> (salvesta <code>application.fee_deadline_override</code>; E3-T06 töö peab selle eelistama P-05-le).</li>
+<li><code>dispute_hold=false</code> kõigil seotud ridadel. Uue koguse korral arvutatakse tasu uuesti (E3-T02) ja <code>licence_draft</code> kustutatakse, taotleja peab uuesti nõustuma (E3-T01).</li>
 <li>Teavitus (<code>dispute.resolved</code>): tulemus, uus kogus, tähtaeg, kohtusse pöördumise info.</li>
-<li>Kui taotleja loobub (<code>decline</code>), kehtib E3 loogika.</li>
+<li>Kui taotleja loobub, kehtib E3 loogika.</li>
 <li><strong>Kõik asjaosalised:</strong> kui <code>Δ</code> võeti teise taotleja vabanenud kogusest, ei teavitata teda eraldi (ta ei ole kogust enam endale saanud), aga PTA ülesanne ei teki.</li>
 </ol>
 <p><strong>Vastuvõtutestid.</strong></p>
