@@ -107,31 +107,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <li>Audit ja versioon (PVT_DR-04/07).</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Lisamine ja kinnitus
-  When  ametnik loob kirje ja kinnitab, publish_at=2027-01-01 00:00
-  Then  status APPROVED ja avalikuks ei muutu enne publish_at
-
-Scenario: Automaatne avalikustamine
-  Given APPROVED kirje, publish_at=2027-01-01 00:00
-  When  on 2027-01-01 00:00:30
-  Then  PUBLISHED ja nähtav avalikus API-s
-
-Scenario: CSV import
-  When  üks rida on vigane
-  Then  midagi ei laadita ja ridade vead on tagastatud
-
-Scenario: Piirarv pärast müüki
-  Given kalastuskaarte on müüdud
-  When  angler_limit muudetakse
-  Then  ERR_OPPORTUNITY_IN_USE
-
-Scenario: Piirarvuta
-  Given angler_limit=null
-  Then  kirje on piirarvuta ja T02 ei kontrolli saadavust
-
-Scenario: Õigused
-  When  APPLICANT proovib luua
-  Then  ERR_FORBIDDEN</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Lisamine ja kinnitus</strong></td><td>–</td><td>ametnik loob kirje ja kinnitab, publish_at=2027-01-01 00:00</td><td>status APPROVED ja avalikuks ei muutu enne publish_at</td></tr><tr><td><strong>Automaatne avalikustamine</strong></td><td>APPROVED kirje, publish_at=2027-01-01 00:00</td><td>on 2027-01-01 00:00:30</td><td>PUBLISHED ja nähtav avalikus API-s</td></tr><tr><td><strong>CSV import</strong></td><td>–</td><td>üks rida on vigane</td><td>midagi ei laadita ja ridade vead on tagastatud</td></tr><tr><td><strong>Piirarv pärast müüki</strong></td><td>kalastuskaarte on müüdud</td><td>angler_limit muudetakse</td><td>ERR_OPPORTUNITY_IN_USE</td></tr><tr><td><strong>Piirarvuta</strong></td><td>angler_limit=null</td><td>–</td><td>kirje on piirarvuta ja T02 ei kontrolli saadavust</td></tr><tr><td><strong>Õigused</strong></td><td>–</td><td>APPLICANT proovib luua</td><td>ERR_FORBIDDEN</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-12, A-14. <strong>Sõltub:</strong> PVT teenuse karkass (E2-T01 samas teenuses).</p>
 <hr>
 <h3 id="kl-e8-t02-kalastuskaardi-soetamine-to-be-07"><a class="anchor" href="#kl-e8-t02-kalastuskaardi-soetamine-to-be-07">#</a>KL-E8-T02 Kalastuskaardi soetamine (TO-BE.07)</h3>
@@ -172,41 +148,7 @@ Scenario: Õigused
 <li>Jõudlus: ostmise lõpp-punktid peavad taluma hooaja alguse tippu: sihtväärtus 100 tellimust sekundis (A-15 tüüpi vaikeväärtus, seadistatav test).</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Piirarvuga kaardi ost
-  Given kirje angler_limit=100, müüdud 99
-  When  kasutaja tellib ja maksab
-  Then  kaart väljastatakse ja 100/100 täis
-
-Scenario: Üle piirarvu
-  Given 100/100
-  When  uus tellimus
-  Then  ERR_SOLD_OUT
-
-Scenario: Samaaegsus
-  Given 1 koht vaba ja 50 paralleelset tellimust
-  Then  täpselt üks saab reservatsiooni
-
-Scenario: Reservatsiooni aegumine
-  Given reservatsioon ja makset ei tule 15 minuti jooksul
-  Then  koht vabaneb
-
-Scenario: Kehtivuse algus
-  Given makse kell 10:00
-  Then  valid_from ≥ 11:00 sama päeval
-
-Scenario: Kuupäev tulevikus
-  Given valitud algus 2027-06-01 ja makse 2027-05-20
-  Then  valid_from = 2027-06-01
-
-Scenario: Kaardi väljad
-  Then  kaart sisaldab KPS § 26 lg 3 kõiki välju
-
-Scenario: Kontroll
-  When  verify koodi järgi
-  Then  tagastatakse kehtivus ja nimi, mitte isikukood
-
-Scenario: Makse ebaõnnestus
-  Then  kaarti ei väljastata ja reservatsioon vabaneb</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Piirarvuga kaardi ost</strong></td><td>kirje angler_limit=100, müüdud 99</td><td>kasutaja tellib ja maksab</td><td>kaart väljastatakse ja 100/100 täis</td></tr><tr><td><strong>Üle piirarvu</strong></td><td>100/100</td><td>uus tellimus</td><td>ERR_SOLD_OUT</td></tr><tr><td><strong>Samaaegsus</strong></td><td>1 koht vaba ja 50 paralleelset tellimust</td><td>–</td><td>täpselt üks saab reservatsiooni</td></tr><tr><td><strong>Reservatsiooni aegumine</strong></td><td>reservatsioon ja makset ei tule 15 minuti jooksul</td><td>–</td><td>koht vabaneb</td></tr><tr><td><strong>Kehtivuse algus</strong></td><td>makse kell 10:00</td><td>–</td><td>valid_from ≥ 11:00 sama päeval</td></tr><tr><td><strong>Kuupäev tulevikus</strong></td><td>valitud algus 2027-06-01 ja makse 2027-05-20</td><td>–</td><td>valid_from = 2027-06-01</td></tr><tr><td><strong>Kaardi väljad</strong></td><td>–</td><td>–</td><td>kaart sisaldab KPS § 26 lg 3 kõiki välju</td></tr><tr><td><strong>Kontroll</strong></td><td>–</td><td>verify koodi järgi</td><td>tagastatakse kehtivus ja nimi, mitte isikukood</td></tr><tr><td><strong>Makse ebaõnnestus</strong></td><td>–</td><td>–</td><td>kaarti ei väljastata ja reservatsioon vabaneb</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-12, A-14, A-24. <strong>Sõltub:</strong> KL-E8-T01, E3-T02/T03 (tasu ja makse mehhanismid), LTO karkass.</p>
 <hr>
 <h3 id="kl-e8-t03-harrastuspüügiõiguse-soetamine-to-be-08"><a class="anchor" href="#kl-e8-t03-harrastuspüügiõiguse-soetamine-to-be-08">#</a>KL-E8-T03 Harrastuspüügiõiguse soetamine (TO-BE.08)</h3>
@@ -239,35 +181,7 @@ Scenario: Makse ebaõnnestus
 <li>Isikuandmed: isikukood on salvestatud krüpteeritult (veerutasemel) ja logides maskeeritud (LTO_DR-17…19).</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Autentimata ost
-  When  kasutaja valib aastapileti, sisestab Eesti isikukoodi, tasub
-  Then  õigus on registreeritud, valid_from=makse+1h ja kinnitus saadetud
-
-Scenario: Vale isikukood
-  When  kontrollnumber ei klapi
-  Then  ERR_VALIDATION enne makset
-
-Scenario: Autenditud
-  Given kasutaja on autenditud
-  Then  isikuandmed on eeltäidetud ja muutmatud
-
-Scenario: SMS
-  When  operaator edastab õige tellimuse
-  Then  õigus registreeritud, valid_from = kinnitus-SMS-i aeg + 1h ja vastus operaatorile OK
-
-Scenario: SMS topelt
-  When  sama operator_message_id tuleb kaks korda
-  Then  teine on no-op ja vastus sama
-
-Scenario: Hilisem algus
-  Given kasutaja valis algusaja 20 päeva pärast makset
-  Then  luba, aga 31 päeva korral ERR_VALIDATION
-
-Scenario: Ühe aasta ülempiir
-  Then  valid_to - valid_from ≤ 1 kalendriaasta
-
-Scenario: Isikukoodi kaitse
-  Then  logides ja verify vastuses ei ole täielikku isikukoodi</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Autentimata ost</strong></td><td>–</td><td>kasutaja valib aastapileti, sisestab Eesti isikukoodi, tasub</td><td>õigus on registreeritud, valid_from=makse+1h ja kinnitus saadetud</td></tr><tr><td><strong>Vale isikukood</strong></td><td>–</td><td>kontrollnumber ei klapi</td><td>ERR_VALIDATION enne makset</td></tr><tr><td><strong>Autenditud</strong></td><td>kasutaja on autenditud</td><td>–</td><td>isikuandmed on eeltäidetud ja muutmatud</td></tr><tr><td><strong>SMS</strong></td><td>–</td><td>operaator edastab õige tellimuse</td><td>õigus registreeritud, valid_from = kinnitus-SMS-i aeg + 1h ja vastus operaatorile OK</td></tr><tr><td><strong>SMS topelt</strong></td><td>–</td><td>sama operator_message_id tuleb kaks korda</td><td>teine on no-op ja vastus sama</td></tr><tr><td><strong>Hilisem algus</strong></td><td>kasutaja valis algusaja 20 päeva pärast makset</td><td>–</td><td>luba, aga 31 päeva korral ERR_VALIDATION</td></tr><tr><td><strong>Ühe aasta ülempiir</strong></td><td>–</td><td>–</td><td>valid_to - valid_from ≤ 1 kalendriaasta</td></tr><tr><td><strong>Isikukoodi kaitse</strong></td><td>–</td><td>–</td><td>logides ja verify vastuses ei ole täielikku isikukoodi</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-12, A-14, A-24. <strong>Sõltub:</strong> E3-T02/T03, LTO karkass.</p>
 </article>
 <div class="pn"><a href="E7-vesiviljelus.html">← E7 Vesiviljeluse tegevusloa taotlemine ja väljastamine (TO-BE.05)</a><a href="E9-automaatotsusega-load.html">E9 Reeglipõhised load: eripüük, elektripüügivahendi tõend, asustamisluba (TO-BE.09–11) →</a></div>

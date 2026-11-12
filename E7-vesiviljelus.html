@@ -130,34 +130,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <li>Esitatud taotlusi ei saa pärast <code>INSPECTION_SCHEDULED</code> taotleja poolt muuta. Parandused toimuvad ametniku ülesande kaudu.</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Edukas esitamine
-  Given esindusõiguslik kasutaja, kõik AQ kontrollid PASS
-  When  ta esitab
-  Then  olek SUBMITTED, kinnituskiri saadetud ja PTA ülesanne „Planeeri kohapealne kontroll“ loodud
-
-Scenario: Piirang
-  Given AQ-03 FAIL
-  Then  esitamine blokeeritud ja põhjus nähtav
-
-Scenario: Sama tegevuskoht
-  Given tegevuskohal on juba kehtiv luba
-  Then  AQ-04 on NEEDS_OFFICER ja esitamine õnnestub, ülesanne ametnikule
-
-Scenario: Eeltäide
-  Given ReM kliendiportaalis on kontaktandmed
-  Then  vorm on eeltäidetud
-
-Scenario: Kliendiportaal maas
-  Then  eeltäide jääb tegemata ja esitamine ei ole blokeeritud
-
-Scenario: Vorm seadistuses
-  When  PTA_ADMIN muudab form_definition-is välja nõutavuse
-  Then  kehtib järgmisest taotlusest ilma koodimuudatuseta
-
-Scenario: Tagasivõtmine
-  Given SUBMITTED
-  When  taotleja võtab tagasi
-  Then  CANCELLED</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Edukas esitamine</strong></td><td>esindusõiguslik kasutaja, kõik AQ kontrollid PASS</td><td>ta esitab</td><td>olek SUBMITTED, kinnituskiri saadetud ja PTA ülesanne „Planeeri kohapealne kontroll“ loodud</td></tr><tr><td><strong>Piirang</strong></td><td>AQ-03 FAIL</td><td>–</td><td>esitamine blokeeritud ja põhjus nähtav</td></tr><tr><td><strong>Sama tegevuskoht</strong></td><td>tegevuskohal on juba kehtiv luba</td><td>–</td><td>AQ-04 on NEEDS_OFFICER ja esitamine õnnestub, ülesanne ametnikule</td></tr><tr><td><strong>Eeltäide</strong></td><td>ReM kliendiportaalis on kontaktandmed</td><td>–</td><td>vorm on eeltäidetud</td></tr><tr><td><strong>Kliendiportaal maas</strong></td><td>–</td><td>–</td><td>eeltäide jääb tegemata ja esitamine ei ole blokeeritud</td></tr><tr><td><strong>Vorm seadistuses</strong></td><td>–</td><td>PTA_ADMIN muudab form_definition-is välja nõutavuse</td><td>kehtib järgmisest taotlusest ilma koodimuudatuseta</td></tr><tr><td><strong>Tagasivõtmine</strong></td><td>SUBMITTED</td><td>taotleja võtab tagasi</td><td>CANCELLED</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-08, A-10, A-12, A-32. <strong>Sõltub:</strong> E1-T01, E1-T02, E1-T04 (mehhanismid).</p>
 <hr>
 <h3 id="kl-e7-t02-kohapealse-kontrolli-planeerimine-ja-okas-2-integratsioon"><a class="anchor" href="#kl-e7-t02-kohapealse-kontrolli-planeerimine-ja-okas-2-integratsioon">#</a>KL-E7-T02 Kohapealse kontrolli planeerimine ja OKAS-2 integratsioon</h3>
@@ -191,30 +164,7 @@ Scenario: Tagasivõtmine
 <li>Kui kontrolli kuupäev möödub ilma tulemuseta 14 päeva, loob süsteem PTA ülesande „Kontrolli tulemus puudub“.</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Planeerimine
-  Given SUBMITTED
-  When  ametnik valib kuupäeva 2027-03-10
-  Then  OKAS-2-s on planeeritud kontroll, olek INSPECTION_SCHEDULED ja taotleja on teavitatud
-
-Scenario: OKAS-2 maas
-  When  planeerimine ebaõnnestub
-  Then  olek jääb SUBMITTED ja ametnik saab vea
-
-Scenario: Tulemus integratsioonist
-  When  tuleb InspectionResultReceived COMPLIANT
-  Then  INSPECTION_DONE ja protokoll DF-s
-
-Scenario: Idempotentsus
-  When  sama sündmus tuleb kaks korda
-  Then  teine on no-op
-
-Scenario: Käsitsi tulemus
-  When  ametnik sisestab tulemuse käsitsi
-  Then  sama olekumuutus ja audit
-
-Scenario: Tulemus puudub
-  Given kontrolli kuupäevast on 14 päeva ja tulemust pole
-  Then  PTA ülesanne</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Planeerimine</strong></td><td>SUBMITTED</td><td>ametnik valib kuupäeva 2027-03-10</td><td>OKAS-2-s on planeeritud kontroll, olek INSPECTION_SCHEDULED ja taotleja on teavitatud</td></tr><tr><td><strong>OKAS-2 maas</strong></td><td>–</td><td>planeerimine ebaõnnestub</td><td>olek jääb SUBMITTED ja ametnik saab vea</td></tr><tr><td><strong>Tulemus integratsioonist</strong></td><td>–</td><td>tuleb InspectionResultReceived COMPLIANT</td><td>INSPECTION_DONE ja protokoll DF-s</td></tr><tr><td><strong>Idempotentsus</strong></td><td>–</td><td>sama sündmus tuleb kaks korda</td><td>teine on no-op</td></tr><tr><td><strong>Käsitsi tulemus</strong></td><td>–</td><td>ametnik sisestab tulemuse käsitsi</td><td>sama olekumuutus ja audit</td></tr><tr><td><strong>Tulemus puudub</strong></td><td>kontrolli kuupäevast on 14 päeva ja tulemust pole</td><td>–</td><td>PTA ülesanne</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-10, A-12. <strong>Sõltub:</strong> KL-E7-T01.</p>
 <hr>
 <h3 id="kl-e7-t03-otsus-tegevusloa-väljastamine-või-keeldumine"><a class="anchor" href="#kl-e7-t03-otsus-tegevusloa-väljastamine-või-keeldumine">#</a>KL-E7-T03 Otsus: tegevusloa väljastamine või keeldumine</h3>
@@ -242,30 +192,7 @@ Scenario: Tulemus puudub
 <li><strong>Vaie</strong> pärast keeldumist käsitletakse HMS üldkorras väljaspool KALATUUM-it (ulatusest väljas, kuni E5 laiendatakse sellele menetlustüübile).</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Väljastamine
-  Given INSPECTION_DONE, kontroll COMPLIANT
-  When  ametnik APPROVE põhjendusega
-  Then  luba VVL-2027-000001 ACTIVE, dokument DF-s, olek LICENCE_ISSUED, teavitus saadetud
-
-Scenario: Keeldumine
-  When  REFUSE õigusnormi ja põhjendusega
-  Then  DECIDED_REFUSED, otsusedokument ja kiri taotlejale
-
-Scenario: Põhjenduseta
-  Then  ERR_VALIDATION
-
-Scenario: Vale olek
-  Given SUBMITTED
-  When  decide
-  Then  ERR_INVALID_STATE_TRANSITION
-
-Scenario: Tingimused
-  When  APPROVE koos conditions
-  Then  tingimused on loal ja dokumendil
-
-Scenario: Õigused
-  When  APPLICANT kutsub decide
-  Then  ERR_FORBIDDEN</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Väljastamine</strong></td><td>INSPECTION_DONE, kontroll COMPLIANT</td><td>ametnik APPROVE põhjendusega</td><td>luba VVL-2027-000001 ACTIVE, dokument DF-s, olek LICENCE_ISSUED, teavitus saadetud</td></tr><tr><td><strong>Keeldumine</strong></td><td>–</td><td>REFUSE õigusnormi ja põhjendusega</td><td>DECIDED_REFUSED, otsusedokument ja kiri taotlejale</td></tr><tr><td><strong>Põhjenduseta</strong></td><td>–</td><td>–</td><td>ERR_VALIDATION</td></tr><tr><td><strong>Vale olek</strong></td><td>SUBMITTED</td><td>decide</td><td>ERR_INVALID_STATE_TRANSITION</td></tr><tr><td><strong>Tingimused</strong></td><td>–</td><td>APPROVE koos conditions</td><td>tingimused on loal ja dokumendil</td></tr><tr><td><strong>Õigused</strong></td><td>–</td><td>APPLICANT kutsub decide</td><td>ERR_FORBIDDEN</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-12, A-31, A-32. <strong>Sõltub:</strong> KL-E7-T02, LTO karkass.</p>
 </article>
 <div class="pn"><a href="E6-stsenaarium-2-delta.html">← E6 Alternatiivne stsenaarium: proaktiivne jaotus ja pakkumine (delta)</a><a href="E8-harrastuspuuk.html">E8 Harrastuspüük: püügivõimaluste haldus, kalastuskaart, püügiõigus (TO-BE.06–08) →</a></div>

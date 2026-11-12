@@ -145,45 +145,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <li>Taotleja saab oma <code>accept</code> otsust muuta kuni makse algatamiseni: <code>POST …/offer/accept</code> on idempotentne ja kirjutab <code>licence_draft</code>-i üle; pärast makse algatamist (T03 <code>payment.state ≠ NONE</code>) → <code>ERR_INVALID_STATE_TRANSITION</code>.</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Nõustumine täies mahus
-  Given taotlus AWAITING_FEE_PAYMENT, allocated=5 ühes reas
-  When  accept drawn=5, validity 2027-01-10…2027-12-31
-  Then  licence_draft on salvestatud, maksekorraldus on loodud, olek on AWAITING_FEE_PAYMENT
-
-Scenario: Osaline väljavõtt
-  Given allocated=5
-  When  accept drawn=3
-  Then  released_opportunity (kogus 2, PARTIAL_DRAW) on loodud ja tasu arvutatakse 3-le
-
-Scenario: Vale kuupäev
-  When  validity.to = 2028-01-05
-  Then  ERR_VALIDATION (kehtivus väljub aastast 2027)
-
-Scenario: 365 päeva
-  Given kolm FISHING_DAY rida kokku 400 päeva samale laevale
-  Then  ERR_FISHING_DAYS_EXCEEDED
-
-Scenario: Kattuv luba
-  Given sama laev, veeala ja püügivahend on juba kehtiva loa all
-  Then  ERR_OVERLAPPING_LICENCE
-
-Scenario: Erand 4¹
-  Given räimepüük kastmõrraga, kaks ≥10 m laeva, erandiloend lubab
-  Then  nõustumine õnnestub ja püügivahendi arv kantakse ainult esimesele loale
-
-Scenario: Loobumine
-  When  decline
-  Then  CANCELLED(DECLINED_BY_APPLICANT), released_opportunity kogu eraldatud kogusega, audit
-
-Scenario: Tähtaeg möödas
-  Given täna on pärast P-05
-  When  accept
-  Then  ERR_INVALID_STATE_TRANSITION (tühistamine toimub T06 töö kaudu)
-
-Scenario: Makse algatatud
-  Given makse on algatatud
-  When  accept uuesti
-  Then  ERR_INVALID_STATE_TRANSITION</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Nõustumine täies mahus</strong></td><td>taotlus AWAITING_FEE_PAYMENT, allocated=5 ühes reas</td><td>accept drawn=5, validity 2027-01-10…2027-12-31</td><td>licence_draft on salvestatud, maksekorraldus on loodud, olek on AWAITING_FEE_PAYMENT</td></tr><tr><td><strong>Osaline väljavõtt</strong></td><td>allocated=5</td><td>accept drawn=3</td><td>released_opportunity (kogus 2, PARTIAL_DRAW) on loodud ja tasu arvutatakse 3-le</td></tr><tr><td><strong>Vale kuupäev</strong></td><td>–</td><td>validity.to = 2028-01-05</td><td>ERR_VALIDATION (kehtivus väljub aastast 2027)</td></tr><tr><td><strong>365 päeva</strong></td><td>kolm FISHING_DAY rida kokku 400 päeva samale laevale</td><td>–</td><td>ERR_FISHING_DAYS_EXCEEDED</td></tr><tr><td><strong>Kattuv luba</strong></td><td>sama laev, veeala ja püügivahend on juba kehtiva loa all</td><td>–</td><td>ERR_OVERLAPPING_LICENCE</td></tr><tr><td><strong>Erand 4¹</strong></td><td>räimepüük kastmõrraga, kaks ≥10 m laeva, erandiloend lubab</td><td>–</td><td>nõustumine õnnestub ja püügivahendi arv kantakse ainult esimesele loale</td></tr><tr><td><strong>Loobumine</strong></td><td>–</td><td>decline</td><td>CANCELLED(DECLINED_BY_APPLICANT), released_opportunity kogu eraldatud kogusega, audit</td></tr><tr><td><strong>Tähtaeg möödas</strong></td><td>täna on pärast P-05</td><td>accept</td><td>ERR_INVALID_STATE_TRANSITION (tühistamine toimub T06 töö kaudu)</td></tr><tr><td><strong>Makse algatatud</strong></td><td>makse on algatatud</td><td>accept uuesti</td><td>ERR_INVALID_STATE_TRANSITION</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-17, A-21. <strong>Sõltub:</strong> KL-E2-T06, KL-E3-T02.</p>
 <hr>
 <h3 id="kl-e3-t02-püügiõiguse-tasu-arvutus-ja-tasumäärade-seadistus"><a class="anchor" href="#kl-e3-t02-püügiõiguse-tasu-arvutus-ja-tasumäärade-seadistus">#</a>KL-E3-T02 Püügiõiguse tasu arvutus ja tasumäärade seadistus</h3>
@@ -220,30 +182,7 @@ Scenario: Makse algatatud
 <li>API: <code>GET …/offer/fee</code> tagastab arvutuse (nõustumisel salvestatud snapshot, muutmatu pärast makse algatamist). Snapshotis on kasutatud tasumäärade ID-d, et summa oleks hiljem seletatav.</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Arvutus
-  Given rate=12.5000 €/tonn ja drawn=4.00 tonni
-  Then  rea tasu=5000 senti
-
-Scenario: Ümardus
-  Given rate=0.3333 €/tonn, drawn=1.00
-  Then  rea tasu=33 senti (half up)
-
-Scenario: Mitu rida
-  Given kaks rida 5000 ja 1234 senti
-  Then  total_cents=6234
-
-Scenario: Tasumäär puudub
-  Given tasumäära kirjet pole
-  Then  ERR_FEE_RATE_MISSING ja summa ei ole 0
-
-Scenario: Import
-  When  CSV sisaldab duplikaadivõtit
-  Then  ERR_VALIDATION koos ridade numbritega ja midagi ei laadita (kõik-või-mitte-midagi)
-
-Scenario: Snapshot
-  Given makse on algatatud
-  When  tasumäär muudetakse
-  Then  loa tasu ei muutu</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Arvutus</strong></td><td>rate=12.5000 €/tonn ja drawn=4.00 tonni</td><td>–</td><td>rea tasu=5000 senti</td></tr><tr><td><strong>Ümardus</strong></td><td>rate=0.3333 €/tonn, drawn=1.00</td><td>–</td><td>rea tasu=33 senti (half up)</td></tr><tr><td><strong>Mitu rida</strong></td><td>kaks rida 5000 ja 1234 senti</td><td>–</td><td>total_cents=6234</td></tr><tr><td><strong>Tasumäär puudub</strong></td><td>tasumäära kirjet pole</td><td>–</td><td>ERR_FEE_RATE_MISSING ja summa ei ole 0</td></tr><tr><td><strong>Import</strong></td><td>–</td><td>CSV sisaldab duplikaadivõtit</td><td>ERR_VALIDATION koos ridade numbritega ja midagi ei laadita (kõik-või-mitte-midagi)</td></tr><tr><td><strong>Snapshot</strong></td><td>makse on algatatud</td><td>tasumäär muudetakse</td><td>loa tasu ei muutu</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-06, A-24. <strong>Sõltub:</strong> ei ole (arvutus on iseseisev).</p>
 <hr>
 <h3 id="kl-e3-t03-maksekorraldus-ja-makse-staatuse-vastuvõtt"><a class="anchor" href="#kl-e3-t03-maksekorraldus-ja-makse-staatuse-vastuvõtt">#</a>KL-E3-T03 Maksekorraldus ja makse staatuse vastuvõtt</h3>
@@ -293,34 +232,7 @@ Scenario: Snapshot
 <li>Maksekorralduse viide on taotluse number (A-24). Maksetähtaeg ei ületa P-05.</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Edukas makse
-  Given licence_draft, total=6234 senti
-  When  mock saadab PAID 6234
-  Then  payment PAID, taotlus CONFIRMED, FeePaid avaldatud ja T04 käivitub
-
-Scenario: Topelt-teade
-  When  sama PAID-teade tuleb kaks korda
-  Then  teine on no-op, CONFIRMED üks kord
-
-Scenario: Ebaõnnestunud makse
-  When  mock saadab FAILED
-  Then  taotlus jääb AWAITING_FEE_PAYMENT ja uus katse on võimalik
-
-Scenario: Hilinenud teade
-  Given kasutaja naaseb return_url kaudu ja teadet pole
-  Then  getStatus kutsutakse ja PAID kinnitatakse
-
-Scenario: Vale summa
-  Given PAID 1000 senti, nõutud 6234
-  Then  taotlus jääb AWAITING_FEE_PAYMENT ja PTA ülesanne on loodud, luba ei väljastata
-
-Scenario: Allkirjata teade
-  When  notify tuleb ilma kehtiva allkirjata
-  Then  401 ja midagi ei muutu
-
-Scenario: Topeltklõps
-  When  offer/pay kutsutakse kaks korda
-  Then  sama redirect_url ja üks payment</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Edukas makse</strong></td><td>licence_draft, total=6234 senti</td><td>mock saadab PAID 6234</td><td>payment PAID, taotlus CONFIRMED, FeePaid avaldatud ja T04 käivitub</td></tr><tr><td><strong>Topelt-teade</strong></td><td>–</td><td>sama PAID-teade tuleb kaks korda</td><td>teine on no-op, CONFIRMED üks kord</td></tr><tr><td><strong>Ebaõnnestunud makse</strong></td><td>–</td><td>mock saadab FAILED</td><td>taotlus jääb AWAITING_FEE_PAYMENT ja uus katse on võimalik</td></tr><tr><td><strong>Hilinenud teade</strong></td><td>kasutaja naaseb return_url kaudu ja teadet pole</td><td>–</td><td>getStatus kutsutakse ja PAID kinnitatakse</td></tr><tr><td><strong>Vale summa</strong></td><td>PAID 1000 senti, nõutud 6234</td><td>–</td><td>taotlus jääb AWAITING_FEE_PAYMENT ja PTA ülesanne on loodud, luba ei väljastata</td></tr><tr><td><strong>Allkirjata teade</strong></td><td>–</td><td>notify tuleb ilma kehtiva allkirjata</td><td>401 ja midagi ei muutu</td></tr><tr><td><strong>Topeltklõps</strong></td><td>–</td><td>offer/pay kutsutakse kaks korda</td><td>sama redirect_url ja üks payment</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-24, A-12. <strong>Sõltub:</strong> KL-E3-T01, T02.</p>
 <hr>
 <h3 id="kl-e3-t04-kalapüügiloa-loomine-ja-väljastamine-lto"><a class="anchor" href="#kl-e3-t04-kalapüügiloa-loomine-ja-väljastamine-lto">#</a>KL-E3-T04 Kalapüügiloa loomine ja väljastamine (LTO)</h3>
@@ -369,42 +281,7 @@ Scenario: Topeltklõps
 <li><strong>Ametniku sekkumine ei ole nõutud</strong> õnnestunud teel (automaatne väljastamine, § 14 lg 3 ja TO-BE.01 õigusmuudatus „lubada süsteemipõhine automaatne loa väljastamine“). Õigusliku aluse kinnitus on lahtine, aga tehniliselt käitub süsteem nii, et automaatset väljastamist saab seadistusega välja lülitada (<code>licence.auto_issue=true</code> vaikimisi). Kui <code>false</code>, loob süsteem PTA ülesande „Kinnita loa väljastamine“ ja luba väljastatakse alles ametniku kinnitusel.</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Automaatne väljastamine
-  Given FeePaid, jaotusotsus kinnitati 5 päeva tagasi
-  When  T04 jookseb
-  Then  luba KPL-2027-000001 on ACTIVE, versioon 1, PDF DF-s, taotlus LICENCE_ISSUED, FishingLicenceChanged avaldatud
-
-Scenario: Kolme päeva reegel
-  Given jaotusotsus kinnitati täna ja makse laekus
-  Then  luba jääb ootele, olek CONFIRMED, scheduled_issue_at = otsus + 3 päeva
-  When  tuleb scheduled_issue_at
-  Then  luba väljastatakse
-
-Scenario: Viimane kontroll ebaõnnestub
-  Given CHK-04 on nüüd FAIL
-  Then  luba ei väljastata, PTA ülesanne on loodud ja taotleja on teavitatud
-
-Scenario: Väljaspool EV jurisdiktsiooni
-  Given veeala on NAFO
-  Then  PDF-il on ingliskeelne tõlge ja luba sisaldab fishing_place ja right_acquisition_basis
-
-Scenario: Kaluri luba kastmõrraga ≥10 m laeval
-  Then  luba sisaldab laeva nime, pardanumbrit ja registri sisenumbrit
-
-Scenario: Idempotentsus
-  When  FeePaid tuleb kaks korda
-  Then  luba on üks
-
-Scenario: Osaline väljavõtt
-  Given drawn=3, allocated=5
-  Then  litsentsi rea kogus on 3 ja PVT-s on 3 omandatud, 2 vabastatud
-
-Scenario: Automaatväljastus välja lülitatud
-  Given licence.auto_issue=false
-  Then  luba jääb PTA kinnituse ootele ja olek jääb CONFIRMED
-
-Scenario: Audit
-  Then  luua auditisündmus iga sammu kohta (loomine, sidumine, dokument, olekumuutus)</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Automaatne väljastamine</strong></td><td>FeePaid, jaotusotsus kinnitati 5 päeva tagasi</td><td>T04 jookseb</td><td>luba KPL-2027-000001 on ACTIVE, versioon 1, PDF DF-s, taotlus LICENCE_ISSUED, FishingLicenceChanged avaldatud</td></tr><tr><td><strong>Kolme päeva reegel</strong></td><td>jaotusotsus kinnitati täna ja makse laekus</td><td>tuleb scheduled_issue_at</td><td>luba jääb ootele, olek CONFIRMED, scheduled_issue_at = otsus + 3 päeva; luba väljastatakse</td></tr><tr><td><strong>Viimane kontroll ebaõnnestub</strong></td><td>CHK-04 on nüüd FAIL</td><td>–</td><td>luba ei väljastata, PTA ülesanne on loodud ja taotleja on teavitatud</td></tr><tr><td><strong>Väljaspool EV jurisdiktsiooni</strong></td><td>veeala on NAFO</td><td>–</td><td>PDF-il on ingliskeelne tõlge ja luba sisaldab fishing_place ja right_acquisition_basis</td></tr><tr><td><strong>Kaluri luba kastmõrraga ≥10 m laeval</strong></td><td>–</td><td>–</td><td>luba sisaldab laeva nime, pardanumbrit ja registri sisenumbrit</td></tr><tr><td><strong>Idempotentsus</strong></td><td>–</td><td>FeePaid tuleb kaks korda</td><td>luba on üks</td></tr><tr><td><strong>Osaline väljavõtt</strong></td><td>drawn=3, allocated=5</td><td>–</td><td>litsentsi rea kogus on 3 ja PVT-s on 3 omandatud, 2 vabastatud</td></tr><tr><td><strong>Automaatväljastus välja lülitatud</strong></td><td>licence.auto_issue=false</td><td>–</td><td>luba jääb PTA kinnituse ootele ja olek jääb CONFIRMED</td></tr><tr><td><strong>Audit</strong></td><td>–</td><td>–</td><td>luua auditisündmus iga sammu kohta (loomine, sidumine, dokument, olekumuutus)</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-09, A-12, A-21, A-22, A-23. <strong>Sõltub:</strong> KL-E3-T03, KL-E1-T04, LTO teenuse karkass (LTO_DR-01; kui puudub, loo minimaalne selle Task&#39;i raames).</p>
 <hr>
 <h3 id="kl-e3-t05-fishinglicencechanged-sündmus-ja-flux-lepe"><a class="anchor" href="#kl-e3-t05-fishinglicencechanged-sündmus-ja-flux-lepe">#</a>KL-E3-T05 FishingLicenceChanged sündmus ja FLUX-lepe</h3>
@@ -454,25 +331,7 @@ Scenario: Audit
 <li><strong>Ulatusest väljas:</strong> P1000-09 sõnumi koostamine, FLUX TL edastus.</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Sündmus loa väljastamisel
-  When  luba KPL-2027-000001 väljastatakse
-  Then  outbox'is on sündmus ISSUED, mis valideerub skeemi vastu
-
-Scenario: Atomaarsus
-  Given tehing loa loomisel rullub tagasi
-  Then  outbox'is ei ole sündmust
-
-Scenario: Edastamine ja deduplitseerimine
-  When  väljastaja saadab sama event_id kaks korda
-  Then  mock-tarbija töötleb ühe korra
-
-Scenario: Tarbija maas
-  Given tarbija ei vasta 24 h
-  Then  sündmus on DEAD_LETTER, PTA ülesanne on loodud
-
-Scenario: Tagasiside
-  When  tuleb FluxDispatchResult REJECTED
-  Then  flux_dispatch_status=REJECTED, PTA ülesanne, luba jääb ACTIVE</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Sündmus loa väljastamisel</strong></td><td>–</td><td>luba KPL-2027-000001 väljastatakse</td><td>outbox&#39;is on sündmus ISSUED, mis valideerub skeemi vastu</td></tr><tr><td><strong>Atomaarsus</strong></td><td>tehing loa loomisel rullub tagasi</td><td>–</td><td>outbox&#39;is ei ole sündmust</td></tr><tr><td><strong>Edastamine ja deduplitseerimine</strong></td><td>–</td><td>väljastaja saadab sama event_id kaks korda</td><td>mock-tarbija töötleb ühe korra</td></tr><tr><td><strong>Tarbija maas</strong></td><td>tarbija ei vasta 24 h</td><td>–</td><td>sündmus on DEAD_LETTER, PTA ülesanne on loodud</td></tr><tr><td><strong>Tagasiside</strong></td><td>–</td><td>tuleb FluxDispatchResult REJECTED</td><td>flux_dispatch_status=REJECTED, PTA ülesanne, luba jääb ACTIVE</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-09. <strong>Sõltub:</strong> KL-E3-T04.</p>
 <hr>
 <h3 id="kl-e3-t06-tasu-tähtaja-järelvalve-ja-taotluse-tühistamine"><a class="anchor" href="#kl-e3-t06-tasu-tähtaja-järelvalve-ja-taotluse-tühistamine">#</a>KL-E3-T06 Tasu tähtaja järelvalve ja taotluse tühistamine</h3>
@@ -507,31 +366,7 @@ Scenario: Tagasiside
 <li><strong>Hoiatused:</strong> 7 ja 1 päeva enne P-05 saadetakse meeldetuletus kõigile <code>AWAITING_FEE_PAYMENT</code> taotlejatele (T07).</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Tähtaeg möödub
-  Given taotlus AWAITING_FEE_PAYMENT, makset pole, täna on 2027-01-01
-  When  töö jookseb
-  Then  taotlus CANCELLED(FEE_NOT_PAID) ja released_opportunity on loodud kogu eraldatud koguses
-
-Scenario: Vaidlustatud ei puututa
-  Given taotlus ALLOCATION_DISPUTED
-  Then  töö jätab selle puutumata
-
-Scenario: Makstud ootel luba
-  Given payment PAID ja luba ootab kolme päeva reegli täitumist
-  Then  taotlust ei tühistata
-
-Scenario: Vahelejäänud päev
-  Given töö ei jooksnud 2027-01-01
-  When  jookseb 2027-01-02
-  Then  tühistamine toimub
-
-Scenario: Meeldetuletus
-  Given AWAITING_FEE_PAYMENT ja P-05=2026-12-31
-  Then  e-kirjad 2026-12-24 ja 2026-12-30
-
-Scenario: Idempotentsus
-  When  töö jookseb kaks korda samal päeval
-  Then  released_opportunity kirjeid ei teki topelt</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Tähtaeg möödub</strong></td><td>taotlus AWAITING_FEE_PAYMENT, makset pole, täna on 2027-01-01</td><td>töö jookseb</td><td>taotlus CANCELLED(FEE_NOT_PAID) ja released_opportunity on loodud kogu eraldatud koguses</td></tr><tr><td><strong>Vaidlustatud ei puututa</strong></td><td>taotlus ALLOCATION_DISPUTED</td><td>–</td><td>töö jätab selle puutumata</td></tr><tr><td><strong>Makstud ootel luba</strong></td><td>payment PAID ja luba ootab kolme päeva reegli täitumist</td><td>–</td><td>taotlust ei tühistata</td></tr><tr><td><strong>Vahelejäänud päev</strong></td><td>töö ei jooksnud 2027-01-01</td><td>jookseb 2027-01-02</td><td>tühistamine toimub</td></tr><tr><td><strong>Meeldetuletus</strong></td><td>AWAITING_FEE_PAYMENT ja P-05=2026-12-31</td><td>–</td><td>e-kirjad 2026-12-24 ja 2026-12-30</td></tr><tr><td><strong>Idempotentsus</strong></td><td>–</td><td>töö jookseb kaks korda samal päeval</td><td>released_opportunity kirjeid ei teki topelt</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-07, A-12. <strong>Sõltub:</strong> KL-E3-T01, T03.</p>
 <hr>
 <h3 id="kl-e3-t07-teavituste-kataloog-e-post-e1-e3-jaoks"><a class="anchor" href="#kl-e3-t07-teavituste-kataloog-e-post-e1-e3-jaoks">#</a>KL-E3-T07 Teavituste kataloog (e-post) E1–E3 jaoks</h3>
@@ -551,20 +386,7 @@ Scenario: Idempotentsus
   MAIL --&gt; LOG[&quot;Saatmise logi ja kordus&quot;]</pre></div>
 <p><strong>Tee.</strong> (1) <code>NotificationService.send(key, recipient, params)</code> ja mallid failidena (i18n <code>et</code>, valmis kohad <code>en</code>), muutujatega, HTML + plain text. (2) Adressaat on <code>contact_email</code>; kui puudub, osapoole peamine e-post KOT-ist; kui ka seda ei ole, <code>NOTIFICATION_NO_ADDRESS</code> auditisündmus ja PTA ülesanne. (3) Kõik teavitused salvestatakse (<code>notification_log</code>: võti, adressaat, saadetud, tulemus), sisu isikuandmeteta peale vajaliku. (4) Kordus 3 korda 1 h vahega. (5) Kõik teavitused sisaldavad taotluse numbrit ja linki, kuid mitte kunagi isikukoodi, maksekaardi ega karistusandmeid. (6) Taotleja ei saa teavitusi välja lülitada, mis on seadusest tulenevad (otsused, vaided).</p>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Malli renderdamine
-  When  send(&quot;licence.issued&quot;, …)
-  Then  e-kiri sisaldab loa numbrit, kehtivust ja linki ning ei sisalda isikukoodi
-
-Scenario: Aadress puudub
-  Given contact_email on tühi ja KOT-is e-posti pole
-  Then  kirjutatakse NOTIFICATION_NO_ADDRESS ja PTA ülesanne
-
-Scenario: Tõrge
-  Given SMTP ei vasta
-  Then  kuni 3 korduskatset ja logi
-
-Scenario: Kõik võtmed on kaetud
-  Then  kataloogi igal võtmel on et-mall (automaattest kontrollib)</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Malli renderdamine</strong></td><td>–</td><td>send(&quot;licence.issued&quot;, …)</td><td>e-kiri sisaldab loa numbrit, kehtivust ja linki ning ei sisalda isikukoodi</td></tr><tr><td><strong>Aadress puudub</strong></td><td>contact_email on tühi ja KOT-is e-posti pole</td><td>–</td><td>kirjutatakse NOTIFICATION_NO_ADDRESS ja PTA ülesanne</td></tr><tr><td><strong>Tõrge</strong></td><td>SMTP ei vasta</td><td>–</td><td>kuni 3 korduskatset ja logi</td></tr><tr><td><strong>Kõik võtmed on kaetud</strong></td><td>–</td><td>–</td><td>kataloogi igal võtmel on et-mall (automaattest kontrollib)</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-13. <strong>Sõltub:</strong> ei ole (teised Task&#39;id tarbivad seda).</p>
 </article>
 <div class="pn"><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html">← E2 Püügivõimaluste arvutamine ja jaotamine</a><a href="E4-kasutamata-puugivoimaluste-umberjagamine.html">E4 Kasutamata püügivõimaluste jagamine (TO-BE.03) →</a></div>

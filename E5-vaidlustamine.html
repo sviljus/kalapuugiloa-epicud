@@ -106,28 +106,7 @@ Kontrollid: tähtaeg <code>decision.published_at + P-12 päeva</code> (kuni 23:5
 <li><code>GET /disputes?party_id=</code>, <code>GET /disputes/{id}</code> (staatus, ajalugu, tähtajad: kuidas menetlus edeneb).</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Vaide esitamine
-  Given taotlus AWAITING_FEE_PAYMENT, otsus avaldati 10 päeva tagasi
-  When  taotleja esitab vaide põhjendusega 80 märki
-  Then  dispute SUBMITTED, taotlus ALLOCATION_DISPUTED, dispute_hold=true, PTA ülesanne ja kinnituskiri
-
-Scenario: Tähtaeg möödas
-  Given otsus avaldati 31 päeva tagasi
-  Then  ERR_DISPUTE_WINDOW_CLOSED
-
-Scenario: Topeltvaie
-  Given aktiivne vaie
-  Then  ERR_DUPLICATE_DISPUTE
-
-Scenario: Teiste menetlus jätkub
-  Then  teise taotleja taotlus saab tasuda ja luba väljastada
-
-Scenario: Tagasivõtmine
-  When  vaie WITHDRAWN
-  Then  taotlus AWAITING_FEE_PAYMENT, dispute_hold=false, tasu tähtaeg = max(P-05, täna + P-13)
-
-Scenario: Põhjendus liiga lühike
-  Then  ERR_VALIDATION</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Vaide esitamine</strong></td><td>taotlus AWAITING_FEE_PAYMENT, otsus avaldati 10 päeva tagasi</td><td>taotleja esitab vaide põhjendusega 80 märki</td><td>dispute SUBMITTED, taotlus ALLOCATION_DISPUTED, dispute_hold=true, PTA ülesanne ja kinnituskiri</td></tr><tr><td><strong>Tähtaeg möödas</strong></td><td>otsus avaldati 31 päeva tagasi</td><td>–</td><td>ERR_DISPUTE_WINDOW_CLOSED</td></tr><tr><td><strong>Topeltvaie</strong></td><td>aktiivne vaie</td><td>–</td><td>ERR_DUPLICATE_DISPUTE</td></tr><tr><td><strong>Teiste menetlus jätkub</strong></td><td>–</td><td>–</td><td>teise taotleja taotlus saab tasuda ja luba väljastada</td></tr><tr><td><strong>Tagasivõtmine</strong></td><td>–</td><td>vaie WITHDRAWN</td><td>taotlus AWAITING_FEE_PAYMENT, dispute_hold=false, tasu tähtaeg = max(P-05, täna + P-13)</td></tr><tr><td><strong>Põhjendus liiga lühike</strong></td><td>–</td><td>–</td><td>ERR_VALIDATION</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-26, A-27, A-28. <strong>Sõltub:</strong> KL-E2-T06, KL-E3-T01.</p>
 <hr>
 <h3 id="kl-e5-t02-vaide-menetlemine-pta-s-ja-otsus"><a class="anchor" href="#kl-e5-t02-vaide-menetlemine-pta-s-ja-otsus">#</a>KL-E5-T02 Vaide menetlemine PTA-s ja otsus</h3>
@@ -169,28 +148,7 @@ Scenario: Põhjendus liiga lühike
 <li><strong>Kohtusse pöördumise info</strong> (kui <code>REJECTED</code> või <code>PARTIALLY</code>): otsusedokument sisaldab HMS/halduskohtu viidet (seadistatav tekst).</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Vaie rahuldatud
-  Given vaidlustaja T oli 10, õige on 14 ja released AVAILABLE kogus on 2
-  When  ametnik resolve ACCEPTED corrected T=14
-  Then  vaidlustaja kogus tõuseb Δ võrra (kuni 2), released_opportunity väheneb sama võrra ja uus otsusedokument on loodud
-
-Scenario: Δ ei ole kaetav
-  Given Δ=3 ja released=1
-  Then  ERR_INSUFFICIENT_RELEASED
-
-Scenario: Rahuldamata
-  When  REJECTED põhjendusega
-  Then  jaotus ei muutu ja otsus sisaldab kohtusse pöördumise infot
-
-Scenario: Teisi ei puututa
-  Then  teiste taotlejate allocated_opportunity versioonid on muutumata
-
-Scenario: Neli silma
-  Given sama ametnik kinnitas jaotuse
-  Then  ERR_FOUR_EYES
-
-Scenario: Audit
-  Then  iga samm (algus, otsus, parandus) on auditis, tõendid DF-s seotud vaidega</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Vaie rahuldatud</strong></td><td>vaidlustaja T oli 10, õige on 14 ja released AVAILABLE kogus on 2</td><td>ametnik resolve ACCEPTED corrected T=14</td><td>vaidlustaja kogus tõuseb Δ võrra (kuni 2), released_opportunity väheneb sama võrra ja uus otsusedokument on loodud</td></tr><tr><td><strong>Δ ei ole kaetav</strong></td><td>Δ=3 ja released=1</td><td>–</td><td>ERR_INSUFFICIENT_RELEASED</td></tr><tr><td><strong>Rahuldamata</strong></td><td>–</td><td>REJECTED põhjendusega</td><td>jaotus ei muutu ja otsus sisaldab kohtusse pöördumise infot</td></tr><tr><td><strong>Teisi ei puututa</strong></td><td>–</td><td>–</td><td>teiste taotlejate allocated_opportunity versioonid on muutumata</td></tr><tr><td><strong>Neli silma</strong></td><td>sama ametnik kinnitas jaotuse</td><td>–</td><td>ERR_FOUR_EYES</td></tr><tr><td><strong>Audit</strong></td><td>–</td><td>–</td><td>iga samm (algus, otsus, parandus) on auditis, tõendid DF-s seotud vaidega</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-12, A-29. <strong>Sõltub:</strong> KL-E5-T01, KL-E2-T02, KL-E3-T06.</p>
 <hr>
 <h3 id="kl-e5-t03-vaide-tulemuse-teavitus-ja-tähtaegade-taastamine"><a class="anchor" href="#kl-e5-t03-vaide-tulemuse-teavitus-ja-tähtaegade-taastamine">#</a>KL-E5-T03 Vaide tulemuse teavitus ja tähtaegade taastamine</h3>
@@ -221,19 +179,7 @@ Scenario: Audit
 <li><strong>Kõik asjaosalised:</strong> kui <code>Δ</code> võeti teise taotleja vabanenud kogusest, ei teavitata teda eraldi (ta ei ole kogust enam endale saanud), aga PTA ülesanne ei teki.</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Taotleja jätkab
-  Given vaie RESOLVED_ACCEPTED 2027-01-05, P-05=2026-12-31, P-13=14
-  Then  fee_deadline_override=2027-01-19 ja E3-T06 ei tühista enne seda
-
-Scenario: Uus tasu
-  Given kogus muutus 5→7
-  Then  tasu arvutatakse uuesti ja licence_draft tühistatakse
-
-Scenario: Rahuldamata
-  Then  taotleja saab teavituse ja jätkab esialgse koguse alusel
-
-Scenario: Teavitus
-  Then  dispute.resolved e-kiri sisaldab tulemust, tähtaega ja kohtusse pöördumise infot</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Taotleja jätkab</strong></td><td>vaie RESOLVED_ACCEPTED 2027-01-05, P-05=2026-12-31, P-13=14</td><td>–</td><td>fee_deadline_override=2027-01-19 ja E3-T06 ei tühista enne seda</td></tr><tr><td><strong>Uus tasu</strong></td><td>kogus muutus 5→7</td><td>–</td><td>tasu arvutatakse uuesti ja licence_draft tühistatakse</td></tr><tr><td><strong>Rahuldamata</strong></td><td>–</td><td>–</td><td>taotleja saab teavituse ja jätkab esialgse koguse alusel</td></tr><tr><td><strong>Teavitus</strong></td><td>–</td><td>–</td><td>dispute.resolved e-kiri sisaldab tulemust, tähtaega ja kohtusse pöördumise infot</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-28. <strong>Sõltub:</strong> KL-E5-T02, KL-E3-T06/T07.</p>
 </article>
 <div class="pn"><a href="E4-kasutamata-puugivoimaluste-umberjagamine.html">← E4 Kasutamata püügivõimaluste jagamine (TO-BE.03)</a><a href="E6-stsenaarium-2-delta.html">E6 Alternatiivne stsenaarium: proaktiivne jaotus ja pakkumine (delta) →</a></div>

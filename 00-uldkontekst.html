@@ -156,7 +156,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <li>Kõik <code>ERR_*</code> koodid on kataloogis ja i18n võtmetega.</li>
 <li>Auditisündmused on lisatud nagu vastuvõtukriteeriumid nõuavad.</li>
 <li>Seadistatavad parameetrid on seadistuses, mitte koodis (grep kuupäevadele ja tasumääradele on tühi).</li>
-<li>Testid kasutavad Task&#39;i enda vastuvõtukriteeriume. Gherkin-stsenaariumid on automaattestid.</li>
+<li>Testid kasutavad Task&#39;i enda vastuvõtukriteeriume. Iga vastuvõtukriteeriumide tabeli rida (olukord, eeldus, tegevus, oodatud tulemus) on üks automaattest.</li>
 </ul>
 <p><strong>Üldised vead (kõigil API-del):</strong>
 <code>ERR_UNAUTHENTICATED</code> (401), <code>ERR_FORBIDDEN</code> (403), <code>ERR_NOT_FOUND</code> (404), <code>ERR_VALIDATION</code> (422, väljade loetelu), <code>ERR_INVALID_STATE_TRANSITION</code> (409), <code>ERR_CONFLICT_VERSION</code> (409, optimistic lock), <code>ERR_DEPENDENCY_UNAVAILABLE</code> (503, vt A-10).</p>

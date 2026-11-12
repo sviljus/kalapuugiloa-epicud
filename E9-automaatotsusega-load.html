@@ -143,44 +143,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <li><strong>Ametniku töölaud:</strong> <code>GET /admin/permits?state=&amp;type=&amp;overdue=</code> ja detailvaade (taotlus, reeglite tulemused, dokumendid, otsuse eelnõu).</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Kõik PASS, lüliti väljas
-  Given kõik reeglid PASS, auto_issue=false
-  Then  olek DECISION_PREPARED ja ametnik näeb eelnõu
-
-Scenario: Kõik PASS, lüliti sees
-  Given auto_issue=true
-  Then  luba ISSUED ilma ametnikuta, actor=SYSTEM
-
-Scenario: FAIL
-  Given üks reegel FAIL põhjusega ERR_PENALTY_RESTRICTION
-  Then  REFUSE_PREPARED ja otsus sisaldab õigusnormi ja põhjenduse
-
-Scenario: NEEDS_OFFICER
-  Given üks reegel NEEDS_OFFICER ja ükski FAIL
-  Then  AWAITING_OFFICER ja ülesanne loodud, luba ei väljastata isegi auto_issue=true korral
-
-Scenario: Puuduste kõrvaldamine
-  Given ametnik määrab AWAITING_APPLICANT_FIX 5 päevaks
-  Then  decision_due_date nihkub 5 päeva võrra
-
-Scenario: Tähtaeg ületatud
-  Given decision_due_date möödub
-  Then  overdue=true ja ülesanne „Tähtaeg ületatud“, automaatotsust ei tehta
-
-Scenario: Uus reegel
-  When  katalogi lisatakse uus reegel
-  Then  see jookseb ilma mootori muutmata
-
-Scenario: Override põhjendusega
-  When  ametnik muudab eelnõu REFUSE-ks põhjendusega
-  Then  REFUSED ja audit sisaldab põhjendust
-
-Scenario: Aruandluskohustus
-  Given SPECIAL_FISHING_PERMIT ISSUED ja reporting_required=true
-  Then  reporting_obligation on loodud ja sündmus avaldatud
-
-Scenario: Isikuandmed
-  Then  kasutajale kuvatavad põhjused ei sisalda karistusandmeid</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Kõik PASS, lüliti väljas</strong></td><td>kõik reeglid PASS, auto_issue=false</td><td>–</td><td>olek DECISION_PREPARED ja ametnik näeb eelnõu</td></tr><tr><td><strong>Kõik PASS, lüliti sees</strong></td><td>auto_issue=true</td><td>–</td><td>luba ISSUED ilma ametnikuta, actor=SYSTEM</td></tr><tr><td><strong>FAIL</strong></td><td>üks reegel FAIL põhjusega ERR_PENALTY_RESTRICTION</td><td>–</td><td>REFUSE_PREPARED ja otsus sisaldab õigusnormi ja põhjenduse</td></tr><tr><td><strong>NEEDS_OFFICER</strong></td><td>üks reegel NEEDS_OFFICER ja ükski FAIL</td><td>–</td><td>AWAITING_OFFICER ja ülesanne loodud, luba ei väljastata isegi auto_issue=true korral</td></tr><tr><td><strong>Puuduste kõrvaldamine</strong></td><td>ametnik määrab AWAITING_APPLICANT_FIX 5 päevaks</td><td>–</td><td>decision_due_date nihkub 5 päeva võrra</td></tr><tr><td><strong>Tähtaeg ületatud</strong></td><td>decision_due_date möödub</td><td>–</td><td>overdue=true ja ülesanne „Tähtaeg ületatud“, automaatotsust ei tehta</td></tr><tr><td><strong>Uus reegel</strong></td><td>–</td><td>katalogi lisatakse uus reegel</td><td>see jookseb ilma mootori muutmata</td></tr><tr><td><strong>Override põhjendusega</strong></td><td>–</td><td>ametnik muudab eelnõu REFUSE-ks põhjendusega</td><td>REFUSED ja audit sisaldab põhjendust</td></tr><tr><td><strong>Aruandluskohustus</strong></td><td>SPECIAL_FISHING_PERMIT ISSUED ja reporting_required=true</td><td>–</td><td>reporting_obligation on loodud ja sündmus avaldatud</td></tr><tr><td><strong>Isikuandmed</strong></td><td>–</td><td>–</td><td>kasutajale kuvatavad põhjused ei sisalda karistusandmeid</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-08, A-10, A-12, A-31, A-34, A-35, A-36. <strong>Sõltub:</strong> E1-T01/T04 mehhanismid (kasutada või kopeerida muster), MO, LTO, DF karkassid, E3-T07 teavitused.</p>
 <hr>
 <h3 id="kl-e9-t02-eripüügiloa-taotlus-ja-reeglid-to-be-09"><a class="anchor" href="#kl-e9-t02-eripüügiloa-taotlus-ja-reeglid-to-be-09">#</a>KL-E9-T02 Eripüügiloa taotlus ja reeglid (TO-BE.09)</h3>
@@ -226,42 +189,7 @@ Scenario: Isikuandmed
   end
   MO--&gt;&gt;T: tasu, luba</pre></div>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Täielik õnnestumine
-  Given SF-01…SF-11 PASS, tasu 0, auto_issue=true
-  Then  luba EPL-2027-000001 ISSUED, aruandluskohustus loodud
-
-Scenario: Karistus
-  Given SF-03 FAIL
-  Then  REFUSE_PREPARED, põhjus KPS § 21 lg 1 p 4
-
-Scenario: Eraomandis veekogu ilma nõusolekuta
-  Then  SF-04 NEEDS_DOCUMENT ja esitamine blokeeritud
-
-Scenario: Eritingimus
-  Given taotleja soovib püüki keeluajal
-  Then  SF-06 NEEDS_OFFICER ja luba ei väljastata automaatselt
-
-Scenario: Tasu arvutus
-  Given lõhe 10 isendit ja koha 20 isendit
-  Then  tasu = 10×6.35 + 20×1.27 = 88.90 €
-
-Scenario: Tasu tasumata
-  Given AWAITING_FEE ja P-15 möödub
-  Then  REFUSED(fee not paid) ja keeldumisotsus on loodud
-
-Scenario: Kogus määramata
-  Given kogus märgitud „ei ole võimalik ette määrata“
-  Then  luba sisaldab märget ja tasu arvutuseks tuleb ametnik (NEEDS_OFFICER)
-
-Scenario: KARI2 BLOCKING
-  Then  SF-09 FAIL
-
-Scenario: Lisatingimused
-  When  ametnik valib lisatingimused p 6 ja 7
-  Then  need on loal tekstina ja luba sisaldab 1247 kohustust
-
-Scenario: Aruandluskohustus tähtaeg
-  Then  report_due_date = kehtivuse lõpp + 30 päeva</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Täielik õnnestumine</strong></td><td>SF-01…SF-11 PASS, tasu 0, auto_issue=true</td><td>–</td><td>luba EPL-2027-000001 ISSUED, aruandluskohustus loodud</td></tr><tr><td><strong>Karistus</strong></td><td>SF-03 FAIL</td><td>–</td><td>REFUSE_PREPARED, põhjus KPS § 21 lg 1 p 4</td></tr><tr><td><strong>Eraomandis veekogu ilma nõusolekuta</strong></td><td>–</td><td>–</td><td>SF-04 NEEDS_DOCUMENT ja esitamine blokeeritud</td></tr><tr><td><strong>Eritingimus</strong></td><td>taotleja soovib püüki keeluajal</td><td>–</td><td>SF-06 NEEDS_OFFICER ja luba ei väljastata automaatselt</td></tr><tr><td><strong>Tasu arvutus</strong></td><td>lõhe 10 isendit ja koha 20 isendit</td><td>–</td><td>tasu = 10×6.35 + 20×1.27 = 88.90 €</td></tr><tr><td><strong>Tasu tasumata</strong></td><td>AWAITING_FEE ja P-15 möödub</td><td>–</td><td>REFUSED(fee not paid) ja keeldumisotsus on loodud</td></tr><tr><td><strong>Kogus määramata</strong></td><td>kogus märgitud „ei ole võimalik ette määrata“</td><td>–</td><td>luba sisaldab märget ja tasu arvutuseks tuleb ametnik (NEEDS_OFFICER)</td></tr><tr><td><strong>KARI2 BLOCKING</strong></td><td>–</td><td>–</td><td>SF-09 FAIL</td></tr><tr><td><strong>Lisatingimused</strong></td><td>–</td><td>ametnik valib lisatingimused p 6 ja 7</td><td>need on loal tekstina ja luba sisaldab 1247 kohustust</td></tr><tr><td><strong>Aruandluskohustus tähtaeg</strong></td><td>–</td><td>–</td><td>report_due_date = kehtivuse lõpp + 30 päeva</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-31, A-33, A-34, A-36. <strong>Sõltub:</strong> KL-E9-T01, E3-T03 (makse).</p>
 <hr>
 <h3 id="kl-e9-t03-elektripüügivahendi-tõend-to-be-10"><a class="anchor" href="#kl-e9-t03-elektripüügivahendi-tõend-to-be-10">#</a>KL-E9-T03 Elektripüügivahendi tõend (TO-BE.10)</h3>
@@ -287,28 +215,7 @@ Scenario: Aruandluskohustus tähtaeg
   A -- jah --&gt; I[&quot;Tõend väljastatud&quot;]
   O --&gt; I</pre></div>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Edukas väljastamine
-  Given EF-01…EF-06 PASS ja auto_issue=false
-  Then  DECISION_PREPARED ja pärast kinnitust EPT-2027-000001 ISSUED, kanne andmekogusse
-
-Scenario: Eripüügiluba puudub
-  Then  EF-04 NEEDS_OFFICER
-
-Scenario: Topelttõend
-  Given sama märgistus on juba kehtiv
-  Then  EF-05 FAIL
-
-Scenario: Vale parameeter
-  Given pinge = 0
-  Then  EF-01 FAIL
-
-Scenario: Kehtetuks tunnistamine
-  When  kasutaja esitab avalduse
-  Then  PTA ülesanne tähtajaga +2 tööpäeva ja pärast revoke märge andmekogus
-
-Scenario: Andmekogu maas
-  Given andmekogu ei vasta
-  Then  tõend jääb ISSUED, kanne läheb outbox'i ja kordub</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Edukas väljastamine</strong></td><td>EF-01…EF-06 PASS ja auto_issue=false</td><td>–</td><td>DECISION_PREPARED ja pärast kinnitust EPT-2027-000001 ISSUED, kanne andmekogusse</td></tr><tr><td><strong>Eripüügiluba puudub</strong></td><td>–</td><td>–</td><td>EF-04 NEEDS_OFFICER</td></tr><tr><td><strong>Topelttõend</strong></td><td>sama märgistus on juba kehtiv</td><td>–</td><td>EF-05 FAIL</td></tr><tr><td><strong>Vale parameeter</strong></td><td>pinge = 0</td><td>–</td><td>EF-01 FAIL</td></tr><tr><td><strong>Kehtetuks tunnistamine</strong></td><td>–</td><td>kasutaja esitab avalduse</td><td>PTA ülesanne tähtajaga +2 tööpäeva ja pärast revoke märge andmekogus</td></tr><tr><td><strong>Andmekogu maas</strong></td><td>andmekogu ei vasta</td><td>–</td><td>tõend jääb ISSUED, kanne läheb outbox&#39;i ja kordub</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-31, A-35, A-36. <strong>Sõltub:</strong> KL-E9-T01, KL-E9-T02 (EF-04 viitab eripüügiloale).</p>
 <hr>
 <h3 id="kl-e9-t04-asustamisloa-taotlus-ja-väljastamine-to-be-11"><a class="anchor" href="#kl-e9-t04-asustamisloa-taotlus-ja-väljastamine-to-be-11">#</a>KL-E9-T04 Asustamisloa taotlus ja väljastamine (TO-BE.11)</h3>
@@ -334,31 +241,7 @@ Scenario: Andmekogu maas
   O --&gt; I[&quot;Asustamisluba väljastatud&quot;]
   I --&gt; N[&quot;Teavitus&quot;]</pre></div>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Õnnestumine
-  Given RP-01…RP-07 PASS, RP-08 NEEDS_OFFICER, ametnik kinnitab
-  Then  ASL-2027-000001 ISSUED, sisaldab asustaja, liiki, kogust, aega ja veekogu
-
-Scenario: Tõendid puudu
-  Then  RP-03 ja RP-04 NEEDS_DOCUMENT ja esitamine blokeeritud
-
-Scenario: Eraomandis veekogu
-  Given veekogu on PRIVATE ja nõusolek puudub
-  Then  RP-05 NEEDS_DOCUMENT
-
-Scenario: Võõrliik
-  Then  RP-06 NEEDS_OFFICER
-
-Scenario: Minevikus
-  Given release_period.from on minevikus
-  Then  RP-07 FAIL
-
-Scenario: Tähtaeg
-  Then  decision_due_date = registreerimine + 10 tööpäeva
-
-Scenario: SF-05 seos
-  Given asustamisluba ISSUED samale veekogule ja perioodile
-  When  taotletakse eripüügiluba ümberasustamise eesmärgil
-  Then  SF-05 on PASS</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Õnnestumine</strong></td><td>RP-01…RP-07 PASS, RP-08 NEEDS_OFFICER, ametnik kinnitab</td><td>–</td><td>ASL-2027-000001 ISSUED, sisaldab asustaja, liiki, kogust, aega ja veekogu</td></tr><tr><td><strong>Tõendid puudu</strong></td><td>–</td><td>–</td><td>RP-03 ja RP-04 NEEDS_DOCUMENT ja esitamine blokeeritud</td></tr><tr><td><strong>Eraomandis veekogu</strong></td><td>veekogu on PRIVATE ja nõusolek puudub</td><td>–</td><td>RP-05 NEEDS_DOCUMENT</td></tr><tr><td><strong>Võõrliik</strong></td><td>–</td><td>–</td><td>RP-06 NEEDS_OFFICER</td></tr><tr><td><strong>Minevikus</strong></td><td>release_period.from on minevikus</td><td>–</td><td>RP-07 FAIL</td></tr><tr><td><strong>Tähtaeg</strong></td><td>–</td><td>–</td><td>decision_due_date = registreerimine + 10 tööpäeva</td></tr><tr><td><strong>SF-05 seos</strong></td><td>asustamisluba ISSUED samale veekogule ja perioodile</td><td>taotletakse eripüügiluba ümberasustamise eesmärgil</td><td>SF-05 on PASS</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-31, A-35, A-36. <strong>Sõltub:</strong> KL-E9-T01.</p>
 </article>
 <div class="pn"><a href="E8-harrastuspuuk.html">← E8 Harrastuspüük: püügivõimaluste haldus, kalastuskaart, püügiõigus (TO-BE.06–08)</a></div>

@@ -104,32 +104,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <li>Teavitus osalejale (<code>reoffer.offered</code>): kogus, tasu (E3-T02), aegub kuupäeval, link.</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Pakkumise arvutus
-  Given vabanenud 2 tükki, kehtivad lubade omanikud A(T=3) ja B(T=1) samas jaotusüksuses
-  When  käivitub 1. jaanuaril
-  Then  A=2 ja B=0 (S=4, O=0.75/0.25, raw=1.5/0.5, ümardatud 2+1=3&gt;2 → põhi 1+0, jääk 1, murdosad 0.5/0.5 võrdsed → suurem T → A)
-  And   reoffer kirjed on loodud ja released_opportunity on REOFFERED
-
-Scenario: Vabastaja ei saa oma kogust
-  Given osapool X loobus 5-st
-  Then  X ei ole selle koguse pakkumise osaline
-
-Scenario: Aktiivset luba pole
-  Given osapoolel on luba, mis on kehtetu
-  Then  ta ei ole osaline
-
-Scenario: Vaidlustatud
-  Given released_opportunity on dispute_hold=true
-  Then  seda ei jaotata
-
-Scenario: Liiga väike jääk
-  Given V &lt; g
-  Then  FINAL_REMAINDER ja pakkumisi ei teki
-
-Scenario: Käsitsi käivitus
-  When  PTA_ADMIN käivitab enne P-06
-  Then  ERR_VALIDATION (liiga vara), kui pole force=true ja põhjendust</code></pre>
-<p><strong>Eeldused.</strong> A-17, A-25. <strong>Sõltub:</strong> KL-E3-T06, KL-E2-T02.</p>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Pakkumise arvutus</strong></td><td>vabanenud 2 tükki, kehtivad lubade omanikud A(T=3) ja B(T=1) samas jaotusüksuses</td><td>käivitub 1. jaanuaril</td><td>A=2 ja B=0 (S=4, O=0.75/0.25, raw=1.5/0.5, ümardatud 2+1=3&gt;2 → põhi 1+0, jääk 1, murdosad 0.5/0.5 võrdsed → suurem T → A); reoffer kirjed on loodud ja released_opportunity on REOFFERED</td></tr><tr><td><strong>Vabastaja ei saa oma kogust</strong></td><td>osapool X loobus 5-st</td><td>–</td><td>X ei ole selle koguse pakkumise osaline</td></tr><tr><td><strong>Aktiivset luba pole</strong></td><td>osapoolel on luba, mis on kehtetu</td><td>–</td><td>ta ei ole osaline</td></tr><tr><td><strong>Vaidlustatud</strong></td><td>released_opportunity on dispute_hold=true</td><td>–</td><td>seda ei jaotata</td></tr><tr><td><strong>Liiga väike jääk</strong></td><td>V &lt; g</td><td>–</td><td>FINAL_REMAINDER ja pakkumisi ei teki</td></tr><tr><td><strong>Käsitsi käivitus</strong></td><td>–</td><td>PTA_ADMIN käivitab enne P-06</td><td>ERR_VALIDATION (liiga vara), kui pole force=true ja põhjendust</td></tr><tr><td><strong>Eeldused.</strong> A-17, A-25. <strong>Sõltub:</strong> KL-E3-T06, KL-E2-T02.</td><td></td><td></td><td></td></tr></tbody></table></div>
 <hr>
 <h3 id="kl-e4-t02-pakkumise-vastuvõtt-tasu-ja-loa-uus-versioon"><a class="anchor" href="#kl-e4-t02-pakkumise-vastuvõtt-tasu-ja-loa-uus-versioon">#</a>KL-E4-T02 Pakkumise vastuvõtt, tasu ja loa uus versioon</h3>
 <p><strong>Eesmärk.</strong> Loaomanik võtab pakkumise vastu, tasub ja loa kehtiv versioon täieneb.</p>
@@ -163,26 +138,7 @@ Scenario: Käsitsi käivitus
 <li>Tasumata nõustumine: kui <code>ACCEPTED</code>, aga makset ei ole <code>expires_at</code>-iks, siis <code>EXPIRED</code> ja kogus tagasi <code>released_opportunity</code> kirjeks <code>FINAL_REMAINDER</code> (ainult üks voor, A-25).</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Edukas lisapakkumine
-  Given loaomanik A, luba v1, pakkumine 2 tükki
-  When  accept ja makse PAID
-  Then  luba v2 ACTIVE, v1 jääb ajalukku, PDF v2, AMENDED sündmus avaldatud
-
-Scenario: Aegumine
-  Given pakkumine ACCEPTED, makset pole P-11 jooksul
-  Then  EXPIRED ja kogus FINAL_REMAINDER
-
-Scenario: Loobumine
-  When  decline
-  Then  DECLINED ja kogus FINAL_REMAINDER
-
-Scenario: 365 päeva piir
-  Given lisapäevad viiksid üle 365
-  Then  luba ei muutu, PTA ülesanne on loodud
-
-Scenario: Osaline vastuvõtt
-  Given pakkumine 4, drawn=3
-  Then  tasutakse 3, loa kogus kasvab 3 ja 1 on FINAL_REMAINDER</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Edukas lisapakkumine</strong></td><td>loaomanik A, luba v1, pakkumine 2 tükki</td><td>accept ja makse PAID</td><td>luba v2 ACTIVE, v1 jääb ajalukku, PDF v2, AMENDED sündmus avaldatud</td></tr><tr><td><strong>Aegumine</strong></td><td>pakkumine ACCEPTED, makset pole P-11 jooksul</td><td>–</td><td>EXPIRED ja kogus FINAL_REMAINDER</td></tr><tr><td><strong>Loobumine</strong></td><td>–</td><td>decline</td><td>DECLINED ja kogus FINAL_REMAINDER</td></tr><tr><td><strong>365 päeva piir</strong></td><td>lisapäevad viiksid üle 365</td><td>–</td><td>luba ei muutu, PTA ülesanne on loodud</td></tr><tr><td><strong>Osaline vastuvõtt</strong></td><td>pakkumine 4, drawn=3</td><td>–</td><td>tasutakse 3, loa kogus kasvab 3 ja 1 on FINAL_REMAINDER</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-24, A-25. <strong>Sõltub:</strong> KL-E4-T01, KL-E3-T02/T03/T04/T05.</p>
 <hr>
 <h3 id="kl-e4-t03-lõplik-jaotusotsus-ja-tulemuste-edastus-ods"><a class="anchor" href="#kl-e4-t03-lõplik-jaotusotsus-ja-tulemuste-edastus-ods">#</a>KL-E4-T03 Lõplik jaotusotsus ja tulemuste edastus (ODS)</h3>
@@ -214,19 +170,7 @@ Scenario: Osaline vastuvõtt
 <li>Avalda statistika (PVT_UC-15): jaotusüksuse kohta eraldatud, kasutatud, ümber jagatud, lõplik jääk.</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Lõplik otsus
-  Given kõik reoffer kirjed on lõppseisus
-  Then  luuakse ümberjaotusotsus DF-i ja jäägid on FINAL_REMAINDER
-
-Scenario: ODS edastus
-  Then  ODS saab kirjed ja AL_UC-16 sündmus on loodud
-
-Scenario: Ootab veel
-  Given üks reoffer on OFFERED
-  Then  lõplikku otsust ei tehta
-
-Scenario: Statistika
-  Then  jaotusüksuse kokkuvõtte summad klapivad: eraldatud = kasutatud + ümber jagatud + lõplik jääk</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Lõplik otsus</strong></td><td>kõik reoffer kirjed on lõppseisus</td><td>–</td><td>luuakse ümberjaotusotsus DF-i ja jäägid on FINAL_REMAINDER</td></tr><tr><td><strong>ODS edastus</strong></td><td>–</td><td>–</td><td>ODS saab kirjed ja AL_UC-16 sündmus on loodud</td></tr><tr><td><strong>Ootab veel</strong></td><td>üks reoffer on OFFERED</td><td>–</td><td>lõplikku otsust ei tehta</td></tr><tr><td><strong>Statistika</strong></td><td>–</td><td>–</td><td>jaotusüksuse kokkuvõtte summad klapivad: eraldatud = kasutatud + ümber jagatud + lõplik jääk</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-12, A-25. <strong>Sõltub:</strong> KL-E4-T02.</p>
 </article>
 <div class="pn"><a href="E3-tasu-ja-loa-valjastamine.html">← E3 Püügivõimaluse vastuvõtt, püügiõiguse tasu ja kalapüügiloa väljastamine</a><a href="E5-vaidlustamine.html">E5 Jagatud püügivõimaluste vaidlustamine (TO-BE.04) →</a></div>

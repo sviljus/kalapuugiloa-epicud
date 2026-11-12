@@ -148,25 +148,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <p>Reeglid: kõik kogused <code>DECIMAL</code>, mitte ujukoma. <code>allocation_result</code> ja <code>allocation_decision</code> on pärast <code>CONFIRMED</code> muutumatud (PVT_DR-07). Parandus tehakse uue <code>allocation_run</code>-iga (eelmine <code>SUPERSEDED</code>). Iga kirje seotud <code>inputs_hash</code>-iga (taotluste ja ajalooandmete ülevõte), et tulemust saaks reprodutseerida.</p>
 <p><strong>Liides.</strong> Migratsioonid, repositooriumid ja loogiline OpenAPI skeem. API-d <code>GET /catch-opportunities?fishing_year=&amp;…</code>, <code>POST/PUT/DELETE</code> (PVT_UC-01/02/03) ainult <code>PTA_ADMIN</code>, ilma kustutamiseta pärast kasutamist (<code>CLOSED</code>, PVT_UC-03).</p>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Jaotusüksuse loomine
-  When  PTA_ADMIN loob (2027, räim, ICES 29, kastmõrd, TONNE) LPV=500.00
-  Then  granularity on 0.01, historical_calc_allowed=true ja audit AL_UC-01 on loodud
-
-Scenario: Unikaalsus
-  When  luuakse sama kombinatsioon teist korda
-  Then  ERR_CONFLICT_VERSION (või ERR_VALIDATION, dubleeriv jaotusüksus)
-
-Scenario: Kinnitatud tulemuse muutumatus
-  Given allocation_decision on CONFIRMED
-  When  proovitakse allocation_result rida muuta
-  Then  ERR_INVALID_STATE_TRANSITION
-
-Scenario: Kümnendarvud
-  Then  tabelites ei ole FLOAT/DOUBLE tüüpi kogusveerge
-
-Scenario: Sulgemine
-  When  PVT_UC-03 sulgeb jaotusüksuse, millel on jaotustulemus
-  Then  ajaloo read on alles ja status on CLOSED</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Jaotusüksuse loomine</strong></td><td>–</td><td>PTA_ADMIN loob (2027, räim, ICES 29, kastmõrd, TONNE) LPV=500.00</td><td>granularity on 0.01, historical_calc_allowed=true ja audit AL_UC-01 on loodud</td></tr><tr><td><strong>Unikaalsus</strong></td><td>–</td><td>luuakse sama kombinatsioon teist korda</td><td>ERR_CONFLICT_VERSION (või ERR_VALIDATION, dubleeriv jaotusüksus)</td></tr><tr><td><strong>Kinnitatud tulemuse muutumatus</strong></td><td>allocation_decision on CONFIRMED</td><td>proovitakse allocation_result rida muuta</td><td>ERR_INVALID_STATE_TRANSITION</td></tr><tr><td><strong>Kümnendarvud</strong></td><td>–</td><td>–</td><td>tabelites ei ole FLOAT/DOUBLE tüüpi kogusveerge</td></tr><tr><td><strong>Sulgemine</strong></td><td>–</td><td>PVT_UC-03 sulgeb jaotusüksuse, millel on jaotustulemus</td><td>ajaloo read on alles ja status on CLOSED</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-02, A-19, A-20. <strong>Sõltub:</strong> ei ole.</p>
 <hr>
 <h3 id="kl-e2-t03-ajalooliste-andmete-sisendi-adapter-ods-pvt"><a class="anchor" href="#kl-e2-t03-ajalooliste-andmete-sisendi-adapter-ods-pvt">#</a>KL-E2-T03 Ajalooliste andmete sisendi adapter (ODS/PVT)</h3>
@@ -203,31 +185,7 @@ Scenario: Sulgemine
 <li>Päring on partiidena (≤ 500 osapoolt korraga), ühe jooksuga ≤ 5 000 osapoolt (A-15).</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Kolm aastat
-  Given osapoolel on omandatud 2024=10, 2025=20, 2026=30 jaotusüksuse võtmel
-  When  getAcquired aastaks 2027
-  Then  tagastatakse 3 rida ja T = 60
-
-Scenario: Puuduv aasta
-  Given 2025 puudub
-  Then  2025 on 0
-
-Scenario: Uus tulija
-  Given osapoolel pole ühtegi omandust
-  Then  T = 0
-
-Scenario: Tõe allikas COMPOSITE
-  Given ODS ütleb 2025=20 ja PVT ütleb 2025=22
-  Then  tulemuseks 22
-
-Scenario: Allikas maas
-  Given ODS ei vasta
-  Then  ERR_DEPENDENCY_UNAVAILABLE ja allocation_run ei teki
-
-Scenario: Hetktõmmis
-  Given arvutus on alanud
-  When  ODS-is muutub 2025 väärtus
-  Then  käimasoleva run'i inputs_hash ja tulemus ei muutu</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Kolm aastat</strong></td><td>osapoolel on omandatud 2024=10, 2025=20, 2026=30 jaotusüksuse võtmel</td><td>getAcquired aastaks 2027</td><td>tagastatakse 3 rida ja T = 60</td></tr><tr><td><strong>Puuduv aasta</strong></td><td>2025 puudub</td><td>–</td><td>2025 on 0</td></tr><tr><td><strong>Uus tulija</strong></td><td>osapoolel pole ühtegi omandust</td><td>–</td><td>T = 0</td></tr><tr><td><strong>Tõe allikas COMPOSITE</strong></td><td>ODS ütleb 2025=20 ja PVT ütleb 2025=22</td><td>–</td><td>tulemuseks 22</td></tr><tr><td><strong>Allikas maas</strong></td><td>ODS ei vasta</td><td>–</td><td>ERR_DEPENDENCY_UNAVAILABLE ja allocation_run ei teki</td></tr><tr><td><strong>Hetktõmmis</strong></td><td>arvutus on alanud</td><td>ODS-is muutub 2025 väärtus</td><td>käimasoleva run&#39;i inputs_hash ja tulemus ei muutu</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-10, A-15, A-18. <strong>Sõltub:</strong> KL-E2-T01.</p>
 <hr>
 <h3 id="kl-e2-t02-arvutusmootor-määrus-4-8"><a class="anchor" href="#kl-e2-t02-arvutusmootor-määrus-4-8">#</a>KL-E2-T02 Arvutusmootor (määrus § 4–§ 8)</h3>
@@ -260,21 +218,7 @@ Scenario: Hetktõmmis
 <div class="tw"><table><thead><tr><th>#</th><th>LPV, g</th><th>Taotlejad (T, requested, esitamise järjekord)</th><th>Oodatud <code>final</code></th><th><code>unallocated</code></th><th>Märkus</th></tr></thead><tbody><tr><td>V1</td><td>100, 1</td><td>A(T=60,req=100), B(30,100), C(10,100)</td><td>A=60, B=30, C=10</td><td>0</td><td>D=300&gt;100 → ajalooline, O=0.6/0.3/0.1</td></tr><tr><td>V2</td><td>10, 1</td><td>A(1,10,1.), B(1,10,2.), C(1,10,3.)</td><td>A=4, B=3, C=3</td><td>0</td><td>O=0.3333, raw=3.333, Σrounded=9 → R=1, f võrdsed → T võrdne → varasem A</td></tr><tr><td>V3</td><td>10, 1</td><td>A(5,10,1.), B(5,10,2.), C(1,10,3.)</td><td>A=5, B=4, C=1</td><td>0</td><td>O=0.4545/0.4545/0.0909. Σrounded=5+5+1=11&gt;10 → floor=4,4,0. R=2; f: C=0.9090, A=B=0.5450. C esimene, siis võrdsus A/B → A</td></tr><tr><td>V4</td><td>10, 1</td><td>A(req=3), B(req=4), D=7≤10</td><td>A=3, B=4</td><td>3</td><td>lihtjaotus § 4 lg 1</td></tr><tr><td>V5</td><td>10, 1</td><td>A(T=1,req=2), B(T=1,req=20)</td><td>A=2, B=5</td><td>3</td><td>O=0.5/0.5, raw=5/5; A piiratud taotlusega (A-17)</td></tr><tr><td>V6</td><td>7.00, 0.01</td><td>A(1,7,1.), B(1,7,2.), C(1,7,3.)</td><td>A=2.34, B=2.33, C=2.33</td><td>0.00</td><td>tonnid, raw=2.3331 → rounded 2.33, Σ=6.99, R=0.01, f=0.3100 võrdne → A</td></tr><tr><td>V7</td><td>1000, 1</td><td>A(T=99999,req=2000), B(T=1,req=2000)</td><td>A=1000, B=0</td><td>0</td><td>O_B=0.00001 → 0.0000 &lt;0.0001 → 0 (§ 6 lg 2). O_A=1.0000</td></tr><tr><td>V8</td><td>10, 1</td><td>A(T=3,req=10, <strong>eligible=false</strong>), B(T=1,req=10), C(T=1,req=10)</td><td>A=0 (exclusion), B=5, C=5</td><td>0</td><td>§ 4 lg 3. S=2 → O=0.5/0.5</td></tr><tr><td>V9</td><td>10, 1, historical_calc_allowed=false</td><td>A(req=8), B(req=8), D=16&gt;10</td><td>puudub (<code>needs_officer</code>)</td><td>–</td><td>§ 4 lg 5</td></tr><tr><td>V10</td><td>10, 1</td><td>A(T=0,req=8), B(T=0,req=8), D=16&gt;10</td><td>puudub (<code>needs_officer</code>)</td><td>–</td><td>S=0, ajalugu puudub</td></tr></tbody></table></div>
 <p>Lisaks: <strong>omadustestid</strong> (property-based, vähemalt 1 000 juhuslikku juhtu): (a) <code>Σ final + unallocated = LPV</code>; (b) <code>final_i ≤ requested_i</code>; (c) <code>final_i ≥ 0</code>; (d) tulemus ei sõltu taotlejate sisendjärjekorrast, kui <code>submitted_at</code> ja <code>party_id</code> on antud (determinism); (e) iga <code>final_i</code> on <code>g</code> kordne.</p>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario Outline: Testivektorid V1–V10
-  Given jaotusüksus ja taotlejad vastavalt tabelile
-  When  allocate()
-  Then  final, unallocated ja needs_officer on tabelis märgitud
-
-Scenario: Determinism
-  When  sama sisend arvutatakse kaks korda erineva sisendjärjekorraga
-  Then  tulemused on identsed bait-baidi haaval
-
-Scenario: Invariant
-  Given sisend, mis rikuks Σ final + unallocated = LPV
-  Then  ERR_ALLOCATION_INVARIANT ja midagi ei salvestata
-
-Scenario: Ujukomavaba
-  Then  lähtekoodis ei kasutata float/double kogustel (staatiline kontroll)</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Outline: Testivektorid V1–V10</strong></td><td>jaotusüksus ja taotlejad vastavalt tabelile</td><td>allocate()</td><td>final, unallocated ja needs_officer on tabelis märgitud</td></tr><tr><td><strong>Determinism</strong></td><td>–</td><td>sama sisend arvutatakse kaks korda erineva sisendjärjekorraga</td><td>tulemused on identsed bait-baidi haaval</td></tr><tr><td><strong>Invariant</strong></td><td>sisend, mis rikuks Σ final + unallocated = LPV</td><td>–</td><td>ERR_ALLOCATION_INVARIANT ja midagi ei salvestata</td></tr><tr><td><strong>Ujukomavaba</strong></td><td>–</td><td>–</td><td>lähtekoodis ei kasutata float/double kogustel (staatiline kontroll)</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-03, A-16, A-17, A-19, A-20. <strong>Sõltub:</strong> KL-E2-T01 (mudel; funktsioon ise võib valmida ilma).</p>
 <p><strong>Ei kuulu ulatusse.</strong> Andmete laadimine (T03), käivitamine (T04), § 10 püügivõimaluste vähendamine (hilisem muudatus).</p>
 <hr>
@@ -368,34 +312,7 @@ Scenario: Ujukomavaba
 <li>Kogu arvutus jooksutatakse taustatööna (A-15: 5 000 taotlust ≤ 5 min), edenemine <code>GET /admin/allocation-runs/{id}</code>: <code>state</code>, <code>processed_pools</code>, <code>total_pools</code>.</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Automaatne käivitus
-  Given P-02 = 2026-12-01 ja kolm AWAITING_ALLOCATION taotlust
-  When  on 2026-12-02 00:05
-  Then  tekib allocation_run CALCULATED, allocation_decision DRAFT ja PTA ülesanne
-
-Scenario: Taotleja langeb välja
-  Given taotleja, kelle CHK-04 on nüüd FAIL
-  Then  tema allocation_result.exclusion_reason on ERR_PENALTY_RESTRICTION ja final=0
-
-Scenario: Tõrge keset arvutust
-  Given ODS läheb kolmanda jaotusüksuse ajal maha
-  Then  run on FAILED, ühtegi allocation_result rida pole salvestatud
-
-Scenario: Kaks samaaegset
-  When  teine käivitus samale aastale
-  Then  ERR_CONFLICT_VERSION
-
-Scenario: Uuesti arvutamine
-  Given CALCULATED run
-  When  recalculate põhjusega „parandatud LPV“
-  Then  uus run CALCULATED, vana SUPERSEDED, mõlemad auditis
-
-Scenario: Staatus ei muutu
-  Then  taotlused on endiselt AWAITING_ALLOCATION pärast arvutust
-
-Scenario: Tähtaja hoiatus
-  Given P-03=2026-12-30 ja täna on 2026-12-27 ilma kinnituseta
-  Then  PTA_ADMIN saab teavituse</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Automaatne käivitus</strong></td><td>P-02 = 2026-12-01 ja kolm AWAITING_ALLOCATION taotlust</td><td>on 2026-12-02 00:05</td><td>tekib allocation_run CALCULATED, allocation_decision DRAFT ja PTA ülesanne</td></tr><tr><td><strong>Taotleja langeb välja</strong></td><td>taotleja, kelle CHK-04 on nüüd FAIL</td><td>–</td><td>tema allocation_result.exclusion_reason on ERR_PENALTY_RESTRICTION ja final=0</td></tr><tr><td><strong>Tõrge keset arvutust</strong></td><td>ODS läheb kolmanda jaotusüksuse ajal maha</td><td>–</td><td>run on FAILED, ühtegi allocation_result rida pole salvestatud</td></tr><tr><td><strong>Kaks samaaegset</strong></td><td>–</td><td>teine käivitus samale aastale</td><td>ERR_CONFLICT_VERSION</td></tr><tr><td><strong>Uuesti arvutamine</strong></td><td>CALCULATED run</td><td>recalculate põhjusega „parandatud LPV“</td><td>uus run CALCULATED, vana SUPERSEDED, mõlemad auditis</td></tr><tr><td><strong>Staatus ei muutu</strong></td><td>–</td><td>–</td><td>taotlused on endiselt AWAITING_ALLOCATION pärast arvutust</td></tr><tr><td><strong>Tähtaja hoiatus</strong></td><td>P-03=2026-12-30 ja täna on 2026-12-27 ilma kinnituseta</td><td>–</td><td>PTA_ADMIN saab teavituse</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-07, A-08, A-12, A-15. <strong>Sõltub:</strong> KL-E2-T01, T02, T03, KL-E1-T07.</p>
 <hr>
 <h3 id="kl-e2-t05-pta-ülevaatus-parandus-ja-kinnitamine-ametnikuportaal"><a class="anchor" href="#kl-e2-t05-pta-ülevaatus-parandus-ja-kinnitamine-ametnikuportaal">#</a>KL-E2-T05 PTA ülevaatus, parandus ja kinnitamine (Ametnikuportaal)</h3>
@@ -426,40 +343,7 @@ Scenario: Tähtaja hoiatus
 <li>Ametnik võib <strong>tagasi lükata</strong> kogu run&#39;i (<code>POST …/reject</code>, põhjus kohustuslik) → <code>SUPERSEDED</code>, uus T04 arvutus on käsitsi käivitatav.</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Ülevaatus
-  Given CALCULATED run kahe jaotusüksusega
-  When  PTA_OFFICER avab kokkuvõtte
-  Then  nähtav on iga jaotusüksuse nõudlus, LPV, jaotatud, jääk ja võrdsuste arv
-
-Scenario: Korrigeerimine
-  When  PTA_OFFICER seab final 5 asemel 4 põhjendusega „viga andmetes“
-  Then  lõplik kogus on 4, arvutusväljad on muutmata ja audit on loodud
-
-Scenario: Põhjenduseta
-  When  korrigeeritakse ilma põhjenduseta
-  Then  ERR_VALIDATION
-
-Scenario: Lahendamata jaotusüksus
-  Given üks jaotusüksus needs_officer
-  When  confirm
-  Then  ERR_UNRESOLVED_POOLS ja nimetatud jaotusüksus
-
-Scenario: Neli silma
-  Given sama ametnik korrigeeris viimasena
-  When  ta kinnitab
-  Then  ERR_FOUR_EYES
-
-Scenario: Kinnitamine
-  Given kõik lahendatud ja teine ametnik kinnitab
-  Then  run ja decision CONFIRMED ja T06 käivitub
-
-Scenario: Tagasilükkamine
-  When  reject põhjendusega
-  Then  run SUPERSEDED, taotlused jäävad AWAITING_ALLOCATION
-
-Scenario: Õigused
-  When  APPLICANT kutsub confirm
-  Then  ERR_FORBIDDEN</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Ülevaatus</strong></td><td>CALCULATED run kahe jaotusüksusega</td><td>PTA_OFFICER avab kokkuvõtte</td><td>nähtav on iga jaotusüksuse nõudlus, LPV, jaotatud, jääk ja võrdsuste arv</td></tr><tr><td><strong>Korrigeerimine</strong></td><td>–</td><td>PTA_OFFICER seab final 5 asemel 4 põhjendusega „viga andmetes“</td><td>lõplik kogus on 4, arvutusväljad on muutmata ja audit on loodud</td></tr><tr><td><strong>Põhjenduseta</strong></td><td>–</td><td>korrigeeritakse ilma põhjenduseta</td><td>ERR_VALIDATION</td></tr><tr><td><strong>Lahendamata jaotusüksus</strong></td><td>üks jaotusüksus needs_officer</td><td>confirm</td><td>ERR_UNRESOLVED_POOLS ja nimetatud jaotusüksus</td></tr><tr><td><strong>Neli silma</strong></td><td>sama ametnik korrigeeris viimasena</td><td>ta kinnitab</td><td>ERR_FOUR_EYES</td></tr><tr><td><strong>Kinnitamine</strong></td><td>kõik lahendatud ja teine ametnik kinnitab</td><td>–</td><td>run ja decision CONFIRMED ja T06 käivitub</td></tr><tr><td><strong>Tagasilükkamine</strong></td><td>–</td><td>reject põhjendusega</td><td>run SUPERSEDED, taotlused jäävad AWAITING_ALLOCATION</td></tr><tr><td><strong>Õigused</strong></td><td>–</td><td>APPLICANT kutsub confirm</td><td>ERR_FORBIDDEN</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-04, A-08, A-12. <strong>Sõltub:</strong> KL-E2-T04.</p>
 <p><strong>Märkus.</strong> Selle Task&#39;i UI on Ametnikuportaali (6.2) osa. Siin on kohustuslik API ja minimaalne tööversiooni vaade. Täisfunktsionaalne portaal on eraldi Epic.</p>
 <hr>
@@ -516,41 +400,7 @@ Salvesta DF-i (DF_UC-01), seo menetlusega (DF_UC-06) ja <code>allocation_decisio
 <li><strong>Jääk:</strong> iga <code>allocation_pool_summary.unallocated &gt; 0</code> kohta loo <code>released_opportunity</code> kirje põhjusega <code>UNALLOCATED_REMAINDER</code> (olem on defineeritud <a href="E3-tasu-ja-loa-valjastamine.html">KL-E3-T06 punktis 3</a>; kui tabelit veel ei ole, loo see siin migratsiooniga ja E3-T06 kasutab seda). See on E4 sisend (A-17).</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Otsuse avaldamine
-  Given kinnitatud allocation_decision 3 taotlejaga, kõik final&gt;0
-  When  T06 jookseb
-  Then  luuakse PDF DF-i, 3 allocated_opportunity kirjet, 3 taotlust on AWAITING_FEE_PAYMENT, 3 e-kirja saadetud ja audit olemas
-
-Scenario: Taotletud väiksem kui arvutatud
-  Given taotleja taotles 3, ajalooline arvutatud 5, eraldatud 3
-  Then  dokumendis on mõlemad arvud (5 ja 3)
-
-Scenario: Välistatud taotleja
-  Given taotleja välistati CHK-04 tõttu
-  Then  taotlus CANCELLED(EXCLUDED), teavitus ütleb põhjuse ilma karistuse sisuta ja viitab vaidele
-
-Scenario: Paberärakiri
-  Given paper_copy_requested=true
-  Then  loodud on PTA ülesanne „Saada paberärakiri“
-
-Scenario: Idempotentsus
-  When  sama sündmus tuleb kaks korda
-  Then  ei teki teist dokumenti, teist e-kirja ega teist olekumuutust
-
-Scenario: Teavitus ebaõnnestub
-  Given SMTP ei vasta
-  Then  otsus jääb avaldatuks, korduskatsed kuni 3 korda ja siis PTA ülesanne
-
-Scenario: Taotleja väljavõte
-  Then  taotleja allalaaditavas väljavõttes on ainult tema read
-
-Scenario: changed_from_request
-  Given eraldati vähem kui taotleti
-  Then  allocated_opportunity.changed_from_request=true ja requested_opportunity on muutmata
-
-Scenario: Jääk
-  Given jaotusüksuse unallocated = 3
-  Then  released_opportunity (kogus 3, UNALLOCATED_REMAINDER) on loodud</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Otsuse avaldamine</strong></td><td>kinnitatud allocation_decision 3 taotlejaga, kõik final&gt;0</td><td>T06 jookseb</td><td>luuakse PDF DF-i, 3 allocated_opportunity kirjet, 3 taotlust on AWAITING_FEE_PAYMENT, 3 e-kirja saadetud ja audit olemas</td></tr><tr><td><strong>Taotletud väiksem kui arvutatud</strong></td><td>taotleja taotles 3, ajalooline arvutatud 5, eraldatud 3</td><td>–</td><td>dokumendis on mõlemad arvud (5 ja 3)</td></tr><tr><td><strong>Välistatud taotleja</strong></td><td>taotleja välistati CHK-04 tõttu</td><td>–</td><td>taotlus CANCELLED(EXCLUDED), teavitus ütleb põhjuse ilma karistuse sisuta ja viitab vaidele</td></tr><tr><td><strong>Paberärakiri</strong></td><td>paper_copy_requested=true</td><td>–</td><td>loodud on PTA ülesanne „Saada paberärakiri“</td></tr><tr><td><strong>Idempotentsus</strong></td><td>–</td><td>sama sündmus tuleb kaks korda</td><td>ei teki teist dokumenti, teist e-kirja ega teist olekumuutust</td></tr><tr><td><strong>Teavitus ebaõnnestub</strong></td><td>SMTP ei vasta</td><td>–</td><td>otsus jääb avaldatuks, korduskatsed kuni 3 korda ja siis PTA ülesanne</td></tr><tr><td><strong>Taotleja väljavõte</strong></td><td>–</td><td>–</td><td>taotleja allalaaditavas väljavõttes on ainult tema read</td></tr><tr><td><strong>changed_from_request</strong></td><td>eraldati vähem kui taotleti</td><td>–</td><td>allocated_opportunity.changed_from_request=true ja requested_opportunity on muutmata</td></tr><tr><td><strong>Jääk</strong></td><td>jaotusüksuse unallocated = 3</td><td>–</td><td>released_opportunity (kogus 3, UNALLOCATED_REMAINDER) on loodud</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-05, A-12, A-13, A-17. <strong>Sõltub:</strong> KL-E2-T05, KL-E1-T03 (taotlus), DF teenus (kui puudub, loo DF-liides ja mock).</p>
 </article>
 <div class="pn"><a href="E1-taotluse-esitamine.html">← E1 Kutselise kalapüügiloa taotluse esitamine</a><a href="E3-tasu-ja-loa-valjastamine.html">E3 Püügivõimaluse vastuvõtt, püügiõiguse tasu ja kalapüügiloa väljastamine →</a></div>

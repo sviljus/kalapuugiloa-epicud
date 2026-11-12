@@ -143,30 +143,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 </ol>
 <p><strong>Liides.</strong> Sisemine teenusliides <code>ApplicationStateMachine.transition(application_id, to_state, actor, reason_code, expected_version)</code>. Sündmus <code>ApplicationStateChanged {application_id, from, to, at, actor, reason_code}</code>.</p>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Lubatud üleminek
-  Given taotlus olekus DRAFT
-  When  SYSTEM kutsub transition(to=AWAITING_ALLOCATION)
-  Then  olek on AWAITING_ALLOCATION ja olekuajaloos on üks uus rida
-  And   AL_UC-01 sündmus on loodud ja viitab taotluse ID-le
-  And   sündmus ApplicationStateChanged on avaldatud
-
-Scenario: Keelatud üleminek
-  Given taotlus olekus CONFIRMED
-  When  keegi kutsub transition(to=DRAFT)
-  Then  vastus on ERR_INVALID_STATE_TRANSITION ja olek ei muutu ega ajalugu ei kasva
-
-Scenario: Lõppseisu muutumatus
-  Given taotlus olekus CANCELLED
-  When  proovitakse muuta mistahes taotluse välja
-  Then  ERR_INVALID_STATE_TRANSITION
-
-Scenario: Samaaegne muutmine
-  Given kaks päringut sama expected_version-iga
-  Then  üks õnnestub, teine saab ERR_CONFLICT_VERSION
-
-Scenario: Numbrid
-  When  luuakse 100 taotlust paralleelselt
-  Then  numbrid on unikaalsed ja järjestikused</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Lubatud üleminek</strong></td><td>taotlus olekus DRAFT</td><td>SYSTEM kutsub transition(to=AWAITING_ALLOCATION)</td><td>olek on AWAITING_ALLOCATION ja olekuajaloos on üks uus rida; AL_UC-01 sündmus on loodud ja viitab taotluse ID-le; sündmus ApplicationStateChanged on avaldatud</td></tr><tr><td><strong>Keelatud üleminek</strong></td><td>taotlus olekus CONFIRMED</td><td>keegi kutsub transition(to=DRAFT)</td><td>vastus on ERR_INVALID_STATE_TRANSITION ja olek ei muutu ega ajalugu ei kasva</td></tr><tr><td><strong>Lõppseisu muutumatus</strong></td><td>taotlus olekus CANCELLED</td><td>proovitakse muuta mistahes taotluse välja</td><td>ERR_INVALID_STATE_TRANSITION</td></tr><tr><td><strong>Samaaegne muutmine</strong></td><td>kaks päringut sama expected_version-iga</td><td>–</td><td>üks õnnestub, teine saab ERR_CONFLICT_VERSION</td></tr><tr><td><strong>Numbrid</strong></td><td>–</td><td>luuakse 100 taotlust paralleelselt</td><td>numbrid on unikaalsed ja järjestikused</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-01, A-12, A-14. <strong>Sõltub:</strong> MO teenuse karkass (MO_DR-01) peab olemas olema. Kui ei ole, loo minimaalne karkass selle Task&#39;i raames ainult selle menetlustüübi jaoks.</p>
 <p><strong>Ei kuulu ulatusse.</strong> Teised menetlustüübid, ametniku töölaud.</p>
 <hr>
@@ -213,33 +190,7 @@ Scenario: Numbrid
 </ol>
 <p><strong>Liides.</strong> <code>GET /api/v1/me/representations</code> → <code>[{party_id, party_name, basis, roles}]</code>. <code>POST /api/v1/fishing-licence-applications</code> (body: <code>party_id</code>, <code>licence_kind</code>, <code>fishing_year</code>) loob mustandi (vt T03). KL UI vorm on osa Task&#39;ist ainult niivõrd, et API-d tarbib (A-01: KL on ainult kasutajaliides).</p>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Füüsilisest isikust kalur
-  Given autenditud kasutaja, kes on elus ja kellel ei ole ettevõtteid
-  When  GET /me/representations
-  Then  vastuses on ühe kirjena SELF ja osapool on KOT-is olemas
-
-Scenario: Ettevõtte esindaja
-  Given kasutaja on Äriregistri järgi ettevõtte A juhatuse liige
-  Then  loetelus on SELF ja BUSINESS_REPRESENTATION(A)
-
-Scenario: Kustutatud ettevõte
-  Given ettevõte B on Äriregistris kustutatud
-  Then  B ei ole loetelus
-
-Scenario: Volitus Pääsukese kaudu
-  Given Pääsuke ütleb, et kasutajal on volitus esindada isikut C kutselise kalapüügi loa taotlemisel
-  Then  loetelus on POWER_OF_ATTORNEY(C)
-
-Scenario: Registri ajutine viga
-  Given Äriregister vastab 503 kolm korda
-  Then  loetelu päring annab ERR_DEPENDENCY_UNAVAILABLE ja ei tagasta osalist loetelu
-
-Scenario: Mitteesindatav osapool
-  When  kasutaja loob mustandi osapoolele, mida ta ei esinda
-  Then  ERR_FORBIDDEN
-
-Scenario: Audit
-  Then  iga registripäring on loonud AL_UC-04 integratsioonisündmuse ilma isikukoodita tekstis</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Füüsilisest isikust kalur</strong></td><td>autenditud kasutaja, kes on elus ja kellel ei ole ettevõtteid</td><td>GET /me/representations</td><td>vastuses on ühe kirjena SELF ja osapool on KOT-is olemas</td></tr><tr><td><strong>Ettevõtte esindaja</strong></td><td>kasutaja on Äriregistri järgi ettevõtte A juhatuse liige</td><td>–</td><td>loetelus on SELF ja BUSINESS_REPRESENTATION(A)</td></tr><tr><td><strong>Kustutatud ettevõte</strong></td><td>ettevõte B on Äriregistris kustutatud</td><td>–</td><td>B ei ole loetelus</td></tr><tr><td><strong>Volitus Pääsukese kaudu</strong></td><td>Pääsuke ütleb, et kasutajal on volitus esindada isikut C kutselise kalapüügi loa taotlemisel</td><td>–</td><td>loetelus on POWER_OF_ATTORNEY(C)</td></tr><tr><td><strong>Registri ajutine viga</strong></td><td>Äriregister vastab 503 kolm korda</td><td>–</td><td>loetelu päring annab ERR_DEPENDENCY_UNAVAILABLE ja ei tagasta osalist loetelu</td></tr><tr><td><strong>Mitteesindatav osapool</strong></td><td>–</td><td>kasutaja loob mustandi osapoolele, mida ta ei esinda</td><td>ERR_FORBIDDEN</td></tr><tr><td><strong>Audit</strong></td><td>–</td><td>–</td><td>iga registripäring on loonud AL_UC-04 integratsioonisündmuse ilma isikukoodita tekstis</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-10, A-11, A-12. <strong>Sõltub:</strong> KL-E1-T01.</p>
 <p><strong>Ei kuulu ulatusse.</strong> Autentimise enda realiseerimine, e-Residendi autentimisviisid.</p>
 <hr>
@@ -285,34 +236,7 @@ Scenario: Audit
 </ol>
 <p><strong>Liides.</strong> OpenAPI <code>fishing-licence-applications</code> ressurss, kolm alamressurssi (<code>requested-opportunities</code>, <code>documents</code>, <code>vessel</code>/<code>fisherman</code>). Loetelud: klassifikaatorid <code>species</code>, <code>water_area</code>, <code>gear_type</code>, <code>unit</code> tulevad klassifikaatorite teenusest. Kui seda ei ole, hoia neid seadistustabelis <code>classifier</code> koos FLUX-i koodidega (skeem: „Klassifikaatorid, sh FLUX-i omad“).</p>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Mustandi loomine eelmise aasta alusel
-  Given osapoolel on eelmise aasta taotlus kolme taotletud püügivõimalusega
-  When  ta loob uue mustandi ja valib „Kopeeri eelmise aasta taotlusest“
-  Then  uues mustandis on samad kolm requested_opportunity rida uue ID-ga ja fishing_year on järgmine
-
-Scenario: Dubleeriv taotlus
-  Given osapoolel on aktiivne ANNUAL taotlus laevale L aastaks 2027
-  When  ta proovib luua teist samale laevale ja aastale
-  Then  ERR_DUPLICATE_APPLICATION
-
-Scenario: Poolik mustand salvestatakse
-  When  PATCH ilma contact_email-ita
-  Then  200 ja mustand salvestub (valideerimine toimub esitamisel)
-
-Scenario: Muutmine pärast esitamist
-  Given taotlus AWAITING_ALLOCATION
-  When  PATCH
-  Then  ERR_INVALID_STATE_TRANSITION
-
-Scenario: Kustutamine
-  Given DRAFT
-  When  DELETE
-  Then  olek CANCELLED, põhjus DRAFT_DELETED, audit loodud
-
-Scenario: Võõra taotluse lugemine
-  Given kasutaja, kes ei esinda taotluse osapoolt
-  When  GET /{id}
-  Then  ERR_NOT_FOUND (mitte 403, et mitte avaldada olemasolu)</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Mustandi loomine eelmise aasta alusel</strong></td><td>osapoolel on eelmise aasta taotlus kolme taotletud püügivõimalusega</td><td>ta loob uue mustandi ja valib „Kopeeri eelmise aasta taotlusest“</td><td>uues mustandis on samad kolm requested_opportunity rida uue ID-ga ja fishing_year on järgmine</td></tr><tr><td><strong>Dubleeriv taotlus</strong></td><td>osapoolel on aktiivne ANNUAL taotlus laevale L aastaks 2027</td><td>ta proovib luua teist samale laevale ja aastale</td><td>ERR_DUPLICATE_APPLICATION</td></tr><tr><td><strong>Poolik mustand salvestatakse</strong></td><td>–</td><td>PATCH ilma contact_email-ita</td><td>200 ja mustand salvestub (valideerimine toimub esitamisel)</td></tr><tr><td><strong>Muutmine pärast esitamist</strong></td><td>taotlus AWAITING_ALLOCATION</td><td>PATCH</td><td>ERR_INVALID_STATE_TRANSITION</td></tr><tr><td><strong>Kustutamine</strong></td><td>DRAFT</td><td>DELETE</td><td>olek CANCELLED, põhjus DRAFT_DELETED, audit loodud</td></tr><tr><td><strong>Võõra taotluse lugemine</strong></td><td>kasutaja, kes ei esinda taotluse osapoolt</td><td>GET /{id}</td><td>ERR_NOT_FOUND (mitte 403, et mitte avaldada olemasolu)</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-02, A-12, A-13. <strong>Sõltub:</strong> KL-E1-T01, KL-E1-T02.</p>
 <p><strong>Ei kuulu ulatusse.</strong> Jooksva aasta täiendavad taotlused (§ 2 lg 3–6), maksete algatamine.</p>
 <hr>
@@ -362,36 +286,7 @@ Scenario: Võõra taotluse lugemine
 <li>Uus reegel tuleb lisada <strong>ilma muu koodi muutmata</strong>: kontrollid registreeritakse kataloogi.</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Kõik läbitud
-  Given kalalaeva taotlus, kus laev on LAEVIS-es, tunnistus LAEVIS-es, omanik = taotleja, karistusi pole
-  When  käivitatakse kontrollid
-  Then  kõik asjakohased tulemused on PASS ja blokeerivaid pole
-
-Scenario: Tunnistust LAEVIS-es pole
-  Given tunnistus puudub LAEVIS-est ja pole lisatud
-  Then  CHK-06 on NEEDS_DOCUMENT(SEAWORTHINESS_CERT)
-  When  taotleja lisab dokumendi
-  Then  CHK-06 on PASS
-
-Scenario: Karistusregistri keeld
-  Given karistus keelab loa andmise
-  Then  CHK-04 on FAIL ja vea tekst ei sisalda karistuse sisu
-
-Scenario: Karistusregister ei vasta
-  Given Karistusregister ei vasta pärast kolme kordust
-  Then  CHK-04 on UNAVAILABLE ja esitamine on blokeeritud, kuid FAIL-i ei ole
-
-Scenario: Võõras veeala
-  Given taotletud püügivõimalus on NAFO veealal
-  Then  CHK-09 ja CHK-10 on NEEDS_DOCUMENT
-
-Scenario: Püügivõimalust pole kehtestatud
-  Given taotletud rida (liik×veeala×vahend) puudub PVT-s aastaks 2027
-  Then  CHK-11 on FAIL ja nimetab rea
-
-Scenario: Kontrolli lisamine
-  When  lisatakse uus Check klass kataloogi
-  Then  ta jooksutatakse ilma mootori koodi muutmata</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Kõik läbitud</strong></td><td>kalalaeva taotlus, kus laev on LAEVIS-es, tunnistus LAEVIS-es, omanik = taotleja, karistusi pole</td><td>käivitatakse kontrollid</td><td>kõik asjakohased tulemused on PASS ja blokeerivaid pole</td></tr><tr><td><strong>Tunnistust LAEVIS-es pole</strong></td><td>tunnistus puudub LAEVIS-est ja pole lisatud</td><td>taotleja lisab dokumendi</td><td>CHK-06 on NEEDS_DOCUMENT(SEAWORTHINESS_CERT); CHK-06 on PASS</td></tr><tr><td><strong>Karistusregistri keeld</strong></td><td>karistus keelab loa andmise</td><td>–</td><td>CHK-04 on FAIL ja vea tekst ei sisalda karistuse sisu</td></tr><tr><td><strong>Karistusregister ei vasta</strong></td><td>Karistusregister ei vasta pärast kolme kordust</td><td>–</td><td>CHK-04 on UNAVAILABLE ja esitamine on blokeeritud, kuid FAIL-i ei ole</td></tr><tr><td><strong>Võõras veeala</strong></td><td>taotletud püügivõimalus on NAFO veealal</td><td>–</td><td>CHK-09 ja CHK-10 on NEEDS_DOCUMENT</td></tr><tr><td><strong>Püügivõimalust pole kehtestatud</strong></td><td>taotletud rida (liik×veeala×vahend) puudub PVT-s aastaks 2027</td><td>–</td><td>CHK-11 on FAIL ja nimetab rea</td></tr><tr><td><strong>Kontrolli lisamine</strong></td><td>–</td><td>lisatakse uus Check klass kataloogi</td><td>ta jooksutatakse ilma mootori koodi muutmata</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-08, A-10, A-12. <strong>Sõltub:</strong> KL-E1-T03.</p>
 <p><strong>Ei kuulu ulatusse.</strong> Eripüügi, vesiviljeluse ja asustamise kontrollid (E7, E9).</p>
 <hr>
@@ -452,39 +347,7 @@ Scenario: Kontrolli lisamine
 <li>Esitatud taotlus on loetav taotleja ja PTA poolt. Taotleja näeb kontrolli tulemusi ja ajalugu.</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Edukas esitamine
-  Given DRAFT, kõik kontrollid PASS, täna on 2026-10-15 (aken 2026-09-01…2026-12-01, aasta 2027)
-  When  taotleja esitab
-  Then  olek AWAITING_ALLOCATION, submitted_at täidetud, kinnitus-e-kiri saadetud, audit loodud
-
-Scenario: Aken suletud
-  Given täna on 2026-12-02
-  When  esitatakse
-  Then  ERR_SUBMISSION_WINDOW_CLOSED ja olek jääb DRAFT
-
-Scenario: Aken pikendatud
-  Given PTA_ADMIN on P-02 muutnud 2026-12-15-le
-  And   täna on 2026-12-10
-  Then  esitamine õnnestub
-
-Scenario: Mitu viga korraga
-  Given CHK-04 FAIL ja CHK-06 NEEDS_DOCUMENT
-  When  esitatakse
-  Then  vastuses on mõlemad ja olek ei muutu
-
-Scenario: NEEDS_OFFICER ei blokeeri
-  Given CHK-xx tagastab NEEDS_OFFICER
-  When  esitatakse
-  Then  esitamine õnnestub ja PTA-le on loodud ülesanne
-
-Scenario: Tagasivõtmine
-  Given AWAITING_ALLOCATION ja täna enne P-02
-  When  withdraw
-  Then  olek DRAFT
-
-Scenario: Tagasivõtmine pärast akent
-  Given täna on pärast P-02
-  Then  ERR_INVALID_STATE_TRANSITION</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Edukas esitamine</strong></td><td>DRAFT, kõik kontrollid PASS, täna on 2026-10-15 (aken 2026-09-01…2026-12-01, aasta 2027)</td><td>taotleja esitab</td><td>olek AWAITING_ALLOCATION, submitted_at täidetud, kinnitus-e-kiri saadetud, audit loodud</td></tr><tr><td><strong>Aken suletud</strong></td><td>täna on 2026-12-02</td><td>esitatakse</td><td>ERR_SUBMISSION_WINDOW_CLOSED ja olek jääb DRAFT</td></tr><tr><td><strong>Aken pikendatud</strong></td><td>PTA_ADMIN on P-02 muutnud 2026-12-15-le; täna on 2026-12-10</td><td>–</td><td>esitamine õnnestub</td></tr><tr><td><strong>Mitu viga korraga</strong></td><td>CHK-04 FAIL ja CHK-06 NEEDS_DOCUMENT</td><td>esitatakse</td><td>vastuses on mõlemad ja olek ei muutu</td></tr><tr><td><strong>NEEDS_OFFICER ei blokeeri</strong></td><td>CHK-xx tagastab NEEDS_OFFICER</td><td>esitatakse</td><td>esitamine õnnestub ja PTA-le on loodud ülesanne</td></tr><tr><td><strong>Tagasivõtmine</strong></td><td>AWAITING_ALLOCATION ja täna enne P-02</td><td>withdraw</td><td>olek DRAFT</td></tr><tr><td><strong>Tagasivõtmine pärast akent</strong></td><td>täna on pärast P-02</td><td>–</td><td>ERR_INVALID_STATE_TRANSITION</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-07, A-08, A-12, A-14. <strong>Sõltub:</strong> KL-E1-T01, T03, T04, E1-T07 (parameetrid).</p>
 <p><strong>Ei kuulu ulatusse.</strong> Jaotus.</p>
 <hr>
@@ -513,18 +376,7 @@ Scenario: Tagasivõtmine pärast akent
 <li>Loend näitab ainult taotlejale lubatud osapoolte taotlusi. Osapoole vahetamine T02 konteksti kaudu.</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Loend
-  Given osapoolel on 3 taotlust erinevates olekutes
-  When  GET loend
-  Then  tagastatakse 3 rida, igaühel olekusilt ja next_action
-
-Scenario: Ajajoon
-  Given taotlus on käinud DRAFT→AWAITING_ALLOCATION→AWAITING_FEE_PAYMENT
-  Then  timeline sisaldab kolme kirjet kronoloogiliselt, igaühel kasutajatekst ja aeg
-
-Scenario: Õigused
-  Given kasutaja ei esinda osapoolt
-  Then  loend on tühi (mitte viga) ja GET /{id}/timeline annab ERR_NOT_FOUND</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Loend</strong></td><td>osapoolel on 3 taotlust erinevates olekutes</td><td>GET loend</td><td>tagastatakse 3 rida, igaühel olekusilt ja next_action</td></tr><tr><td><strong>Ajajoon</strong></td><td>taotlus on käinud DRAFT→AWAITING_ALLOCATION→AWAITING_FEE_PAYMENT</td><td>–</td><td>timeline sisaldab kolme kirjet kronoloogiliselt, igaühel kasutajatekst ja aeg</td></tr><tr><td><strong>Õigused</strong></td><td>kasutaja ei esinda osapoolt</td><td>–</td><td>loend on tühi (mitte viga) ja GET /{id}/timeline annab ERR_NOT_FOUND</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-13. <strong>Sõltub:</strong> KL-E1-T01, T03.</p>
 <hr>
 <h3 id="kl-e1-t07-taotlusvooru-parameetrite-haldus-pta-admin"><a class="anchor" href="#kl-e1-t07-taotlusvooru-parameetrite-haldus-pta-admin">#</a>KL-E1-T07 Taotlusvooru parameetrite haldus (PTA_ADMIN)</h3>
@@ -552,21 +404,7 @@ Scenario: Õigused
 <li>Kõik teised Task&#39;id loevad parameetreid ainult siit teenusest (<code>FishingYearConfig.get(year)</code>), mitte ei kopeeri vaikeväärtusi.</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Vaikeväärtused
-  Given 2027. aasta jaoks kirjet pole
-  Then  P-02 = 2026-12-01 ja P-05 = 2026-12-31
-
-Scenario: Pikendamine
-  When  PTA_ADMIN seab P-02 = 2026-12-15
-  Then  esitamine on lubatud kuni 2026-12-15 23:59:59 Europe/Tallinn ja muutus on versioonitud
-
-Scenario: Vigane järjekord
-  When  P-02 &lt; P-01
-  Then  ERR_VALIDATION
-
-Scenario: Õigused
-  When  APPLICANT kutsub PUT
-  Then  ERR_FORBIDDEN</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Vaikeväärtused</strong></td><td>2027. aasta jaoks kirjet pole</td><td>–</td><td>P-02 = 2026-12-01 ja P-05 = 2026-12-31</td></tr><tr><td><strong>Pikendamine</strong></td><td>–</td><td>PTA_ADMIN seab P-02 = 2026-12-15</td><td>esitamine on lubatud kuni 2026-12-15 23:59:59 Europe/Tallinn ja muutus on versioonitud</td></tr><tr><td><strong>Vigane järjekord</strong></td><td>–</td><td>P-02 &lt; P-01</td><td>ERR_VALIDATION</td></tr><tr><td><strong>Õigused</strong></td><td>–</td><td>APPLICANT kutsub PUT</td><td>ERR_FORBIDDEN</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-07, A-12, A-14. <strong>Sõltub:</strong> ei ole (alustatav kohe).</p>
 </article>
 <div class="pn"><a href="00-uldkontekst.html">← Üldkontekst</a><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html">E2 Püügivõimaluste arvutamine ja jaotamine →</a></div>

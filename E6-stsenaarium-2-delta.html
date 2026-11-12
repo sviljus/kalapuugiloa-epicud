@@ -107,25 +107,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <li>Taotlusvoorus puudub taotluspõhine sisend, seega <code>allocate()</code> koodis kasutatakse <code>requested = ∞</code>, ja omadustestis <code>final_i ≤ requested_i</code> kontrollitakse ainult <code>requested</code> olemasolul.</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: 90/10
-  Given LPV=100 tükki, new_entrant_reserve_share=0.10, osalejad A(T=60), B(T=40)
-  When  PROACTIVE jaotus
-  Then  jaotatav=90: A=54, B=36 ja released_opportunity(NEW_ENTRANT_RESERVE)=10
-
-Scenario: Lihtjaotust ei ole
-  Given kogu nõudlus väiksem kui LPV, aga taotlusi ei ole
-  Then  jaotus põhineb ajalool, mitte nõudlusel
-
-Scenario: Reservi jääk
-  Given reserve_release_date on käes ja 10 on AVAILABLE
-  Then  need jaotatakse olemasolevatele omanikele E4 loogikaga
-
-Scenario: Reserv 0 %
-  Given P-14=0
-  Then  reservi ei teki ja kogu LPV jaotatakse
-
-Scenario: Determinism
-  Then  E2-T02 omadustestid kehtivad ka PROACTIVE režiimis</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>90/10</strong></td><td>LPV=100 tükki, new_entrant_reserve_share=0.10, osalejad A(T=60), B(T=40)</td><td>PROACTIVE jaotus</td><td>jaotatav=90: A=54, B=36 ja released_opportunity(NEW_ENTRANT_RESERVE)=10</td></tr><tr><td><strong>Lihtjaotust ei ole</strong></td><td>kogu nõudlus väiksem kui LPV, aga taotlusi ei ole</td><td>–</td><td>jaotus põhineb ajalool, mitte nõudlusel</td></tr><tr><td><strong>Reservi jääk</strong></td><td>reserve_release_date on käes ja 10 on AVAILABLE</td><td>–</td><td>need jaotatakse olemasolevatele omanikele E4 loogikaga</td></tr><tr><td><strong>Reserv 0 %</strong></td><td>P-14=0</td><td>–</td><td>reservi ei teki ja kogu LPV jaotatakse</td></tr><tr><td><strong>Determinism</strong></td><td>–</td><td>–</td><td>E2-T02 omadustestid kehtivad ka PROACTIVE režiimis</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-01, A-03, A-04, A-16…A-20. <strong>Sõltub:</strong> E2-T01, T02, T03; tellija valik stsenaariumi kohta.</p>
 <hr>
 <h3 id="kl-e6-t02-pakkumine-ja-eeltäidetud-kinnitus-ilma-taotluseta"><a class="anchor" href="#kl-e6-t02-pakkumine-ja-eeltäidetud-kinnitus-ilma-taotluseta">#</a>KL-E6-T02 Pakkumine ja eeltäidetud kinnitus (ilma taotluseta)</h3>
@@ -169,26 +151,7 @@ Scenario: Determinism
 <li>Taotlustüüp <code>OFFER_BASED</code> on kõigis aruannetes eristatav.</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Pakkumise loomine
-  Given kinnitatud proaktiivne jaotus, osaleja X läbis eelkontrolli
-  Then  X-ile on loodud OFFER_BASED taotlus AWAITING_FEE_PAYMENT, allocated_opportunity täidetud ja e-kiri saadetud
-
-Scenario: Eelkontroll FAIL
-  Given X CHK-04 FAIL
-  Then  pakkumist ei looda ja PTA ülesanne on olemas
-
-Scenario: Järelkontroll FAIL nõustumisel
-  Given X läbis eelkontrolli, aga nõustumisel on LAEVIS-e omanik muutunud
-  When  confirm
-  Then  ERR_OFFER_NOT_POSSIBLE ja luba ei väljastata
-
-Scenario: Link
-  When  X avab lingi
-  Then  teda suunatakse autentimisele ja pärast seda tema pakkumisele
-
-Scenario: Tühistamine
-  Given X ei teinud midagi P-05-ks
-  Then  OFFER_BASED taotlus CANCELLED(OFFER_NOT_ACCEPTED) ja kogus on released_opportunity</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Pakkumise loomine</strong></td><td>kinnitatud proaktiivne jaotus, osaleja X läbis eelkontrolli</td><td>–</td><td>X-ile on loodud OFFER_BASED taotlus AWAITING_FEE_PAYMENT, allocated_opportunity täidetud ja e-kiri saadetud</td></tr><tr><td><strong>Eelkontroll FAIL</strong></td><td>X CHK-04 FAIL</td><td>–</td><td>pakkumist ei looda ja PTA ülesanne on olemas</td></tr><tr><td><strong>Järelkontroll FAIL nõustumisel</strong></td><td>X läbis eelkontrolli, aga nõustumisel on LAEVIS-e omanik muutunud</td><td>confirm</td><td>ERR_OFFER_NOT_POSSIBLE ja luba ei väljastata</td></tr><tr><td><strong>Link</strong></td><td>–</td><td>X avab lingi</td><td>teda suunatakse autentimisele ja pärast seda tema pakkumisele</td></tr><tr><td><strong>Tühistamine</strong></td><td>X ei teinud midagi P-05-ks</td><td>–</td><td>OFFER_BASED taotlus CANCELLED(OFFER_NOT_ACCEPTED) ja kogus on released_opportunity</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-01, A-30. <strong>Sõltub:</strong> KL-E6-T01, E3-T01…T07.</p>
 <hr>
 <h3 id="kl-e6-t03-taotlusvooru-väljalülitus-ja-üleminek"><a class="anchor" href="#kl-e6-t03-taotlusvooru-väljalülitus-ja-üleminek">#</a>KL-E6-T03 Taotlusvooru väljalülitus ja üleminek</h3>
@@ -209,18 +172,7 @@ Scenario: Tühistamine
 <li>Üleminekujuhend dokumendis <code>docs/operations/scenario-switch.md</code>: kontrollnimekiri (õigusmuudatus jõus, parameetrid, test-käivitus enne aasta algust).</li>
 </ol>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
-<pre><code class="lang-gherkin">Scenario: Baasstsenaarium
-  Given scenario=APPLICATION_BASED
-  Then  taotluse esitamine on lubatud ja E6 töö ei käivitu
-
-Scenario: Proaktiivne aasta
-  Given scenario=PROACTIVE
-  When  taotleja proovib luua ANNUAL taotlust
-  Then  ERR_SCENARIO_NOT_APPLICABLE
-
-Scenario: Ajalugu
-  Given 2027 oli APPLICATION_BASED ja 2028 PROACTIVE
-  Then  2027 andmed ja aruanded on muutumata</code></pre>
+<div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Baasstsenaarium</strong></td><td>scenario=APPLICATION_BASED</td><td>–</td><td>taotluse esitamine on lubatud ja E6 töö ei käivitu</td></tr><tr><td><strong>Proaktiivne aasta</strong></td><td>scenario=PROACTIVE</td><td>taotleja proovib luua ANNUAL taotlust</td><td>ERR_SCENARIO_NOT_APPLICABLE</td></tr><tr><td><strong>Ajalugu</strong></td><td>2027 oli APPLICATION_BASED ja 2028 PROACTIVE</td><td>–</td><td>2027 andmed ja aruanded on muutumata</td></tr></tbody></table></div>
 <p><strong>Eeldused.</strong> A-01. <strong>Sõltub:</strong> E1-T07, E6-T01, E6-T02.</p>
 </article>
 <div class="pn"><a href="E5-vaidlustamine.html">← E5 Jagatud püügivõimaluste vaidlustamine (TO-BE.04)</a><a href="E7-vesiviljelus.html">E7 Vesiviljeluse tegevusloa taotlemine ja väljastamine (TO-BE.05) →</a></div>
