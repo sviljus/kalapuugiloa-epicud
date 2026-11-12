@@ -43,6 +43,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 #results small{display:block;color:var(--mut)}mark{background:#ffd54a66;color:inherit}
 @media(max-width:1100px){.shell{grid-template-columns:250px minmax(0,1fr)}.toc{display:none}}
 @media(max-width:760px){#menu{display:block}.shell{display:block}.side{display:none;position:fixed;top:57px;left:0;width:84vw;max-width:320px;background:var(--bg);z-index:25;height:calc(100vh - 57px)}body.nav .side{display:block}main{padding:16px}.brand small{display:none}}
+.diagram{margin:1em 0;padding:12px;background:var(--soft);border:1px solid var(--bd);border-radius:10px;overflow:auto;text-align:center}pre.mermaid{background:none;border:0;padding:0;margin:0}
 </style></head><body>
 <header class="top"><button id="menu" aria-label="Menüü">☰</button><a class="brand" href="index.html">Kalapüügiloa väljastamine <small>Epic'ud ja Task'id</small></a>
 <input id="q" type="search" placeholder="Otsi (/)" autocomplete="off"><button id="theme" aria-label="Teema">◐</button></header>
@@ -56,9 +57,85 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <p><strong>Skeem (TO-BE.01 KALATUUM rada):</strong> Taotlusvoor on lõppenud → alamprotsess TO-BE.02 → „Püügivõimalused on jaotatud taotlejate vahel“ → kas püügivõimalused on võrreldes taotlusega muutunud? → jah: taotlusele luuakse uus püügivõimaluse andmeplokk (taotlusel esitatud püügivõimalused jäävad alles) → taotluse staatus „Riigilõivu tasumise ootel“ (<a href="00-uldkontekst.html">A-05</a>: „Püügiõiguse tasu tasumise ootel“) → teavituse edastamine.</p>
 <p><strong>Task&#39;ide järjekord:</strong> T01 → T03 → T02 → T04 → T05 → T06.</p>
 <hr>
+<p><strong>Diagramm: jaotuse andmevoog taotlusvoorust otsuseni</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="flowchart TD
+  APP[&quot;Taotlused AWAITING_ALLOCATION (MO)&quot;] --&gt; RUN[&quot;T04: jaotusvoor allocation_run&quot;]
+  PVT[(&quot;PVT: catch_opportunity ja LPV&quot;)] --&gt; RUN
+  ODS[(&quot;ODS / PVT ajalugu: T Y-1..Y-3&quot;)] --&gt; HIST[&quot;T03: HistoricalAcquisitionPort&quot;]
+  HIST --&gt; RUN
+  REG[&quot;Uuesti-kontroll CHK-01..05&quot;] --&gt; RUN
+  RUN --&gt; ENG[&quot;T02: arvutusmootor määrus 4-8&quot;]
+  ENG --&gt; RES[(&quot;allocation_result ja pool_summary&quot;)]
+  RES --&gt; REV[&quot;T05: PTA ülevaatus ja kinnitus&quot;]
+  REV --&gt; DEC[&quot;T06: jaotusotsus PJO-aasta-nr&quot;]
+  DEC --&gt; DF[(&quot;DF: PDF ja JSON&quot;)]
+  DEC --&gt; ST[&quot;Taotlused -&gt; AWAITING_FEE_PAYMENT&quot;]
+  DEC --&gt; N[&quot;Teavitused taotlejatele&quot;]
+  DEC --&gt; REL[&quot;released_opportunity: UNALLOCATED_REMAINDER&quot;]">flowchart TD
+  APP[&quot;Taotlused AWAITING_ALLOCATION (MO)&quot;] --&gt; RUN[&quot;T04: jaotusvoor allocation_run&quot;]
+  PVT[(&quot;PVT: catch_opportunity ja LPV&quot;)] --&gt; RUN
+  ODS[(&quot;ODS / PVT ajalugu: T Y-1..Y-3&quot;)] --&gt; HIST[&quot;T03: HistoricalAcquisitionPort&quot;]
+  HIST --&gt; RUN
+  REG[&quot;Uuesti-kontroll CHK-01..05&quot;] --&gt; RUN
+  RUN --&gt; ENG[&quot;T02: arvutusmootor määrus 4-8&quot;]
+  ENG --&gt; RES[(&quot;allocation_result ja pool_summary&quot;)]
+  RES --&gt; REV[&quot;T05: PTA ülevaatus ja kinnitus&quot;]
+  REV --&gt; DEC[&quot;T06: jaotusotsus PJO-aasta-nr&quot;]
+  DEC --&gt; DF[(&quot;DF: PDF ja JSON&quot;)]
+  DEC --&gt; ST[&quot;Taotlused -&gt; AWAITING_FEE_PAYMENT&quot;]
+  DEC --&gt; N[&quot;Teavitused taotlejatele&quot;]
+  DEC --&gt; REL[&quot;released_opportunity: UNALLOCATED_REMAINDER&quot;]</pre></div>
 <h3 id="kl-e2-t01-pvt-andmemudel-jaotusüksus-jaotustulemus-jaotusotsus"><a class="anchor" href="#kl-e2-t01-pvt-andmemudel-jaotusüksus-jaotustulemus-jaotusotsus">#</a>KL-E2-T01 PVT andmemudel: jaotusüksus, jaotustulemus, jaotusotsus</h3>
 <p><strong>Eesmärk.</strong> Luua PVT-s andmemudel, mis hoiab kehtestatud püügivõimalusi, arvutustulemusi koos täieliku kujunemislooga ja jaotusotsust.</p>
 <p><strong>Kontekst.</strong> PVT_DR-01…13 (eriti DR-04 kujunemislugu, DR-05 seos arvutustega, DR-07 ajaloolisus, DR-09 automaatselt arvutatud vs kinnitatud), PVT_UC-01 (loomine), PVT_UC-22 (audit). A-19, A-20.</p>
+<p><strong>Diagramm: PVT andmemudel</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="erDiagram
+  catch_opportunity ||--o{ allocation_result : &quot;jaotub&quot;
+  allocation_run ||--o{ allocation_result : &quot;sisaldab&quot;
+  allocation_run ||--o{ allocation_pool_summary : &quot;kokkuvõte&quot;
+  catch_opportunity ||--o{ allocation_pool_summary : &quot;üksuse kohta&quot;
+  allocation_run ||--o| allocation_decision : &quot;otsus&quot;
+  allocation_result ||--o| allocated_opportunity : &quot;kinnitatuna&quot;
+  allocation_decision ||--o{ allocated_opportunity : &quot;annab&quot;
+  catch_opportunity {
+    string species_code
+    string water_area_code
+    string gear_type_code
+    string unit
+    decimal permitted_quantity
+  }
+  allocation_result {
+    decimal requested_quantity
+    decimal final_quantity
+    bool tiebreak_applied
+  }
+  allocation_decision {
+    string state
+    string document_id
+  }">erDiagram
+  catch_opportunity ||--o{ allocation_result : &quot;jaotub&quot;
+  allocation_run ||--o{ allocation_result : &quot;sisaldab&quot;
+  allocation_run ||--o{ allocation_pool_summary : &quot;kokkuvõte&quot;
+  catch_opportunity ||--o{ allocation_pool_summary : &quot;üksuse kohta&quot;
+  allocation_run ||--o| allocation_decision : &quot;otsus&quot;
+  allocation_result ||--o| allocated_opportunity : &quot;kinnitatuna&quot;
+  allocation_decision ||--o{ allocated_opportunity : &quot;annab&quot;
+  catch_opportunity {
+    string species_code
+    string water_area_code
+    string gear_type_code
+    string unit
+    decimal permitted_quantity
+  }
+  allocation_result {
+    decimal requested_quantity
+    decimal final_quantity
+    bool tiebreak_applied
+  }
+  allocation_decision {
+    string state
+    string document_id
+  }</pre></div>
 <p><strong>Tee.</strong> Loo järgmised olemid (loogiline mudel, nimed kohandatav A-02 konventsiooniga):</p>
 <ul>
 <li><code>catch_opportunity</code> (jaotusüksus): <code>id</code>, <code>fishing_year</code>, <code>species_code</code>, <code>water_area_code</code>, <code>gear_type_code</code>, <code>unit</code>, <code>permitted_quantity</code> (LPV, decimal), <code>granularity</code> (1 või 0.01, tuletatud <code>unit</code>-ist), <code>historical_calc_allowed</code> (bool, vaikimisi <code>true</code>; <code>false</code> blokk-kvoodi ja ühiskvoodi korral, määrus § 4 lg 5), <code>status</code> (<code>DRAFT</code>, <code>ESTABLISHED</code>, <code>CLOSED</code>), <code>valid_from</code>, <code>version</code>. Unikaalne <code>(fishing_year, species, water_area, gear_type, unit)</code>.</li>
@@ -70,7 +147,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 </ul>
 <p>Reeglid: kõik kogused <code>DECIMAL</code>, mitte ujukoma. <code>allocation_result</code> ja <code>allocation_decision</code> on pärast <code>CONFIRMED</code> muutumatud (PVT_DR-07). Parandus tehakse uue <code>allocation_run</code>-iga (eelmine <code>SUPERSEDED</code>). Iga kirje seotud <code>inputs_hash</code>-iga (taotluste ja ajalooandmete ülevõte), et tulemust saaks reprodutseerida.</p>
 <p><strong>Liides.</strong> Migratsioonid, repositooriumid ja loogiline OpenAPI skeem. API-d <code>GET /catch-opportunities?fishing_year=&amp;…</code>, <code>POST/PUT/DELETE</code> (PVT_UC-01/02/03) ainult <code>PTA_ADMIN</code>, ilma kustutamiseta pärast kasutamist (<code>CLOSED</code>, PVT_UC-03).</p>
-<p><strong>AC.</strong></p>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: Jaotusüksuse loomine
   When  PTA_ADMIN loob (2027, räim, ICES 29, kastmõrd, TONNE) LPV=500.00
   Then  granularity on 0.01, historical_calc_allowed=true ja audit AL_UC-01 on loodud
@@ -95,6 +172,26 @@ Scenario: Sulgemine
 <h3 id="kl-e2-t03-ajalooliste-andmete-sisendi-adapter-ods-pvt"><a class="anchor" href="#kl-e2-t03-ajalooliste-andmete-sisendi-adapter-ods-pvt">#</a>KL-E2-T03 Ajalooliste andmete sisendi adapter (ODS/PVT)</h3>
 <p><strong>Eesmärk.</strong> Arvutus saab iga taotleja ja jaotusüksuse kohta kolme eelmise aasta õiguspäraselt omandatud püügivõimaluste summa.</p>
 <p><strong>Kontekst.</strong> PVT_IF-02 (ajalooliste püügiandmete päring), PVT_DR-13 (ajaloolised andmed sõltumata füüsilisest asukohast), skeem „Vastavalt püügivõimaluste arvutamise metoodikale“, TO-BE.02: „pärib andmelaost ajaloolise püügiõiguse arvutamiseks vajalikud andmed“, KPS: püügivõimalus loetakse omandatuks, kui see on loale märgitud ja selle eest on makstud (kui tasu nõutav). A-18.</p>
+<p><strong>Diagramm: ajaloolise sisendi adapter</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="flowchart LR
+  ENG[&quot;Arvutus / run&quot;] --&gt;|&quot;getAcquired(party_ids, key, Y-1..Y-3)&quot;| P[&quot;HistoricalAcquisitionPort&quot;]
+  P --&gt; SW{&quot;historical.source&quot;}
+  SW -- ODS --&gt; ODS[(&quot;ODS andmeladu&quot;)]
+  SW -- PVT --&gt; PVT[(&quot;PVT ajalugu&quot;)]
+  SW -- COMPOSITE --&gt; CMP[&quot;ODS täiendatud PVT-ga, PVT on tõe allikas&quot;]
+  ODS --&gt; OUT[&quot;party_id, year, acquired_quantity&quot;]
+  PVT --&gt; OUT
+  CMP --&gt; OUT
+  OUT --&gt; CHK{&quot;puuduv aasta = 0, negatiivne = viga&quot;}">flowchart LR
+  ENG[&quot;Arvutus / run&quot;] --&gt;|&quot;getAcquired(party_ids, key, Y-1..Y-3)&quot;| P[&quot;HistoricalAcquisitionPort&quot;]
+  P --&gt; SW{&quot;historical.source&quot;}
+  SW -- ODS --&gt; ODS[(&quot;ODS andmeladu&quot;)]
+  SW -- PVT --&gt; PVT[(&quot;PVT ajalugu&quot;)]
+  SW -- COMPOSITE --&gt; CMP[&quot;ODS täiendatud PVT-ga, PVT on tõe allikas&quot;]
+  ODS --&gt; OUT[&quot;party_id, year, acquired_quantity&quot;]
+  PVT --&gt; OUT
+  CMP --&gt; OUT
+  OUT --&gt; CHK{&quot;puuduv aasta = 0, negatiivne = viga&quot;}</pre></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Liides <code>HistoricalAcquisitionPort.getAcquired(party_ids[], catch_opportunity_key, years[Y-1,Y-2,Y-3]) → [{party_id, year, acquired_quantity(decimal)}]</code>, kus <code>catch_opportunity_key</code> on <code>(species, water_area, gear_type, unit)</code> ilma aastata.</li>
@@ -105,7 +202,7 @@ Scenario: Sulgemine
 <li>Kui andmeallikas ei vasta, tulemus <code>ERR_DEPENDENCY_UNAVAILABLE</code>, arvutus ei alga (ei arvuta osalise ajalooga).</li>
 <li>Päring on partiidena (≤ 500 osapoolt korraga), ühe jooksuga ≤ 5 000 osapoolt (A-15).</li>
 </ol>
-<p><strong>AC.</strong></p>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: Kolm aastat
   Given osapoolel on omandatud 2024=10, 2025=20, 2026=30 jaotusüksuse võtmel
   When  getAcquired aastaks 2027
@@ -162,7 +259,7 @@ Scenario: Hetktõmmis
 <p><strong>Testivektorid (kohustuslikud automaattestid, väärtused on täpsed):</strong></p>
 <div class="tw"><table><thead><tr><th>#</th><th>LPV, g</th><th>Taotlejad (T, requested, esitamise järjekord)</th><th>Oodatud <code>final</code></th><th><code>unallocated</code></th><th>Märkus</th></tr></thead><tbody><tr><td>V1</td><td>100, 1</td><td>A(T=60,req=100), B(30,100), C(10,100)</td><td>A=60, B=30, C=10</td><td>0</td><td>D=300&gt;100 → ajalooline, O=0.6/0.3/0.1</td></tr><tr><td>V2</td><td>10, 1</td><td>A(1,10,1.), B(1,10,2.), C(1,10,3.)</td><td>A=4, B=3, C=3</td><td>0</td><td>O=0.3333, raw=3.333, Σrounded=9 → R=1, f võrdsed → T võrdne → varasem A</td></tr><tr><td>V3</td><td>10, 1</td><td>A(5,10,1.), B(5,10,2.), C(1,10,3.)</td><td>A=5, B=4, C=1</td><td>0</td><td>O=0.4545/0.4545/0.0909. Σrounded=5+5+1=11&gt;10 → floor=4,4,0. R=2; f: C=0.9090, A=B=0.5450. C esimene, siis võrdsus A/B → A</td></tr><tr><td>V4</td><td>10, 1</td><td>A(req=3), B(req=4), D=7≤10</td><td>A=3, B=4</td><td>3</td><td>lihtjaotus § 4 lg 1</td></tr><tr><td>V5</td><td>10, 1</td><td>A(T=1,req=2), B(T=1,req=20)</td><td>A=2, B=5</td><td>3</td><td>O=0.5/0.5, raw=5/5; A piiratud taotlusega (A-17)</td></tr><tr><td>V6</td><td>7.00, 0.01</td><td>A(1,7,1.), B(1,7,2.), C(1,7,3.)</td><td>A=2.34, B=2.33, C=2.33</td><td>0.00</td><td>tonnid, raw=2.3331 → rounded 2.33, Σ=6.99, R=0.01, f=0.3100 võrdne → A</td></tr><tr><td>V7</td><td>1000, 1</td><td>A(T=99999,req=2000), B(T=1,req=2000)</td><td>A=1000, B=0</td><td>0</td><td>O_B=0.00001 → 0.0000 &lt;0.0001 → 0 (§ 6 lg 2). O_A=1.0000</td></tr><tr><td>V8</td><td>10, 1</td><td>A(T=3,req=10, <strong>eligible=false</strong>), B(T=1,req=10), C(T=1,req=10)</td><td>A=0 (exclusion), B=5, C=5</td><td>0</td><td>§ 4 lg 3. S=2 → O=0.5/0.5</td></tr><tr><td>V9</td><td>10, 1, historical_calc_allowed=false</td><td>A(req=8), B(req=8), D=16&gt;10</td><td>puudub (<code>needs_officer</code>)</td><td>–</td><td>§ 4 lg 5</td></tr><tr><td>V10</td><td>10, 1</td><td>A(T=0,req=8), B(T=0,req=8), D=16&gt;10</td><td>puudub (<code>needs_officer</code>)</td><td>–</td><td>S=0, ajalugu puudub</td></tr></tbody></table></div>
 <p>Lisaks: <strong>omadustestid</strong> (property-based, vähemalt 1 000 juhuslikku juhtu): (a) <code>Σ final + unallocated = LPV</code>; (b) <code>final_i ≤ requested_i</code>; (c) <code>final_i ≥ 0</code>; (d) tulemus ei sõltu taotlejate sisendjärjekorrast, kui <code>submitted_at</code> ja <code>party_id</code> on antud (determinism); (e) iga <code>final_i</code> on <code>g</code> kordne.</p>
-<p><strong>AC.</strong></p>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario Outline: Testivektorid V1–V10
   Given jaotusüksus ja taotlejad vastavalt tabelile
   When  allocate()
@@ -184,6 +281,82 @@ Scenario: Ujukomavaba
 <h3 id="kl-e2-t04-jaotusarvutuse-käivitamine-ja-eelnõu-koostamine"><a class="anchor" href="#kl-e2-t04-jaotusarvutuse-käivitamine-ja-eelnõu-koostamine">#</a>KL-E2-T04 Jaotusarvutuse käivitamine ja eelnõu koostamine</h3>
 <p><strong>Eesmärk.</strong> Pärast taotlusvooru lõppu käivitub arvutus automaatselt kõigil jaotusüksustel ja tulemus salvestatakse eelnõuna PTA ülevaatuseks.</p>
 <p><strong>Kontekst.</strong> TO-BE.02 kirjeldus „Protsess käivitub pärast taotlusvooru lõppu“, määrus § 9 lg 1 (otsus hiljemalt 30. dets), P-02, P-03.</p>
+<p><strong>Diagramm: arvutusmootori otsustuspuu</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="flowchart TD
+  S[&quot;pool + applicants&quot;] --&gt; X[&quot;0. Välista eligible=false&quot;]
+  X --&gt; D{&quot;D = Σ requested &lt;= LPV?&quot;}
+  D -- jah --&gt; SIMPLE[&quot;SIMPLE: final = requested&quot;]
+  D -- ei --&gt; H{&quot;historical_calc_allowed?&quot;}
+  H -- ei --&gt; MAN[&quot;MANUAL: needs_officer&quot;]
+  H -- jah --&gt; SS{&quot;S = Σ T &gt; 0?&quot;}
+  SS -- ei --&gt; MAN
+  SS -- jah --&gt; O[&quot;O = round(T/S, 4); apv_raw = O × LPV&quot;]
+  O --&gt; RND[&quot;apv_rounded (0 või 2 kohta)&quot;]
+  RND --&gt; F{&quot;Σ rounded &gt; LPV?&quot;}
+  F -- jah --&gt; FL[&quot;base = floor_g(apv_raw)&quot;]
+  F -- ei --&gt; BR[&quot;base = apv_rounded&quot;]
+  FL --&gt; REM[&quot;jääk R = LPV - Σ base&quot;]
+  BR --&gt; REM
+  REM --&gt; FR[&quot;murdosa f_i järjestus, võrdsus A-03&quot;]
+  FR --&gt; CAP[&quot;final = min(base + extra, requested)&quot;]
+  CAP --&gt; INV{&quot;Σ final + unallocated = LPV?&quot;}
+  INV -- ei --&gt; ERR[&quot;ERR_ALLOCATION_INVARIANT&quot;]
+  INV -- jah --&gt; OUT[&quot;results + summary&quot;]">flowchart TD
+  S[&quot;pool + applicants&quot;] --&gt; X[&quot;0. Välista eligible=false&quot;]
+  X --&gt; D{&quot;D = Σ requested &lt;= LPV?&quot;}
+  D -- jah --&gt; SIMPLE[&quot;SIMPLE: final = requested&quot;]
+  D -- ei --&gt; H{&quot;historical_calc_allowed?&quot;}
+  H -- ei --&gt; MAN[&quot;MANUAL: needs_officer&quot;]
+  H -- jah --&gt; SS{&quot;S = Σ T &gt; 0?&quot;}
+  SS -- ei --&gt; MAN
+  SS -- jah --&gt; O[&quot;O = round(T/S, 4); apv_raw = O × LPV&quot;]
+  O --&gt; RND[&quot;apv_rounded (0 või 2 kohta)&quot;]
+  RND --&gt; F{&quot;Σ rounded &gt; LPV?&quot;}
+  F -- jah --&gt; FL[&quot;base = floor_g(apv_raw)&quot;]
+  F -- ei --&gt; BR[&quot;base = apv_rounded&quot;]
+  FL --&gt; REM[&quot;jääk R = LPV - Σ base&quot;]
+  BR --&gt; REM
+  REM --&gt; FR[&quot;murdosa f_i järjestus, võrdsus A-03&quot;]
+  FR --&gt; CAP[&quot;final = min(base + extra, requested)&quot;]
+  CAP --&gt; INV{&quot;Σ final + unallocated = LPV?&quot;}
+  INV -- ei --&gt; ERR[&quot;ERR_ALLOCATION_INVARIANT&quot;]
+  INV -- jah --&gt; OUT[&quot;results + summary&quot;]</pre></div>
+<p><strong>Diagramm: jaotusvooru käivitus</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="sequenceDiagram
+  participant SCH as Ajastaja / PTA_ADMIN
+  participant RUN as allocation_run
+  participant MO as MO
+  participant CHK as Kontrollid
+  participant H as Ajaloo adapter
+  participant ENG as Mootor
+  participant DB as PVT andmebaas
+  SCH-&gt;&gt;RUN: käivita (P-02 + 1 päev 00:05)
+  RUN-&gt;&gt;MO: hetktõmmis AWAITING_ALLOCATION taotlustest
+  RUN-&gt;&gt;CHK: uuesti-kontroll CHK-01..05
+  RUN-&gt;&gt;H: T Y-1..Y-3
+  loop iga jaotusüksus
+    RUN-&gt;&gt;ENG: allocate(pool, applicants)
+    ENG--&gt;&gt;RUN: results, summary
+  end
+  RUN-&gt;&gt;DB: salvesta tulemused, state=CALCULATED
+  RUN--&gt;&gt;SCH: eelnõu valmis (PTA ülesanne)">sequenceDiagram
+  participant SCH as Ajastaja / PTA_ADMIN
+  participant RUN as allocation_run
+  participant MO as MO
+  participant CHK as Kontrollid
+  participant H as Ajaloo adapter
+  participant ENG as Mootor
+  participant DB as PVT andmebaas
+  SCH-&gt;&gt;RUN: käivita (P-02 + 1 päev 00:05)
+  RUN-&gt;&gt;MO: hetktõmmis AWAITING_ALLOCATION taotlustest
+  RUN-&gt;&gt;CHK: uuesti-kontroll CHK-01..05
+  RUN-&gt;&gt;H: T Y-1..Y-3
+  loop iga jaotusüksus
+    RUN-&gt;&gt;ENG: allocate(pool, applicants)
+    ENG--&gt;&gt;RUN: results, summary
+  end
+  RUN-&gt;&gt;DB: salvesta tulemused, state=CALCULATED
+  RUN--&gt;&gt;SCH: eelnõu valmis (PTA ülesanne)</pre></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li><strong>Käivitus:</strong> ajastatud töö <code>SYSTEM</code> käivitub päeval pärast P-02 (kell 00:05 Europe/Tallinn). Lisaks käsitsi <code>POST /admin/allocation-runs</code> (<code>PTA_ADMIN</code>, parameeter <code>fishing_year</code>). Samale aastale ei tohi samaaegselt olla kaks aktiivset (<code>CALCULATED</code>/<code>UNDER_REVIEW</code>) run&#39;i: <code>ERR_CONFLICT_VERSION</code>.</li>
@@ -194,7 +367,7 @@ Scenario: Ujukomavaba
 <li><strong>Hoiatus tähtajast:</strong> kui P-03 − täna ≤ 3 päeva ja otsust pole kinnitatud, saadetakse <code>PTA_ADMIN</code>-ile teavitus (kord päevas).</li>
 <li>Kogu arvutus jooksutatakse taustatööna (A-15: 5 000 taotlust ≤ 5 min), edenemine <code>GET /admin/allocation-runs/{id}</code>: <code>state</code>, <code>processed_pools</code>, <code>total_pools</code>.</li>
 </ol>
-<p><strong>AC.</strong></p>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: Automaatne käivitus
   Given P-02 = 2026-12-01 ja kolm AWAITING_ALLOCATION taotlust
   When  on 2026-12-02 00:05
@@ -228,6 +401,20 @@ Scenario: Tähtaja hoiatus
 <h3 id="kl-e2-t05-pta-ülevaatus-parandus-ja-kinnitamine-ametnikuportaal"><a class="anchor" href="#kl-e2-t05-pta-ülevaatus-parandus-ja-kinnitamine-ametnikuportaal">#</a>KL-E2-T05 PTA ülevaatus, parandus ja kinnitamine (Ametnikuportaal)</h3>
 <p><strong>Eesmärk.</strong> PTA menetleja näeb arvutuse tulemust, saab põhjendatud juhtudel korrigeerida ja kinnitab jaotusotsuse.</p>
 <p><strong>Kontekst.</strong> TO-BE.02 „PTA ametniku töölaud (KALATUUM)“: „tutvuda arvutuste tulemustega, kontrollida … ja vajadusel teha parandusi või kinnitada“. PVT_UC-16 (kontrollimine), PVT_UC-17 (kinnitamine), PVT_UC-18 (korrigeerimine), PVT_IF-06, MO_UC-17. A-04.</p>
+<p><strong>Diagramm: PTA ülevaatus ja kinnitamine</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="stateDiagram-v2
+  [*] --&gt; CALCULATED
+  CALCULATED --&gt; UNDER_REVIEW: PTA avab
+  UNDER_REVIEW --&gt; UNDER_REVIEW: korrigeerimine koos põhjendusega
+  UNDER_REVIEW --&gt; CONFIRMED: PTA kinnitab
+  CONFIRMED --&gt; SUPERSEDED: parandus uue run-iga
+  CONFIRMED --&gt; [*]">stateDiagram-v2
+  [*] --&gt; CALCULATED
+  CALCULATED --&gt; UNDER_REVIEW: PTA avab
+  UNDER_REVIEW --&gt; UNDER_REVIEW: korrigeerimine koos põhjendusega
+  UNDER_REVIEW --&gt; CONFIRMED: PTA kinnitab
+  CONFIRMED --&gt; SUPERSEDED: parandus uue run-iga
+  CONFIRMED --&gt; [*]</pre></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>API (roll <code>PTA_OFFICER</code>): <code>GET /admin/allocation-runs/{id}/pools</code> (kokkuvõtted: nõudlus, LPV, jaotatud, jääk, <code>needs_officer</code>, võrdsuse juhtumite arv), <code>GET …/pools/{pool}/results</code> (rida taotleja kohta kõigi arvutusväljadega, <code>tiebreak_detail</code>), <code>GET …/exclusions</code>.</li>
@@ -238,7 +425,7 @@ Scenario: Tähtaja hoiatus
 <li><code>P-08=false</code> (automaatkinnitus): T04 lõpus kutsutakse kinnitamine automaatselt <code>SYSTEM</code>-ina, kui ühtegi <code>needs_officer</code>-it ei ole.</li>
 <li>Ametnik võib <strong>tagasi lükata</strong> kogu run&#39;i (<code>POST …/reject</code>, põhjus kohustuslik) → <code>SUPERSEDED</code>, uus T04 arvutus on käsitsi käivitatav.</li>
 </ol>
-<p><strong>AC.</strong></p>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: Ülevaatus
   Given CALCULATED run kahe jaotusüksusega
   When  PTA_OFFICER avab kokkuvõtte
@@ -279,6 +466,36 @@ Scenario: Õigused
 <h3 id="kl-e2-t06-jaotusotsuse-väljastamine-avaldamine-ja-teavitamine"><a class="anchor" href="#kl-e2-t06-jaotusotsuse-väljastamine-avaldamine-ja-teavitamine">#</a>KL-E2-T06 Jaotusotsuse väljastamine, avaldamine ja teavitamine</h3>
 <p><strong>Eesmärk.</strong> Kinnitatud jaotusest saab ametlik jaotusotsus (dokument), mille põhjal taotlused liiguvad järgmisse olekusse ja taotlejad saavad teavituse.</p>
 <p><strong>Kontekst.</strong> Määrus § 8 (otsus elektrooniliselt, kantakse kutselise kalapüügi registrisse; sisu: nimed, osakud, eraldatud püügivõimalused; kui taotletud &lt; arvutatud, märgitakse mõlemad), § 9 lg 6 (saadetakse viivituseta taotluses märgitud e-posti aadressile; paberärakiri soovi korral), TO-BE.02 „Protsessi lõpus genereeritakse jaotusotsus“, TO-BE.01 skeem „Taotluse staatuse muutmine ‚Püügiõiguse tasu tasumise ootel‘“, „Vastava teavituse edastamine“. MO_UC-15, 17, 18, DF_UC-01/06, LTO_DR-05.</p>
+<p><strong>Diagramm: otsuse väljastamine ja teavitamine</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="sequenceDiagram
+  participant E as AllocationDecisionConfirmed
+  participant MO as MO
+  participant DF as DF
+  participant PVT as PVT
+  participant N as Teavitused
+  participant T as Taotlejad
+  E-&gt;&gt;MO: sündmus
+  MO-&gt;&gt;MO: koosta PDF + JSON (PJO-aasta-nr)
+  MO-&gt;&gt;DF: salvesta ja seo menetlusega
+  MO-&gt;&gt;PVT: allocated_opportunity read
+  MO-&gt;&gt;PVT: released_opportunity (UNALLOCATED_REMAINDER)
+  MO-&gt;&gt;MO: taotlused -&gt; AWAITING_FEE_PAYMENT
+  MO-&gt;&gt;N: teavitus iga taotleja kohta
+  N-&gt;&gt;T: e-kiri koos lingiga">sequenceDiagram
+  participant E as AllocationDecisionConfirmed
+  participant MO as MO
+  participant DF as DF
+  participant PVT as PVT
+  participant N as Teavitused
+  participant T as Taotlejad
+  E-&gt;&gt;MO: sündmus
+  MO-&gt;&gt;MO: koosta PDF + JSON (PJO-aasta-nr)
+  MO-&gt;&gt;DF: salvesta ja seo menetlusega
+  MO-&gt;&gt;PVT: allocated_opportunity read
+  MO-&gt;&gt;PVT: released_opportunity (UNALLOCATED_REMAINDER)
+  MO-&gt;&gt;MO: taotlused -&gt; AWAITING_FEE_PAYMENT
+  MO-&gt;&gt;N: teavitus iga taotleja kohta
+  N-&gt;&gt;T: e-kiri koos lingiga</pre></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Käivitub sündmusest <code>AllocationDecisionConfirmed</code>.</li>
@@ -298,7 +515,7 @@ Salvesta DF-i (DF_UC-01), seo menetlusega (DF_UC-06) ja <code>allocation_decisio
 <li>Kogu T06 on idempotentne <code>decision_id</code> järgi (topeltsündmus ei tee topeltkirju ega topeltolekumuutust).</li>
 <li><strong>Jääk:</strong> iga <code>allocation_pool_summary.unallocated &gt; 0</code> kohta loo <code>released_opportunity</code> kirje põhjusega <code>UNALLOCATED_REMAINDER</code> (olem on defineeritud <a href="E3-tasu-ja-loa-valjastamine.html">KL-E3-T06 punktis 3</a>; kui tabelit veel ei ole, loo see siin migratsiooniga ja E3-T06 kasutab seda). See on E4 sisend (A-17).</li>
 </ol>
-<p><strong>AC.</strong></p>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: Otsuse avaldamine
   Given kinnitatud allocation_decision 3 taotlejaga, kõik final&gt;0
   When  T06 jookseb
@@ -356,4 +573,4 @@ var links=[].slice.call(document.querySelectorAll('.active .sub a'));
 if(links.length&&'IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){links.forEach(function(l){l.classList.toggle('cur',l.hash==='#'+en.target.id)})}})},{rootMargin:'-60px 0px -75% 0px'});
 links.forEach(function(l){var h=document.getElementById(l.hash.slice(1));if(h)io.observe(h)})}
 })();
-</script></body></html>
+</script><script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script><script>(function(){function dark(){var t=document.documentElement.dataset.theme;return t?t==='dark':matchMedia('(prefers-color-scheme:dark)').matches}function run(){document.querySelectorAll('pre.mermaid').forEach(function(e){e.removeAttribute('data-processed');e.textContent=e.dataset.src});mermaid.initialize({startOnLoad:false,theme:dark()?'dark':'default',securityLevel:'strict'});mermaid.run({querySelector:'pre.mermaid'})}run();document.getElementById('theme').addEventListener('click',function(){setTimeout(run,0)})})()</script></body></html>

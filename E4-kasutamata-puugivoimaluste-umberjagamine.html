@@ -43,6 +43,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 #results small{display:block;color:var(--mut)}mark{background:#ffd54a66;color:inherit}
 @media(max-width:1100px){.shell{grid-template-columns:250px minmax(0,1fr)}.toc{display:none}}
 @media(max-width:760px){#menu{display:block}.shell{display:block}.side{display:none;position:fixed;top:57px;left:0;width:84vw;max-width:320px;background:var(--bg);z-index:25;height:calc(100vh - 57px)}body.nav .side{display:block}main{padding:16px}.brand small{display:none}}
+.diagram{margin:1em 0;padding:12px;background:var(--soft);border:1px solid var(--bd);border-radius:10px;overflow:auto;text-align:center}pre.mermaid{background:none;border:0;padding:0;margin:0}
 </style></head><body>
 <header class="top"><button id="menu" aria-label="Menüü">☰</button><a class="brand" href="index.html">Kalapüügiloa väljastamine <small>Epic'ud ja Task'id</small></a>
 <input id="q" type="search" placeholder="Otsi (/)" autocomplete="off"><button id="theme" aria-label="Teema">◐</button></header>
@@ -56,9 +57,43 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <p><strong>Voog (skeem + tekst):</strong> 1. jaanuar (P-06) → KALATUUM tuvastab kasutamata mahu → arvutab proportsioonid aktiivsete loaomanike vahel → saadab täiendavad pakkumised ajaperioodiks → nõustumisel tasutakse tasu → süsteem ajakohastab kalapüügiloa → kasutamata jäänu = lõplik jääk → lõplik jaotusotsus → tulemused andmelattu aruandluseks.</p>
 <p><strong>Task&#39;ide järjekord:</strong> T01 → T02 → T03.</p>
 <hr>
+<p><strong>Diagramm: ümberjaotuse andmevoog</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="flowchart LR
+  REL[(&quot;released_opportunity AVAILABLE&quot;)] --&gt; T1[&quot;T01: P-06 arvutus&quot;]
+  LIC[(&quot;Aktiivsed load (LTO)&quot;)] --&gt; T1
+  T1 --&gt; OFF[(&quot;reoffer pakkumised&quot;)]
+  OFF --&gt; T2[&quot;T02: nõustu, tasu, loa uus versioon&quot;]
+  T2 --&gt; PAY[&quot;Makse (E3-T03)&quot;]
+  PAY --&gt; LV[&quot;LTO: loa versioon v+1&quot;]
+  LV --&gt; EV[&quot;FishingLicenceChanged AMENDED&quot;]
+  T2 --&gt; T3[&quot;T03: lõplik ümberjaotusotsus&quot;]
+  T3 --&gt; ODS[(&quot;ODS&quot;)]">flowchart LR
+  REL[(&quot;released_opportunity AVAILABLE&quot;)] --&gt; T1[&quot;T01: P-06 arvutus&quot;]
+  LIC[(&quot;Aktiivsed load (LTO)&quot;)] --&gt; T1
+  T1 --&gt; OFF[(&quot;reoffer pakkumised&quot;)]
+  OFF --&gt; T2[&quot;T02: nõustu, tasu, loa uus versioon&quot;]
+  T2 --&gt; PAY[&quot;Makse (E3-T03)&quot;]
+  PAY --&gt; LV[&quot;LTO: loa versioon v+1&quot;]
+  LV --&gt; EV[&quot;FishingLicenceChanged AMENDED&quot;]
+  T2 --&gt; T3[&quot;T03: lõplik ümberjaotusotsus&quot;]
+  T3 --&gt; ODS[(&quot;ODS&quot;)]</pre></div>
 <h3 id="kl-e4-t01-ümberjaotuse-käivitus-ja-pakkumiste-arvutus"><a class="anchor" href="#kl-e4-t01-ümberjaotuse-käivitus-ja-pakkumiste-arvutus">#</a>KL-E4-T01 Ümberjaotuse käivitus ja pakkumiste arvutus</h3>
 <p><strong>Eesmärk.</strong> P-06 päeval arvutatakse iga vabanenud kogusega jaotusüksuse kohta pakkumised aktiivsetele loaomanikele.</p>
 <p><strong>Kontekst.</strong> TO-BE.03 kirjeldus, <a href="E3-tasu-ja-loa-valjastamine.html">E3-T06</a> (<code>released_opportunity</code>), <a href="E2-puugivoimaluste-arvutus-ja-jaotus.html">E2-T02</a> (mootor), PVT_UC-12, A-25.</p>
+<p><strong>Diagramm: pakkumiste arvutus</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="flowchart TD
+  J[&quot;P-06 00:10&quot;] --&gt; C[&quot;Kogu AVAILABLE ja dispute_hold=false, V = Σ jaotusüksuse kohta&quot;]
+  C --&gt; Q{&quot;V &gt;= g?&quot;}
+  Q -- ei --&gt; FR[&quot;FINAL_REMAINDER&quot;]
+  Q -- jah --&gt; P[&quot;Osalejad: aktiivse loaga selles üksuses&quot;]
+  P --&gt; ENG[&quot;Proportsioonid mootoriga E2-T02&quot;]
+  ENG --&gt; RO[(&quot;reoffer + teavitus&quot;)]">flowchart TD
+  J[&quot;P-06 00:10&quot;] --&gt; C[&quot;Kogu AVAILABLE ja dispute_hold=false, V = Σ jaotusüksuse kohta&quot;]
+  C --&gt; Q{&quot;V &gt;= g?&quot;}
+  Q -- ei --&gt; FR[&quot;FINAL_REMAINDER&quot;]
+  Q -- jah --&gt; P[&quot;Osalejad: aktiivse loaga selles üksuses&quot;]
+  P --&gt; ENG[&quot;Proportsioonid mootoriga E2-T02&quot;]
+  ENG --&gt; RO[(&quot;reoffer + teavitus&quot;)]</pre></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Ajastatud töö <code>SYSTEM</code> P-06 kell 00:10 (või käsitsi <code>PTA_ADMIN</code>). Kogub kõik <code>released_opportunity</code> kirjed <code>status=AVAILABLE</code> ja <code>dispute_hold=false</code> aastale <code>Y</code>, summeerib jaotusüksuse kaupa <code>V = Σ quantity</code>. Kui <code>V &lt; g</code> (jaotusühik), märgi <code>FINAL_REMAINDER</code> ja liigu edasi.</li>
@@ -68,7 +103,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <li>Pakkumise arvutus läheb <strong>PTA ülevaatusele sama mehhanismiga kui E2</strong> (A-04): <code>allocation_run</code> tüüp <code>REALLOCATION</code>; kinnitamise järel avaldatakse pakkumised. Kui P-08=false, automaatselt.</li>
 <li>Teavitus osalejale (<code>reoffer.offered</code>): kogus, tasu (E3-T02), aegub kuupäeval, link.</li>
 </ol>
-<p><strong>AC.</strong></p>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: Pakkumise arvutus
   Given vabanenud 2 tükki, kehtivad lubade omanikud A(T=3) ja B(T=1) samas jaotusüksuses
   When  käivitub 1. jaanuaril
@@ -99,6 +134,24 @@ Scenario: Käsitsi käivitus
 <h3 id="kl-e4-t02-pakkumise-vastuvõtt-tasu-ja-loa-uus-versioon"><a class="anchor" href="#kl-e4-t02-pakkumise-vastuvõtt-tasu-ja-loa-uus-versioon">#</a>KL-E4-T02 Pakkumise vastuvõtt, tasu ja loa uus versioon</h3>
 <p><strong>Eesmärk.</strong> Loaomanik võtab pakkumise vastu, tasub ja loa kehtiv versioon täieneb.</p>
 <p><strong>Kontekst.</strong> Skeemi sõnum „Nõustumise korral tasutakse tasu ning süsteem ajakohastab kalapüügiloa“, LTO_UC-06 (uus versioon), LTO_UC-05, <a href="E3-tasu-ja-loa-valjastamine.html">E3-T02</a> (tasu), <a href="E3-tasu-ja-loa-valjastamine.html">E3-T03</a> (makse), <a href="E3-tasu-ja-loa-valjastamine.html">E3-T05</a> (sündmus).</p>
+<p><strong>Diagramm: pakkumise vastuvõtt</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="stateDiagram-v2
+  [*] --&gt; OFFERED
+  OFFERED --&gt; ACCEPTED: accept
+  OFFERED --&gt; DECLINED: decline
+  OFFERED --&gt; EXPIRED: expires_at
+  ACCEPTED --&gt; PAID: makse kinnitatud
+  PAID --&gt; [*]: loa uus versioon
+  DECLINED --&gt; [*]
+  EXPIRED --&gt; [*]">stateDiagram-v2
+  [*] --&gt; OFFERED
+  OFFERED --&gt; ACCEPTED: accept
+  OFFERED --&gt; DECLINED: decline
+  OFFERED --&gt; EXPIRED: expires_at
+  ACCEPTED --&gt; PAID: makse kinnitatud
+  PAID --&gt; [*]: loa uus versioon
+  DECLINED --&gt; [*]
+  EXPIRED --&gt; [*]</pre></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li><code>GET /reoffers?party_id=</code> ja <code>GET /reoffers/{id}</code>: kogus, tasu, tähtaeg.</li>
@@ -109,7 +162,7 @@ Scenario: Käsitsi käivitus
 <li><code>reoffer.state</code> → <code>PAID</code>. Teavitus (<code>reoffer.paid</code>, <code>licence.amended</code>).</li>
 <li>Tasumata nõustumine: kui <code>ACCEPTED</code>, aga makset ei ole <code>expires_at</code>-iks, siis <code>EXPIRED</code> ja kogus tagasi <code>released_opportunity</code> kirjeks <code>FINAL_REMAINDER</code> (ainult üks voor, A-25).</li>
 </ol>
-<p><strong>AC.</strong></p>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: Edukas lisapakkumine
   Given loaomanik A, luba v1, pakkumine 2 tükki
   When  accept ja makse PAID
@@ -135,6 +188,24 @@ Scenario: Osaline vastuvõtt
 <h3 id="kl-e4-t03-lõplik-jaotusotsus-ja-tulemuste-edastus-ods"><a class="anchor" href="#kl-e4-t03-lõplik-jaotusotsus-ja-tulemuste-edastus-ods">#</a>KL-E4-T03 Lõplik jaotusotsus ja tulemuste edastus (ODS)</h3>
 <p><strong>Eesmärk.</strong> Pärast pakkumiste tähtaega fikseeritakse lõplik jaotus ja edastatakse andmehoidlasse.</p>
 <p><strong>Kontekst.</strong> TO-BE.03: „Protsess lõpetatakse lõpliku jaotuse otsuse genereerimisega. Tulemused edastatakse andmelattu“. MO_UC-26 (ODS-i edastus), AL_UC-16, PVT_DR-07, MO_DR-18.</p>
+<p><strong>Diagramm: lõplik otsus ja ODS</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="sequenceDiagram
+  participant J as Töö SYSTEM
+  participant MO as MO
+  participant DF as DF
+  participant ODS as ODS
+  J-&gt;&gt;MO: kõik reoffer lõppseisus?
+  MO-&gt;&gt;MO: REALLOCATION_DECISION
+  MO-&gt;&gt;DF: dokument
+  MO-&gt;&gt;ODS: released, reoffer, jääk, ajalugu">sequenceDiagram
+  participant J as Töö SYSTEM
+  participant MO as MO
+  participant DF as DF
+  participant ODS as ODS
+  J-&gt;&gt;MO: kõik reoffer lõppseisus?
+  MO-&gt;&gt;MO: REALLOCATION_DECISION
+  MO-&gt;&gt;DF: dokument
+  MO-&gt;&gt;ODS: released, reoffer, jääk, ajalugu</pre></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Töö <code>SYSTEM</code>: kui kõik <code>reoffer</code> kirjed aastale <code>Y</code> on lõppseisus (<code>PAID</code>, <code>DECLINED</code>, <code>EXPIRED</code>), koosta lõplik <strong>ümberjaotusotsus</strong> (MO otsus tüüp <code>REALLOCATION_DECISION</code>): iga jaotusüksuse jaoks vabanenud kogus, pakutud, vastu võetud, lõplik jääk. Dokument DF-i (E2-T06 mall). Lõplik jääk <code>FINAL_REMAINDER</code> kinnitub.</li>
@@ -142,7 +213,7 @@ Scenario: Osaline vastuvõtt
 <li><strong>Ajaloolisi osakaalusid ei muudeta</strong> (TO-BE.03): ümberjaotuse omandid loetakse ajaloolisse õigusesse samuti nagu muud omandid, sest seadus loeb omandatuks kõik loale märgitud ja makstud (kooskõlas E3-T04 punktiga 5). Eraldi „ei arvesta ajalooliselt“ lipp tuleks lisada vaid siis, kui tellija nii otsustab (väljaspool ulatust).</li>
 <li>Avalda statistika (PVT_UC-15): jaotusüksuse kohta eraldatud, kasutatud, ümber jagatud, lõplik jääk.</li>
 </ol>
-<p><strong>AC.</strong></p>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: Lõplik otsus
   Given kõik reoffer kirjed on lõppseisus
   Then  luuakse ümberjaotusotsus DF-i ja jäägid on FINAL_REMAINDER
@@ -178,4 +249,4 @@ var links=[].slice.call(document.querySelectorAll('.active .sub a'));
 if(links.length&&'IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){links.forEach(function(l){l.classList.toggle('cur',l.hash==='#'+en.target.id)})}})},{rootMargin:'-60px 0px -75% 0px'});
 links.forEach(function(l){var h=document.getElementById(l.hash.slice(1));if(h)io.observe(h)})}
 })();
-</script></body></html>
+</script><script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script><script>(function(){function dark(){var t=document.documentElement.dataset.theme;return t?t==='dark':matchMedia('(prefers-color-scheme:dark)').matches}function run(){document.querySelectorAll('pre.mermaid').forEach(function(e){e.removeAttribute('data-processed');e.textContent=e.dataset.src});mermaid.initialize({startOnLoad:false,theme:dark()?'dark':'default',securityLevel:'strict'});mermaid.run({querySelector:'pre.mermaid'})}run();document.getElementById('theme').addEventListener('click',function(){setTimeout(run,0)})})()</script></body></html>

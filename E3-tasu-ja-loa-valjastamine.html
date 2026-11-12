@@ -43,6 +43,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 #results small{display:block;color:var(--mut)}mark{background:#ffd54a66;color:inherit}
 @media(max-width:1100px){.shell{grid-template-columns:250px minmax(0,1fr)}.toc{display:none}}
 @media(max-width:760px){#menu{display:block}.shell{display:block}.side{display:none;position:fixed;top:57px;left:0;width:84vw;max-width:320px;background:var(--bg);z-index:25;height:calc(100vh - 57px)}body.nav .side{display:block}main{padding:16px}.brand small{display:none}}
+.diagram{margin:1em 0;padding:12px;background:var(--soft);border:1px solid var(--bd);border-radius:10px;overflow:auto;text-align:center}pre.mermaid{background:none;border:0;padding:0;margin:0}
 </style></head><body>
 <header class="top"><button id="menu" aria-label="Menüü">☰</button><a class="brand" href="index.html">Kalapüügiloa väljastamine <small>Epic'ud ja Task'id</small></a>
 <input id="q" type="search" placeholder="Otsi (/)" autocomplete="off"><button id="theme" aria-label="Teema">◐</button></header>
@@ -56,9 +57,67 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <p><strong>Skeem (TO-BE.01 taotleja rada, teine pool):</strong> Taotleja tutvub jaotatud püügivõimalustega → kas nõustub tingimustega? JAH → alamprotsess „Kalapüügiloa tasu maksmine“ → makse on teostatud → taotluse staatus „Kinnitatud“ → kalapüügiloa loomine ja staatuse „Kehtiv“ määramine → FLUX sündmuse algatamine → EE FLUX Server koostab, rikastab ja valideerib sõnumi → P1000-09 sõnumi edastamine → „Püügiluba on väljastatud“. EI → kas lobub? JAH → taotleja tühistab taotluse → taotlus tühistatud. EI → kas soovib vaidlustada? JAH → TO-BE.04 (<a href="E5-vaidlustamine.html">E5</a>). EI → püügiõiguse tasu tähtaja möödumisel (pärast 31. detsembrit) → taotluse tühistamine → märge „Ei puuduta vaidlustamisel olevaid püügivõimalusi“ → 1. jaanuaril TO-BE.03.</p>
 <p><strong>Task&#39;ide järjekord:</strong> T02 → T01 → T03 → T04 → T05 → T06; T07 teavitused paralleelselt.</p>
 <hr>
+<p><strong>Diagramm: andmevoog otsusest loani ja FLUX-ini</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="flowchart LR
+  OFFER[&quot;Jaotusotsus (E2)&quot;] --&gt; T1[&quot;T01: nõustu / loobu&quot;]
+  T1 --&gt; T2[&quot;T02: tasu arvutus&quot;]
+  RATES[(&quot;fishing_right_fee_rate&quot;)] --&gt; T2
+  T2 --&gt; T3[&quot;T03: makseorder&quot;]
+  T3 &lt;--&gt; PAY[&quot;Makselahendus (MobiGW, SEB)&quot;]
+  T3 --&gt;|&quot;FeePaid&quot;| T4[&quot;T04: luba LTO-s&quot;]
+  T4 --&gt; DF[(&quot;DF: loa PDF&quot;)]
+  T4 --&gt;|&quot;FishingLicenceChanged&quot;| T5[&quot;T05: outbox&quot;]
+  T5 --&gt; FLUX[&quot;EE FLUX Server -&gt; FLUX TL&quot;]
+  T1 -. &quot;tähtaeg P-05 möödas&quot; .-&gt; T6[&quot;T06: tühistamine ja vabastamine&quot;]
+  T4 --&gt; N[&quot;T07: teavitused&quot;]
+  T6 --&gt; N">flowchart LR
+  OFFER[&quot;Jaotusotsus (E2)&quot;] --&gt; T1[&quot;T01: nõustu / loobu&quot;]
+  T1 --&gt; T2[&quot;T02: tasu arvutus&quot;]
+  RATES[(&quot;fishing_right_fee_rate&quot;)] --&gt; T2
+  T2 --&gt; T3[&quot;T03: makseorder&quot;]
+  T3 &lt;--&gt; PAY[&quot;Makselahendus (MobiGW, SEB)&quot;]
+  T3 --&gt;|&quot;FeePaid&quot;| T4[&quot;T04: luba LTO-s&quot;]
+  T4 --&gt; DF[(&quot;DF: loa PDF&quot;)]
+  T4 --&gt;|&quot;FishingLicenceChanged&quot;| T5[&quot;T05: outbox&quot;]
+  T5 --&gt; FLUX[&quot;EE FLUX Server -&gt; FLUX TL&quot;]
+  T1 -. &quot;tähtaeg P-05 möödas&quot; .-&gt; T6[&quot;T06: tühistamine ja vabastamine&quot;]
+  T4 --&gt; N[&quot;T07: teavitused&quot;]
+  T6 --&gt; N</pre></div>
 <h3 id="kl-e3-t01-taotleja-otsus-jaotuse-kohta-nõustu-loobu"><a class="anchor" href="#kl-e3-t01-taotleja-otsus-jaotuse-kohta-nõustu-loobu">#</a>KL-E3-T01 Taotleja otsus jaotuse kohta (nõustu, loobu)</h3>
 <p><strong>Eesmärk.</strong> Taotleja näeb talle eraldatud püügivõimalusi ja teeb otsuse. Nõustumisel määrab ta loa andmed.</p>
 <p><strong>Kontekst.</strong> Skeemi sammud „Tutvub jaotatud püügivõimalustega“, „Kas nõustub?“, „Kas lobub?“. PVT_UC-10 (püügivõimaluse vastuvõtmine), PVT_UC-11 (tagastamine), KL_UC-10 (kutseliste püügivõimaluste vaatamine), KL_UC-12/13. Määrus § 14 lg 1–2 (taotleja teavitab kehtivusest, püügivõimalustest, kaluritest/laevadest; osaline väljavõtt), § 12 lg 2–6, § 13. A-21.</p>
+<p><strong>Diagramm: taotleja otsus</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="sequenceDiagram
+  actor T as Taotleja
+  participant MO as MO
+  participant FEE as Tasu arvutus
+  T-&gt;&gt;MO: GET offer
+  MO-&gt;&gt;FEE: arvuta tasu eelvaade
+  MO--&gt;&gt;T: jaotus, tasu, tähtaeg P-05
+  alt nõustub
+    T-&gt;&gt;MO: POST accept (drawn_quantity, kehtivus, laevad)
+    MO-&gt;&gt;MO: kontrollid ja snapshot
+    MO--&gt;&gt;T: suuna maksele
+  else loobub
+    T-&gt;&gt;MO: POST decline
+    MO-&gt;&gt;MO: AWAITING_FEE_PAYMENT -&gt; CANCELLED
+    MO-&gt;&gt;MO: released_opportunity
+  end">sequenceDiagram
+  actor T as Taotleja
+  participant MO as MO
+  participant FEE as Tasu arvutus
+  T-&gt;&gt;MO: GET offer
+  MO-&gt;&gt;FEE: arvuta tasu eelvaade
+  MO--&gt;&gt;T: jaotus, tasu, tähtaeg P-05
+  alt nõustub
+    T-&gt;&gt;MO: POST accept (drawn_quantity, kehtivus, laevad)
+    MO-&gt;&gt;MO: kontrollid ja snapshot
+    MO--&gt;&gt;T: suuna maksele
+  else loobub
+    T-&gt;&gt;MO: POST decline
+    MO-&gt;&gt;MO: AWAITING_FEE_PAYMENT -&gt; CANCELLED
+    MO-&gt;&gt;MO: released_opportunity
+  end</pre></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li><code>GET /fishing-licence-applications/{id}/offer</code> tagastab: otsuse number ja dokumendi link; iga <code>allocated_opportunity</code> rida koos <code>requested</code>, <code>allocated</code>, <code>changed_from_request</code>; arvutatud tasu (T02, kuvamiseks); tähtaeg P-05; vaide info.</li>
@@ -85,7 +144,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <li><strong>Osaline väljavõtt:</strong> kui <code>drawn &lt; allocated</code>, vabaneb vahe kohe <code>released_opportunity</code> kirjena põhjusega <code>PARTIAL_DRAW</code> (jääb E4 kasutamata püügivõimaluste kogumisse; määrus § 14 lg 2 ei kirjuta, mis juhtub, A-17 analoogia).</li>
 <li>Taotleja saab oma <code>accept</code> otsust muuta kuni makse algatamiseni: <code>POST …/offer/accept</code> on idempotentne ja kirjutab <code>licence_draft</code>-i üle; pärast makse algatamist (T03 <code>payment.state ≠ NONE</code>) → <code>ERR_INVALID_STATE_TRANSITION</code>.</li>
 </ol>
-<p><strong>AC.</strong></p>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: Nõustumine täies mahus
   Given taotlus AWAITING_FEE_PAYMENT, allocated=5 ühes reas
   When  accept drawn=5, validity 2027-01-10…2027-12-31
@@ -130,10 +189,28 @@ Scenario: Makse algatatud
 <h3 id="kl-e3-t02-püügiõiguse-tasu-arvutus-ja-tasumäärade-seadistus"><a class="anchor" href="#kl-e3-t02-püügiõiguse-tasu-arvutus-ja-tasumäärade-seadistus">#</a>KL-E3-T02 Püügiõiguse tasu arvutus ja tasumäärade seadistus</h3>
 <p><strong>Eesmärk.</strong> Süsteem arvutab iga loa tasu seadistatud aastapõhiste tasumäärade järgi.</p>
 <p><strong>Kontekst.</strong> <span class="ext" title="Viide repo dokumendile, mida siin ei avaldata">Määrus „Kutselise kalapüügi võimalused ja kalapüügiõiguse tasumäärad 2027“</span> (lisad 1–5), määrus nr 164 § 14 lg 1 (tasu vähemalt KeTS § 37 lg 4 p 3 ulatuses), A-05, A-06, A-24.</p>
+<p><strong>Diagramm: tasu arvutus</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="flowchart TD
+  D[&quot;Loa read: drawn_quantity × unit&quot;] --&gt; FIND{&quot;Tasumäär olemas?&quot;}
+  RATES[(&quot;fishing_right_fee_rate&quot;)] --&gt; FIND
+  FIND -- ei --&gt; ERR[&quot;ERR_FEE_RATE_MISSING (mitte 0 €)&quot;]
+  FIND -- jah --&gt; L[&quot;rea tasu = round_half_up(qty × rate, sent)&quot;]
+  L --&gt; SUM[&quot;total_cents = Σ ridu&quot;]
+  SUM --&gt; MIN[&quot;minimum_cents = round(P-09 × total)&quot;]
+  MIN --&gt; SNAP[&quot;snapshot (rate ID-d) arvutuse seletamiseks&quot;]
+  CSV[&quot;CSV import (PTA_ADMIN)&quot;] --&gt; RATES">flowchart TD
+  D[&quot;Loa read: drawn_quantity × unit&quot;] --&gt; FIND{&quot;Tasumäär olemas?&quot;}
+  RATES[(&quot;fishing_right_fee_rate&quot;)] --&gt; FIND
+  FIND -- ei --&gt; ERR[&quot;ERR_FEE_RATE_MISSING (mitte 0 €)&quot;]
+  FIND -- jah --&gt; L[&quot;rea tasu = round_half_up(qty × rate, sent)&quot;]
+  L --&gt; SUM[&quot;total_cents = Σ ridu&quot;]
+  SUM --&gt; MIN[&quot;minimum_cents = round(P-09 × total)&quot;]
+  MIN --&gt; SNAP[&quot;snapshot (rate ID-d) arvutuse seletamiseks&quot;]
+  CSV[&quot;CSV import (PTA_ADMIN)&quot;] --&gt; RATES</pre></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Seadistustabel <code>fishing_right_fee_rate</code>: <code>fishing_year</code>, <code>licence_kind</code>, <code>water_area_code</code>, <code>gear_type_code</code>, <code>species_code</code> (null = ei sõltu liigist), <code>unit</code>, <code>rate_eur</code> (decimal, 4 kohta), <code>source_annex</code> (nt „Lisa 1“), <code>valid_from</code>, <code>valid_to</code>. Iga aasta uus laadimine; vana jääb alles.</li>
-<li><strong>Laadimine:</strong> <code>POST /admin/fee-rates/import</code> (CSV, <code>PTA_ADMIN</code>). CSV veerud nagu tabelis. Valideeri: unikaalsus võtmel <code>(year, kind, area, gear, species, unit)</code>, <code>rate ≥ 0</code>. Tagasta vigade loetelu ridade numbritega. Lisaks mallfail <code>fixtures/fee_rates_2027.csv</code> mõne reaga testiks. <strong>Päris tasumäärad (lisad 1–5 PDF-id) kantakse CSV-sse inimese poolt, agent ei oma neid andmeid. Aasta rate puudub → <code>ERR_FEE_RATE_MISSING</code>.</strong></li>
+<li><strong>Laadimine:</strong> <code>POST /admin/fee-rates/import</code> (CSV, <code>PTA_ADMIN</code>). CSV veerud nagu tabelis. Valideeri: unikaalsus võtmel <code>(year, kind, area, gear, species, unit)</code>, <code>rate ≥ 0</code>. Tagasta vigade loetelu ridade numbritega. Fail <span class="ext" title="Viide repo dokumendile, mida siin ei avaldata"><code>fixtures/fee_rates_2027.csv</code></span> sisaldab <strong>kõiki 2027. aasta tasumäärasid</strong> (153 rida, määruse nr 113 lisad 1–5, Riigi Teataja akt 103112026001), see on esimene laaditav seadistus ja ühtlasi testiandmestik. Veerud: <code>fishing_year, licence_kind, water_area_code, gear_type_code, species_code, unit, rate_eur, limit_qty, source_annex, water_area_name, area_note</code>. <code>limit_qty</code> on määruse piirarv (info, mitte tasuarvutuse sisend), <code>area_note</code> sisaldab püügiruudud või maakonna. Ühikud: <code>GEAR_COUNT</code> (tasu ühe püügivahendi kohta, lisad 1, 3, 4), <code>TONNE</code> (lisad 1 tabel 2, 2, 5), <code>FISHING_DAY</code> (lisa 5 tabel 2). Koodid (<code>gear_type_code</code>, <code>water_area_code</code>, <code>species_code</code>) on selle faili sisemised ja tuleb enne laadimist kaardistada klassifikaatoritega (A-24); kaardistamata kood → <code>ERR_VALIDATION</code>. Aasta rate puudub → <code>ERR_FEE_RATE_MISSING</code>. <strong>Inimese ülesanne: kontrollida CSV vastavust PDF-idele (ridade arv ja summad on kontrollitud skriptiga, kuid allkirjastatud kinnitus tuleb inimeselt) ning kinnitada klassifikaatorite kaardistus. Järgmise aasta määrused sisestab inimene samas vormis.</strong></li>
 <li><strong>Arvutus:</strong> <code>FeeCalculator.calculate(licence_draft) → {lines[], total_cents, minimum_cents}</code>:<ul>
 <li>rea tasu = <code>drawn_quantity × rate</code> (decimal), ümardatud sendini <strong>half up</strong> reakaupa; kokku = Σ ridu.</li>
 <li><code>minimum_cents = round(P-09 × total_cents)</code>; tasuda tuleb vähemalt <code>minimum_cents</code>, kuid vaikimisi (P-09 = 1,0) kogu <code>total_cents</code>.</li>
@@ -142,7 +219,7 @@ Scenario: Makse algatatud
 </li>
 <li>API: <code>GET …/offer/fee</code> tagastab arvutuse (nõustumisel salvestatud snapshot, muutmatu pärast makse algatamist). Snapshotis on kasutatud tasumäärade ID-d, et summa oleks hiljem seletatav.</li>
 </ol>
-<p><strong>AC.</strong></p>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: Arvutus
   Given rate=12.5000 €/tonn ja drawn=4.00 tonni
   Then  rea tasu=5000 senti
@@ -172,6 +249,38 @@ Scenario: Snapshot
 <h3 id="kl-e3-t03-maksekorraldus-ja-makse-staatuse-vastuvõtt"><a class="anchor" href="#kl-e3-t03-maksekorraldus-ja-makse-staatuse-vastuvõtt">#</a>KL-E3-T03 Maksekorraldus ja makse staatuse vastuvõtt</h3>
 <p><strong>Eesmärk.</strong> Nõustunud taotleja saab tasuda, süsteem võtab vastu kinnituse ja kinnitab taotluse.</p>
 <p><strong>Kontekst.</strong> LTO_IF-13 (olemasolev kalaluba.ee makselahendus: MobiGW, SEB e-äri; „KALATUUM ei töötle makseid iseseisvalt“), skeem „Kalapüügiloa tasu maksmine“ alamprotsess, „Maksmine on teostatud“, „Taotluse staatuse muutmine ‚Kinnitatud‘ staatuseks“, TO-BE.01: „Edukalt laekunud makse on eelduseks loa väljastamisele“. A-24.</p>
+<p><strong>Diagramm: makse</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="sequenceDiagram
+  actor T as Taotleja
+  participant MO as KALATUUM
+  participant PG as PaymentGatewayPort
+  participant PAY as Makselahendus
+  T-&gt;&gt;MO: algata makse
+  MO-&gt;&gt;PG: createOrder(reference, amount)
+  PG-&gt;&gt;PAY: tellimus
+  PAY--&gt;&gt;MO: redirect_url
+  MO--&gt;&gt;T: suuna makselehele
+  T-&gt;&gt;PAY: tasub
+  PAY-&gt;&gt;MO: notify_url (staatus)
+  MO-&gt;&gt;PG: getStatus(payment_id)
+  PG--&gt;&gt;MO: PAID
+  MO-&gt;&gt;MO: AWAITING_FEE_PAYMENT -&gt; CONFIRMED
+  MO--&gt;&gt;MO: sündmus FeePaid">sequenceDiagram
+  actor T as Taotleja
+  participant MO as KALATUUM
+  participant PG as PaymentGatewayPort
+  participant PAY as Makselahendus
+  T-&gt;&gt;MO: algata makse
+  MO-&gt;&gt;PG: createOrder(reference, amount)
+  PG-&gt;&gt;PAY: tellimus
+  PAY--&gt;&gt;MO: redirect_url
+  MO--&gt;&gt;T: suuna makselehele
+  T-&gt;&gt;PAY: tasub
+  PAY-&gt;&gt;MO: notify_url (staatus)
+  MO-&gt;&gt;PG: getStatus(payment_id)
+  PG--&gt;&gt;MO: PAID
+  MO-&gt;&gt;MO: AWAITING_FEE_PAYMENT -&gt; CONFIRMED
+  MO--&gt;&gt;MO: sündmus FeePaid</pre></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Liides <code>PaymentGatewayPort</code>: <code>createOrder(reference, amount_cents, currency, return_url, notify_url, description) → {payment_id, redirect_url}</code> ja <code>getStatus(payment_id)</code>. Realiseeri adapter olemasoleva kalaluba.ee makselahenduse vastu. Konkreetne lepe on sellest repost väljas, seega: tee port + <strong>mock-adapter</strong> + HTTP-adapteri karkass seadistuse taga (<code>payment.adapter=mock|http</code>), mis kasutab konfigureeritavat baas-URL-i. Mock-adapter peab toetama stsenaariume <code>PAID</code>, <code>FAILED</code>, <code>CANCELLED_BY_USER</code>, <code>PENDING</code>, <code>TIMEOUT</code>.</li>
@@ -183,7 +292,7 @@ Scenario: Snapshot
 <li>Kõik maksesündmused on auditis (<code>AL_UC-04</code>), ilma kaardi- või pangakonto andmeteta.</li>
 <li>Maksekorralduse viide on taotluse number (A-24). Maksetähtaeg ei ületa P-05.</li>
 </ol>
-<p><strong>AC.</strong></p>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: Edukas makse
   Given licence_draft, total=6234 senti
   When  mock saadab PAID 6234
@@ -217,6 +326,28 @@ Scenario: Topeltklõps
 <h3 id="kl-e3-t04-kalapüügiloa-loomine-ja-väljastamine-lto"><a class="anchor" href="#kl-e3-t04-kalapüügiloa-loomine-ja-väljastamine-lto">#</a>KL-E3-T04 Kalapüügiloa loomine ja väljastamine (LTO)</h3>
 <p><strong>Eesmärk.</strong> Pärast makset loob KALATUUM automaatselt kalapüügiloa ilma ametniku sekkumiseta.</p>
 <p><strong>Kontekst.</strong> Määrus § 12–§ 14, LTO_UC-01 (loomine), LTO_UC-02 (väljastamine pärast positiivset otsust), LTO_UC-12/13/14 (sidumine osapoolega, püügivõimalusega, menetlusega), LTO_UC-15 (dokumendid), LTO_UC-16 (väliste tingimuste kontroll), LTO_UC-11, LTO_DR-05/06/07/17/19, A-21…A-23. Skeem: „Kalapüügiloa loomine ja staatuse ‚Kehtiv‘ määramine“. TO-BE.01: „loa väljastamine toimub automaatselt pärast tingimuste täitmist“.</p>
+<p><strong>Diagramm: loa loomine</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="flowchart TD
+  E[&quot;FeePaid&quot;] --&gt; W{&quot;now &gt;= otsus + P-04 päeva?&quot;}
+  W -- ei --&gt; SCH[&quot;scheduled_issue_at, proovi hiljem&quot;] --&gt; W
+  W -- jah --&gt; CHK[&quot;Viimane kontroll CHK-01..05 + § 12 kattuvus&quot;]
+  CHK --&gt; R{&quot;Tulemus&quot;}
+  R -- FAIL --&gt; TASK[&quot;PTA ülesanne: väljastamine blokeeritud&quot;]
+  R -- PASS --&gt; TX[&quot;Üks tehing: licence + licence_version v1 + read&quot;]
+  TX --&gt; DOC[&quot;PDF (A-23) -&gt; DF&quot;]
+  TX --&gt; ST[&quot;Taotlus -&gt; LICENCE_ISSUED&quot;]
+  TX --&gt; EV[&quot;Outbox: FishingLicenceChanged&quot;]
+  TX --&gt; N[&quot;Teavitus taotlejale&quot;]">flowchart TD
+  E[&quot;FeePaid&quot;] --&gt; W{&quot;now &gt;= otsus + P-04 päeva?&quot;}
+  W -- ei --&gt; SCH[&quot;scheduled_issue_at, proovi hiljem&quot;] --&gt; W
+  W -- jah --&gt; CHK[&quot;Viimane kontroll CHK-01..05 + § 12 kattuvus&quot;]
+  CHK --&gt; R{&quot;Tulemus&quot;}
+  R -- FAIL --&gt; TASK[&quot;PTA ülesanne: väljastamine blokeeritud&quot;]
+  R -- PASS --&gt; TX[&quot;Üks tehing: licence + licence_version v1 + read&quot;]
+  TX --&gt; DOC[&quot;PDF (A-23) -&gt; DF&quot;]
+  TX --&gt; ST[&quot;Taotlus -&gt; LICENCE_ISSUED&quot;]
+  TX --&gt; EV[&quot;Outbox: FishingLicenceChanged&quot;]
+  TX --&gt; N[&quot;Teavitus taotlejale&quot;]</pre></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Käivitub sündmusest <code>FeePaid</code>.</li>
@@ -237,7 +368,7 @@ Scenario: Topeltklõps
 <li><strong>Idempotentsus:</strong> <code>application_id</code> järgi üks luba. Korduv sündmus ei loo teist.</li>
 <li><strong>Ametniku sekkumine ei ole nõutud</strong> õnnestunud teel (automaatne väljastamine, § 14 lg 3 ja TO-BE.01 õigusmuudatus „lubada süsteemipõhine automaatne loa väljastamine“). Õigusliku aluse kinnitus on lahtine, aga tehniliselt käitub süsteem nii, et automaatset väljastamist saab seadistusega välja lülitada (<code>licence.auto_issue=true</code> vaikimisi). Kui <code>false</code>, loob süsteem PTA ülesande „Kinnita loa väljastamine“ ja luba väljastatakse alles ametniku kinnitusel.</li>
 </ol>
-<p><strong>AC.</strong></p>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: Automaatne väljastamine
   Given FeePaid, jaotusotsus kinnitati 5 päeva tagasi
   When  T04 jookseb
@@ -279,6 +410,30 @@ Scenario: Audit
 <h3 id="kl-e3-t05-fishinglicencechanged-sündmus-ja-flux-lepe"><a class="anchor" href="#kl-e3-t05-fishinglicencechanged-sündmus-ja-flux-lepe">#</a>KL-E3-T05 FishingLicenceChanged sündmus ja FLUX-lepe</h3>
 <p><strong>Eesmärk.</strong> Väljastatud loa kohta jõuab teade EE FLUX Serverini nii, et sündmusi ei kaota ega dubleeri.</p>
 <p><strong>Kontekst.</strong> Skeem: „FLUX sündmuse algatamine“ → „FLUX sõnumi koostamine, rikastamine ja valideerimine“ → „FLUX P1000-09 sõnumi edastamine“. <span class="ext" title="Viide repo dokumendile, mida siin ei avaldata">EE FLUX Server</span> (FLX.UC.02: kalapüügilubade vahetamine, P1000-09 Fishing Licence Authorisation and Permit). LTO_IF-12. A-09.</p>
+<p><strong>Diagramm: sündmus ja FLUX-lepe</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="sequenceDiagram
+  participant LTO as LTO (tehing)
+  participant OB as Outbox
+  participant BUS as Sündmusteenus
+  participant FX as EE FLUX Server
+  participant TL as FLUX TL
+  LTO-&gt;&gt;OB: kirjuta sündmus samas tehingus
+  OB-&gt;&gt;BUS: avalda (at-least-once)
+  BUS-&gt;&gt;FX: FishingLicenceChanged v1
+  FX-&gt;&gt;FX: dedupe event_id, koosta P1000-09
+  FX-&gt;&gt;TL: edasta
+  TL--&gt;&gt;FX: kinnitus">sequenceDiagram
+  participant LTO as LTO (tehing)
+  participant OB as Outbox
+  participant BUS as Sündmusteenus
+  participant FX as EE FLUX Server
+  participant TL as FLUX TL
+  LTO-&gt;&gt;OB: kirjuta sündmus samas tehingus
+  OB-&gt;&gt;BUS: avalda (at-least-once)
+  BUS-&gt;&gt;FX: FishingLicenceChanged v1
+  FX-&gt;&gt;FX: dedupe event_id, koosta P1000-09
+  FX-&gt;&gt;TL: edasta
+  TL--&gt;&gt;FX: kinnitus</pre></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Sündmuse skeem <code>FishingLicenceChanged</code> v1 (JSON Schema failina repos <code>contracts/events/</code>):<pre><code class="lang-json">{
@@ -298,7 +453,7 @@ Scenario: Audit
 <li><strong>Lepingutest:</strong> tarbija-lepingu (consumer-driven) test, mis valideerib sündmust JSON-skeemi vastu, ning mock-tarbija, mis kvittib <code>ACCEPTED</code>.</li>
 <li><strong>Ulatusest väljas:</strong> P1000-09 sõnumi koostamine, FLUX TL edastus.</li>
 </ol>
-<p><strong>AC.</strong></p>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: Sündmus loa väljastamisel
   When  luba KPL-2027-000001 väljastatakse
   Then  outbox'is on sündmus ISSUED, mis valideerub skeemi vastu
@@ -323,6 +478,22 @@ Scenario: Tagasiside
 <h3 id="kl-e3-t06-tasu-tähtaja-järelvalve-ja-taotluse-tühistamine"><a class="anchor" href="#kl-e3-t06-tasu-tähtaja-järelvalve-ja-taotluse-tühistamine">#</a>KL-E3-T06 Tasu tähtaja järelvalve ja taotluse tühistamine</h3>
 <p><strong>Eesmärk.</strong> Kui taotleja ei tasu tähtajaks ja ei ole loobunud ega vaidlustanud, tühistab süsteem taotluse ning vabastab püügivõimalused.</p>
 <p><strong>Kontekst.</strong> Skeemi „Püügiõiguse tasu tähtaja möödumisel“ → „Taotluse tühistamine“ → märge „Ei puuduta vaidlustamisel olevaid püügivõimalusi“ → „1. jaanuaril“ → TO-BE.03. A-07, P-05, P-06.</p>
+<p><strong>Diagramm: tähtaja järelvalve</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="flowchart TD
+  J[&quot;Iga päev 00:05&quot;] --&gt; Q[&quot;AWAITING_FEE_PAYMENT ja now &gt; tähtaeg&quot;]
+  Q --&gt; X{&quot;Vaidlustatud või PAID?&quot;}
+  X -- jah --&gt; SKIP[&quot;jäta puutumata&quot;]
+  X -- ei --&gt; C[&quot;-&gt; CANCELLED (FEE_NOT_PAID)&quot;]
+  C --&gt; REL[&quot;released_opportunity kogu eraldatud kogusele&quot;]
+  C --&gt; N[&quot;Teavitus taotlejale&quot;]
+  C --&gt; AU[&quot;Audit&quot;]">flowchart TD
+  J[&quot;Iga päev 00:05&quot;] --&gt; Q[&quot;AWAITING_FEE_PAYMENT ja now &gt; tähtaeg&quot;]
+  Q --&gt; X{&quot;Vaidlustatud või PAID?&quot;}
+  X -- jah --&gt; SKIP[&quot;jäta puutumata&quot;]
+  X -- ei --&gt; C[&quot;-&gt; CANCELLED (FEE_NOT_PAID)&quot;]
+  C --&gt; REL[&quot;released_opportunity kogu eraldatud kogusele&quot;]
+  C --&gt; N[&quot;Teavitus taotlejale&quot;]
+  C --&gt; AU[&quot;Audit&quot;]</pre></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li><strong>Ajastatud töö</strong> (<code>SYSTEM</code>) iga päev 00:05: leia kõik taotlused, mille olek on <code>AWAITING_FEE_PAYMENT</code>, <code>now &gt; tähtaeg 23:59:59</code> ja mille <code>payment.state ∉ {PAID}</code>. <strong>Tähtaeg</strong> on <code>application.fee_deadline_override</code>, kui see on täidetud (seab <a href="E5-vaidlustamine.html">E5-T03</a>), muidu P-05. <strong>Välista</strong> olekud <code>ALLOCATION_DISPUTED</code> ning taotlused, millel on aktiivne vaie (E5), seega neid ei puututa („Ei puuduta vaidlustamisel olevaid püügivõimalusi“). Samuti ei puutu <code>PAID</code>, mille loa väljastamine ootab (3 päeva reegel või PTA blokk).</li>
@@ -335,7 +506,7 @@ Scenario: Tagasiside
 <li>Töö on idempotentne ja taastatav (kui päev jäi vahele, järgmine kord tühistab).</li>
 <li><strong>Hoiatused:</strong> 7 ja 1 päeva enne P-05 saadetakse meeldetuletus kõigile <code>AWAITING_FEE_PAYMENT</code> taotlejatele (T07).</li>
 </ol>
-<p><strong>AC.</strong></p>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: Tähtaeg möödub
   Given taotlus AWAITING_FEE_PAYMENT, makset pole, täna on 2027-01-01
   When  töö jookseb
@@ -368,8 +539,18 @@ Scenario: Idempotentsus
 <p><strong>Kontekst.</strong> Skeemi „Vastava teavituse edastamine“, TO-BE.01 probleemikoht „Aeganõudev ja mitmeetapiline suhtlus“ (süsteemne teavitamine). A-13.</p>
 <p><strong>Kataloog:</strong> (võti — saatja sündmus — sisu põhipunktid)</p>
 <div class="tw"><table><thead><tr><th>Võti</th><th>Sündmus</th><th>Sisu</th></tr></thead><tbody><tr><td><code>application.submitted</code></td><td>E1-T05</td><td>Taotlus nr … on esitatud, link</td></tr><tr><td><code>application.excluded</code></td><td>E2-T06</td><td>Taotlus ei osale jaotuses, põhjus, vaide info</td></tr><tr><td><code>allocation.published</code></td><td>E2-T06</td><td>Otsuse nr, tulemus, link, tähtaeg P-05, vaide info</td></tr><tr><td><code>fee.reminder_7d</code> / <code>fee.reminder_1d</code></td><td>E3-T06</td><td>Tasumata tasu, summa, tähtaeg</td></tr><tr><td><code>fee.paid</code></td><td>E3-T03</td><td>Makse kinnitatud</td></tr><tr><td><code>licence.issued</code></td><td>E3-T04</td><td>Luba nr, kehtivus, dokument</td></tr><tr><td><code>licence.blocked</code></td><td>E3-T04</td><td>Loa väljastamine viibib, PTA võtab ühendust</td></tr><tr><td><code>application.cancelled</code></td><td>E3-T01/T06</td><td>Põhjus (loobumine / tasumata)</td></tr><tr><td><code>fee.partial</code></td><td>E3-T03</td><td>Makstud summa on liiga väike</td></tr></tbody></table></div>
+<p><strong>Diagramm: teavituste voog</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="flowchart LR
+  EV[&quot;Sündmused: ApplicationStateChanged, FeePaid, licence issued, ...&quot;] --&gt; CAT[&quot;Teavituste kataloog (mallid, i18n)&quot;]
+  CAT --&gt; R[&quot;Adressaadi lahendus KOT-ist&quot;]
+  R --&gt; MAIL[&quot;E-post&quot;]
+  MAIL --&gt; LOG[&quot;Saatmise logi ja kordus&quot;]">flowchart LR
+  EV[&quot;Sündmused: ApplicationStateChanged, FeePaid, licence issued, ...&quot;] --&gt; CAT[&quot;Teavituste kataloog (mallid, i18n)&quot;]
+  CAT --&gt; R[&quot;Adressaadi lahendus KOT-ist&quot;]
+  R --&gt; MAIL[&quot;E-post&quot;]
+  MAIL --&gt; LOG[&quot;Saatmise logi ja kordus&quot;]</pre></div>
 <p><strong>Tee.</strong> (1) <code>NotificationService.send(key, recipient, params)</code> ja mallid failidena (i18n <code>et</code>, valmis kohad <code>en</code>), muutujatega, HTML + plain text. (2) Adressaat on <code>contact_email</code>; kui puudub, osapoole peamine e-post KOT-ist; kui ka seda ei ole, <code>NOTIFICATION_NO_ADDRESS</code> auditisündmus ja PTA ülesanne. (3) Kõik teavitused salvestatakse (<code>notification_log</code>: võti, adressaat, saadetud, tulemus), sisu isikuandmeteta peale vajaliku. (4) Kordus 3 korda 1 h vahega. (5) Kõik teavitused sisaldavad taotluse numbrit ja linki, kuid mitte kunagi isikukoodi, maksekaardi ega karistusandmeid. (6) Taotleja ei saa teavitusi välja lülitada, mis on seadusest tulenevad (otsused, vaided).</p>
-<p><strong>AC.</strong></p>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: Malli renderdamine
   When  send(&quot;licence.issued&quot;, …)
   Then  e-kiri sisaldab loa numbrit, kehtivust ja linki ning ei sisalda isikukoodi
@@ -406,4 +587,4 @@ var links=[].slice.call(document.querySelectorAll('.active .sub a'));
 if(links.length&&'IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){links.forEach(function(l){l.classList.toggle('cur',l.hash==='#'+en.target.id)})}})},{rootMargin:'-60px 0px -75% 0px'});
 links.forEach(function(l){var h=document.getElementById(l.hash.slice(1));if(h)io.observe(h)})}
 })();
-</script></body></html>
+</script><script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script><script>(function(){function dark(){var t=document.documentElement.dataset.theme;return t?t==='dark':matchMedia('(prefers-color-scheme:dark)').matches}function run(){document.querySelectorAll('pre.mermaid').forEach(function(e){e.removeAttribute('data-processed');e.textContent=e.dataset.src});mermaid.initialize({startOnLoad:false,theme:dark()?'dark':'default',securityLevel:'strict'});mermaid.run({querySelector:'pre.mermaid'})}run();document.getElementById('theme').addEventListener('click',function(){setTimeout(run,0)})})()</script></body></html>

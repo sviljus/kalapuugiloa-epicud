@@ -43,6 +43,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 #results small{display:block;color:var(--mut)}mark{background:#ffd54a66;color:inherit}
 @media(max-width:1100px){.shell{grid-template-columns:250px minmax(0,1fr)}.toc{display:none}}
 @media(max-width:760px){#menu{display:block}.shell{display:block}.side{display:none;position:fixed;top:57px;left:0;width:84vw;max-width:320px;background:var(--bg);z-index:25;height:calc(100vh - 57px)}body.nav .side{display:block}main{padding:16px}.brand small{display:none}}
+.diagram{margin:1em 0;padding:12px;background:var(--soft);border:1px solid var(--bd);border-radius:10px;overflow:auto;text-align:center}pre.mermaid{background:none;border:0;padding:0;margin:0}
 </style></head><body>
 <header class="top"><button id="menu" aria-label="Menüü">☰</button><a class="brand" href="index.html">Kalapüügiloa väljastamine <small>Epic'ud ja Task'id</small></a>
 <input id="q" type="search" placeholder="Otsi (/)" autocomplete="off"><button id="theme" aria-label="Teema">◐</button></header>
@@ -56,9 +57,47 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <p><strong>Väljaspool Epic&#39;ut:</strong> erandprotsess AS-IS.01_2.1.2.3 „Kalastuskaardi taotluse esitamine ja menetlemine“ (ametniku menetlus, jääb eraldi teeninduskanaliks); täiendavad autentimisviisid (eIDAS 2.0, kaugidentifitseerimine; wiki soovitab neid hinnata detailanalüüsis); väikesaarte püsielanike kaardid kohaliku omavalitsuse kaudu (KPS § 26 lg 2); tasumäärad ise (seadistatavad).</p>
 <p><strong>Task&#39;ide järjekord:</strong> T01 → T02 → T03 (T03 ei sõltu T01-st kalastuskaardita ostu osas).</p>
 <hr>
+<p><strong>Diagramm: harrastuspüügi andmevoog</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="flowchart LR
+  KA[&quot;Keskkonnaameti ametnik&quot;] --&gt;|&quot;T01&quot;| PVT[(&quot;PVT: recreational_opportunity&quot;)]
+  PVT --&gt;|&quot;avalikustamine kuupäeval&quot;| PUB[&quot;Avalik loend&quot;]
+  PUB --&gt; T2[&quot;T02: kalastuskaardi tellimus&quot;]
+  U[&quot;Kasutaja&quot;] --&gt; T2
+  U --&gt; T3[&quot;T03: harrastuspüügiõigus (KL / SMS)&quot;]
+  T2 --&gt; PAY[&quot;Makse&quot;]
+  T3 --&gt; PAY
+  PAY --&gt; LTO[(&quot;LTO: kaart või õigus&quot;)]
+  LTO --&gt; DOC[&quot;Dokument ja teavitus&quot;]">flowchart LR
+  KA[&quot;Keskkonnaameti ametnik&quot;] --&gt;|&quot;T01&quot;| PVT[(&quot;PVT: recreational_opportunity&quot;)]
+  PVT --&gt;|&quot;avalikustamine kuupäeval&quot;| PUB[&quot;Avalik loend&quot;]
+  PUB --&gt; T2[&quot;T02: kalastuskaardi tellimus&quot;]
+  U[&quot;Kasutaja&quot;] --&gt; T2
+  U --&gt; T3[&quot;T03: harrastuspüügiõigus (KL / SMS)&quot;]
+  T2 --&gt; PAY[&quot;Makse&quot;]
+  T3 --&gt; PAY
+  PAY --&gt; LTO[(&quot;LTO: kaart või õigus&quot;)]
+  LTO --&gt; DOC[&quot;Dokument ja teavitus&quot;]</pre></div>
 <h3 id="kl-e8-t01-piirarvuga-kalastuskaardi-püügivõimaluste-lisamine-ja-avalikustamine-to-be-06"><a class="anchor" href="#kl-e8-t01-piirarvuga-kalastuskaardi-püügivõimaluste-lisamine-ja-avalikustamine-to-be-06">#</a>KL-E8-T01 Piirarvuga kalastuskaardi püügivõimaluste lisamine ja avalikustamine (TO-BE.06)</h3>
 <p><strong>Eesmärk.</strong> Keskkonnaameti ametnik lisab uue hooaja kalastuskaardi püügivõimalused ja need avalikustatakse automaatselt õigusaktis määratud kuupäeval.</p>
 <p><strong>Kontekst.</strong> TO-BE.06: „sisestab Keskkonnaameti ametnik uue hooaja püügivõimaluste andmed, määrates muu hulgas tootekoodi, püügipiirkonna, püügivahendi liigi, lubatud püügivahendite arvu, veekogu, püüdjate piirarvu ning muud kalastuskaardi tingimused. Pärast kinnitamist salvestatakse need … ja avalikustatakse automaatselt kalaluba.ee iseteeninduses õigusaktides määratud kuupäeval.“ PVT_UC-06 (harrastuskalapüügi püügivõimaluste moodustamine), PVT_UC-01/02/03, PVT_DR-02/06. Seadus: <span class="ext" title="Viide repo dokumendile, mida siin ei avaldata">KPS § 26</span>, <span class="ext" title="Viide repo dokumendile, mida siin ei avaldata">kalastuskaardi määrus</span>.</p>
+<p><strong>Diagramm: püügivõimaluste avalikustamine</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="sequenceDiagram
+  actor A as Ametnik
+  participant PVT as PVT
+  participant S as Ajastaja
+  participant P as Avalik API
+  A-&gt;&gt;PVT: lisa recreational_opportunity (piirarvud)
+  PVT-&gt;&gt;PVT: olek DRAFT
+  S-&gt;&gt;PVT: õigusaktis määratud kuupäev
+  PVT-&gt;&gt;P: avalikusta">sequenceDiagram
+  actor A as Ametnik
+  participant PVT as PVT
+  participant S as Ajastaja
+  participant P as Avalik API
+  A-&gt;&gt;PVT: lisa recreational_opportunity (piirarvud)
+  PVT-&gt;&gt;PVT: olek DRAFT
+  S-&gt;&gt;PVT: õigusaktis määratud kuupäev
+  PVT-&gt;&gt;P: avalikusta</pre></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Andmemudel <code>recreational_opportunity</code> (PVT, teise tüübina E2-T01 <code>catch_opportunity</code> kõrval, ühise baastabeliga <code>opportunity_base</code> vastavalt PVT_DR-02): <code>id</code>, <code>season</code> (aasta või <code>valid_from</code>/<code>valid_to</code>), <code>product_code</code> (tootekood), <code>water_area_code</code>, <code>water_body_code</code> (veekogu, Eesti looduse infosüsteemi registrikood), <code>gear_type_code</code>, <code>gear_count_limit</code> (lubatud püügivahendite arv kaardi kohta), <code>angler_limit</code> (püüdjate piirarv; <code>null</code> = piirarvuta), <code>conditions</code> (tekst + koodid), <code>price_cents</code> (viide tasumäärale, T02), <code>publish_at</code> (avalikustamise aeg), <code>status</code> (<code>DRAFT</code>, <code>APPROVED</code>, <code>PUBLISHED</code>, <code>CLOSED</code>), <code>version</code>.</li>
@@ -67,7 +106,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <li><code>PUBLISHED</code> kirjeid ei kustutata, ainult <code>CLOSED</code> (PVT_UC-03). Piirarvu või hinda <strong>ei muudeta</strong> pärast esimest müüki (<code>ERR_OPPORTUNITY_IN_USE</code>), ainult sulgemine ja uus kirje.</li>
 <li>Audit ja versioon (PVT_DR-04/07).</li>
 </ol>
-<p><strong>AC.</strong></p>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: Lisamine ja kinnitus
   When  ametnik loob kirje ja kinnitab, publish_at=2027-01-01 00:00
   Then  status APPROVED ja avalikuks ei muutu enne publish_at
@@ -98,6 +137,28 @@ Scenario: Õigused
 <h3 id="kl-e8-t02-kalastuskaardi-soetamine-to-be-07"><a class="anchor" href="#kl-e8-t02-kalastuskaardi-soetamine-to-be-07">#</a>KL-E8-T02 Kalastuskaardi soetamine (TO-BE.07)</h3>
 <p><strong>Eesmärk.</strong> Kasutaja soetab kalaluba.ee kaudu piirarvuga või piirarvuta kalastuskaardi ja saab kaardi (elektrooniline dokument) õigel ajal kehtivaks.</p>
 <p><strong>Kontekst.</strong> TO-BE.07: äriloogika viiakse LTO-sse, kalaluba.ee jääb kanaliks. AS-IS.01_2.1.2.1/2.1.2.2. KPS § 25 lg 3 ja 6, § 26 lg 1, 3–6. KL_UC-04, LTO_UC-01/02/11/13, LTO_IF-13 (makse), PVT_UC-10/15. A-24.</p>
+<p><strong>Diagramm: kalastuskaardi soetamine</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="sequenceDiagram
+  actor K as Kasutaja
+  participant LTO as LTO
+  participant PVT as PVT
+  participant PAY as Makse
+  K-&gt;&gt;LTO: POST fishing-cards/orders
+  LTO-&gt;&gt;PVT: piirarvu kontroll ja reserveerimine
+  LTO-&gt;&gt;PAY: maksekorraldus
+  PAY--&gt;&gt;LTO: PAID
+  LTO-&gt;&gt;LTO: kaart kehtivaks valid_from alusel
+  LTO--&gt;&gt;K: elektrooniline kaart">sequenceDiagram
+  actor K as Kasutaja
+  participant LTO as LTO
+  participant PVT as PVT
+  participant PAY as Makse
+  K-&gt;&gt;LTO: POST fishing-cards/orders
+  LTO-&gt;&gt;PVT: piirarvu kontroll ja reserveerimine
+  LTO-&gt;&gt;PAY: maksekorraldus
+  PAY--&gt;&gt;LTO: PAID
+  LTO-&gt;&gt;LTO: kaart kehtivaks valid_from alusel
+  LTO--&gt;&gt;K: elektrooniline kaart</pre></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>API: <code>GET /public/recreational-opportunities</code> (T01), <code>POST /fishing-cards/orders</code> body <code>{opportunity_id, holder: {…}, valid_from, channel: &quot;KALALUBA&quot;}</code>. Autentimata ja autenditud kasutaja: autenditult eeltäidetakse isikuandmed (KL_UC-01, KOT), autentimata sisestatakse riik ja isikukood/muu tunnus ja nimi/sünniaeg (AS-IS.01_2.1.4.1). <code>holder</code>: nimi, sünniaeg, isikukood (või isikut tõendava dokumendi number välismaalasel), riik.</li>
@@ -110,7 +171,7 @@ Scenario: Õigused
 <li><strong>Erandprotsess 2.1.2.3</strong> (taotlus ametniku kaudu) <strong>ei muutu</strong> ja ei ole selle Task&#39;i osa. Kuid andmemudel peab võimaldama loa väljastamise kanalit <code>OFFICER_CHANNEL</code> (LTO <code>issued_via</code> väli).</li>
 <li>Jõudlus: ostmise lõpp-punktid peavad taluma hooaja alguse tippu: sihtväärtus 100 tellimust sekundis (A-15 tüüpi vaikeväärtus, seadistatav test).</li>
 </ol>
-<p><strong>AC.</strong></p>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: Piirarvuga kaardi ost
   Given kirje angler_limit=100, müüdud 99
   When  kasutaja tellib ja maksab
@@ -151,6 +212,20 @@ Scenario: Makse ebaõnnestus
 <h3 id="kl-e8-t03-harrastuspüügiõiguse-soetamine-to-be-08"><a class="anchor" href="#kl-e8-t03-harrastuspüügiõiguse-soetamine-to-be-08">#</a>KL-E8-T03 Harrastuspüügiõiguse soetamine (TO-BE.08)</h3>
 <p><strong>Eesmärk.</strong> Kasutaja soetab harrastuspüügiõiguse kolme kanali kaudu: kalaluba.ee autentimata, kalaluba.ee autenditud, SMS. Kõik toimivad nagu täna.</p>
 <p><strong>Kontekst.</strong> TO-BE.08, AS-IS.01_2.1.4.1/.2/.3, KPS § 25 lg 2, 5, 6, KL_UC-03, LTO_UC-01/02, LTO_IF-13 (MobiGW SMS- ja mobiilimaksete vahendaja).</p>
+<p><strong>Diagramm: harrastuspüügiõiguse kanalid</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="flowchart TD
+  A[&quot;kalaluba.ee autentimata&quot;] --&gt; C[&quot;HobbyRightService.purchase&quot;]
+  B[&quot;kalaluba.ee autenditud&quot;] --&gt; C
+  S[&quot;SMS&quot;] --&gt; C
+  C --&gt; PAY[&quot;Makse&quot;]
+  PAY --&gt; R[(&quot;Õigus LTO-s&quot;)]
+  R --&gt; OUT[&quot;Kinnitus kanalisse&quot;]">flowchart TD
+  A[&quot;kalaluba.ee autentimata&quot;] --&gt; C[&quot;HobbyRightService.purchase&quot;]
+  B[&quot;kalaluba.ee autenditud&quot;] --&gt; C
+  S[&quot;SMS&quot;] --&gt; C
+  C --&gt; PAY[&quot;Makse&quot;]
+  PAY --&gt; R[(&quot;Õigus LTO-s&quot;)]
+  R --&gt; OUT[&quot;Kinnitus kanalisse&quot;]</pre></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li><strong>Ühine tuum</strong> <code>HobbyRightService.purchase(subject, duration_option, channel, payment_ref)</code>. Kanalid ainult kohandavad sisend- ja väljundkanalit.</li>
@@ -163,7 +238,7 @@ Scenario: Makse ebaõnnestus
 <li><strong>Mahutavus:</strong> üle 70 000 õiguse aastas, tipud hooaja alguses. Sihtväärtus 100 tellimust sekundis ja tellimuse töötlus ≤ 2 s p95 (välisüsteemidest sõltuv aeg välja arvatud).</li>
 <li>Isikuandmed: isikukood on salvestatud krüpteeritult (veerutasemel) ja logides maskeeritud (LTO_DR-17…19).</li>
 </ol>
-<p><strong>AC.</strong></p>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: Autentimata ost
   When  kasutaja valib aastapileti, sisestab Eesti isikukoodi, tasub
   Then  õigus on registreeritud, valid_from=makse+1h ja kinnitus saadetud
@@ -215,4 +290,4 @@ var links=[].slice.call(document.querySelectorAll('.active .sub a'));
 if(links.length&&'IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){links.forEach(function(l){l.classList.toggle('cur',l.hash==='#'+en.target.id)})}})},{rootMargin:'-60px 0px -75% 0px'});
 links.forEach(function(l){var h=document.getElementById(l.hash.slice(1));if(h)io.observe(h)})}
 })();
-</script></body></html>
+</script><script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script><script>(function(){function dark(){var t=document.documentElement.dataset.theme;return t?t==='dark':matchMedia('(prefers-color-scheme:dark)').matches}function run(){document.querySelectorAll('pre.mermaid').forEach(function(e){e.removeAttribute('data-processed');e.textContent=e.dataset.src});mermaid.initialize({startOnLoad:false,theme:dark()?'dark':'default',securityLevel:'strict'});mermaid.run({querySelector:'pre.mermaid'})}run();document.getElementById('theme').addEventListener('click',function(){setTimeout(run,0)})})()</script></body></html>

@@ -43,6 +43,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 #results small{display:block;color:var(--mut)}mark{background:#ffd54a66;color:inherit}
 @media(max-width:1100px){.shell{grid-template-columns:250px minmax(0,1fr)}.toc{display:none}}
 @media(max-width:760px){#menu{display:block}.shell{display:block}.side{display:none;position:fixed;top:57px;left:0;width:84vw;max-width:320px;background:var(--bg);z-index:25;height:calc(100vh - 57px)}body.nav .side{display:block}main{padding:16px}.brand small{display:none}}
+.diagram{margin:1em 0;padding:12px;background:var(--soft);border:1px solid var(--bd);border-radius:10px;overflow:auto;text-align:center}pre.mermaid{background:none;border:0;padding:0;margin:0}
 </style></head><body>
 <header class="top"><button id="menu" aria-label="Menüü">☰</button><a class="brand" href="index.html">Kalapüügiloa väljastamine <small>Epic'ud ja Task'id</small></a>
 <input id="q" type="search" placeholder="Otsi (/)" autocomplete="off"><button id="theme" aria-label="Teema">◐</button></header>
@@ -63,9 +64,39 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 </ul>
 <p><strong>Task&#39;ide järjekord:</strong> T01 → T02 → T03.</p>
 <hr>
+<p><strong>Diagramm: proaktiivse stsenaariumi voog</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="flowchart LR
+  HIST[(&quot;Ajalugu T&quot;)] --&gt; T1[&quot;T01: PROACTIVE jaotus taotlusteta&quot;]
+  PVT[(&quot;LPV ja reserv&quot;)] --&gt; T1
+  T1 --&gt; REV[&quot;E2-T05 ülevaatus ja otsus&quot;]
+  REV --&gt; T2[&quot;T02: OFFER_BASED taotlus AWAITING_FEE_PAYMENT&quot;]
+  T2 --&gt; E3[&quot;E3: tasu, makse, luba&quot;]
+  CFG[&quot;fishing_year_config.scenario&quot;] --&gt; T3[&quot;T03: lüliti&quot;]
+  T3 --&gt; T1">flowchart LR
+  HIST[(&quot;Ajalugu T&quot;)] --&gt; T1[&quot;T01: PROACTIVE jaotus taotlusteta&quot;]
+  PVT[(&quot;LPV ja reserv&quot;)] --&gt; T1
+  T1 --&gt; REV[&quot;E2-T05 ülevaatus ja otsus&quot;]
+  REV --&gt; T2[&quot;T02: OFFER_BASED taotlus AWAITING_FEE_PAYMENT&quot;]
+  T2 --&gt; E3[&quot;E3: tasu, makse, luba&quot;]
+  CFG[&quot;fishing_year_config.scenario&quot;] --&gt; T3[&quot;T03: lüliti&quot;]
+  T3 --&gt; T1</pre></div>
 <h3 id="kl-e6-t01-proaktiivne-jaotus-jaotusüksuse-reeglistik-reserv-uutele-turuosalistele"><a class="anchor" href="#kl-e6-t01-proaktiivne-jaotus-jaotusüksuse-reeglistik-reserv-uutele-turuosalistele">#</a>KL-E6-T01 Proaktiivne jaotus (jaotusüksuse reeglistik, reserv uutele turuosalistele)</h3>
 <p><strong>Eesmärk.</strong> Jaotus tehakse <strong>taotlusteta</strong>: kõigile õigustatud turuosalistele (ajalooliste omandite alusel) arvutatakse osakud ja püügivõimalused. Jaotusüksuse kaupa on seadistatav, kui suur osa jaotatakse ajaloo alusel ja kui suur osa jäetakse uutele turuosalistele.</p>
 <p><strong>Kontekst.</strong> TO-BE.S2.01 kirjeldus: „Seadistatavad ärireeglid… Näiteks 90% ajalooliste õiguste alusel ning 10% reserveeritakse uutele turule sisenejatele. Kui määratud tähtajaks jääb reserveeritud osa kasutamata, … ümber jagada olemasolevate õiguste omanike vahel“. PVT_UC-07 (riiklik reserv), PVT_DR-03, PVT_DR-12.</p>
+<p><strong>Diagramm: proaktiivne jaotus</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="flowchart TD
+  P[&quot;Jaotusüksus: LPV, reserve_share&quot;] --&gt; PM[&quot;permitted' = LPV × (1 - reserve)&quot;]
+  P --&gt; RS[&quot;Reserv = LPV - permitted'&quot;]
+  H[(&quot;Kõik osapooled T &gt; 0&quot;)] --&gt; ENG[&quot;E2-T02 mode PROACTIVE&quot;]
+  PM --&gt; ENG
+  ENG --&gt; OUT[&quot;allocation_result&quot;]
+  RS --&gt; LATER[&quot;Reserv ümber reserve_release_date&quot;]">flowchart TD
+  P[&quot;Jaotusüksus: LPV, reserve_share&quot;] --&gt; PM[&quot;permitted' = LPV × (1 - reserve)&quot;]
+  P --&gt; RS[&quot;Reserv = LPV - permitted'&quot;]
+  H[(&quot;Kõik osapooled T &gt; 0&quot;)] --&gt; ENG[&quot;E2-T02 mode PROACTIVE&quot;]
+  PM --&gt; ENG
+  ENG --&gt; OUT[&quot;allocation_result&quot;]
+  RS --&gt; LATER[&quot;Reserv ümber reserve_release_date&quot;]</pre></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Lisa <code>catch_opportunity.new_entrant_reserve_share</code> (decimal 0…1, vaikimisi P-14 = 0) ja <code>reserve_release_date</code> (tähtaeg, millal kasutamata reserv ümber jagatakse; vaikimisi puudub, st käsitsi).</li>
@@ -75,7 +106,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <li>Käivitus: <code>SYSTEM</code> jaotusperioodi alguses (parameeter <code>proactive.allocation_start_date</code>, vaikimisi 1. november <code>Y−1</code>; PTA_ADMIN muudab). Ülevaatus ja kinnitus A-04 järgi (E2-T05). Otsus E2-T06 mallil, aga <strong>taotluse olekute asemel</strong> luuakse eeltäidetud <code>offer</code> kirjed (E6-T02).</li>
 <li>Taotlusvoorus puudub taotluspõhine sisend, seega <code>allocate()</code> koodis kasutatakse <code>requested = ∞</code>, ja omadustestis <code>final_i ≤ requested_i</code> kontrollitakse ainult <code>requested</code> olemasolul.</li>
 </ol>
-<p><strong>AC.</strong></p>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: 90/10
   Given LPV=100 tükki, new_entrant_reserve_share=0.10, osalejad A(T=60), B(T=40)
   When  PROACTIVE jaotus
@@ -100,6 +131,34 @@ Scenario: Determinism
 <h3 id="kl-e6-t02-pakkumine-ja-eeltäidetud-kinnitus-ilma-taotluseta"><a class="anchor" href="#kl-e6-t02-pakkumine-ja-eeltäidetud-kinnitus-ilma-taotluseta">#</a>KL-E6-T02 Pakkumine ja eeltäidetud kinnitus (ilma taotluseta)</h3>
 <p><strong>Eesmärk.</strong> Turuosaline saab teavituse, avab lingi, autentub ja kinnitab, loobub või vaidlustab talle jaotatud püügivõimaluse.</p>
 <p><strong>Kontekst.</strong> TO-BE.S2.02 kirjeldus ja skeem, määruse § 2 (taotlus asendub pakkumise vastuvõtuga), § 3 (eelkontroll enne pakkumist). A-30.</p>
+<p><strong>Diagramm: pakkumine ilma taotluseta</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="sequenceDiagram
+  participant MO as MO
+  participant N as Teavitused
+  actor T as Turuosaline
+  MO-&gt;&gt;MO: loo OFFER_BASED taotlus (AWAITING_FEE_PAYMENT)
+  MO-&gt;&gt;N: pakkumine koos lingiga
+  T-&gt;&gt;MO: avab, autentib
+  alt kinnitab
+    T-&gt;&gt;MO: accept -&gt; E3 tasu ja luba
+  else loobub
+    T-&gt;&gt;MO: decline
+  else vaidlustab
+    T-&gt;&gt;MO: dispute (E5)
+  end">sequenceDiagram
+  participant MO as MO
+  participant N as Teavitused
+  actor T as Turuosaline
+  MO-&gt;&gt;MO: loo OFFER_BASED taotlus (AWAITING_FEE_PAYMENT)
+  MO-&gt;&gt;N: pakkumine koos lingiga
+  T-&gt;&gt;MO: avab, autentib
+  alt kinnitab
+    T-&gt;&gt;MO: accept -&gt; E3 tasu ja luba
+  else loobub
+    T-&gt;&gt;MO: decline
+  else vaidlustab
+    T-&gt;&gt;MO: dispute (E5)
+  end</pre></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Kinnitatud otsuse järel (E2-T06) loo iga osalejale <strong><code>application</code> tüübiga <code>OFFER_BASED</code></strong> olekusse <code>AWAITING_FEE_PAYMENT</code> (E1-T01 olekumasin kasutab sama; <strong>lisa üleminek <code>OFFER_BASED</code>: loomisel <code>AWAITING_ALLOCATION</code> jäetakse vahele</strong>). <code>requested_opportunity</code> ridu ei ole; <code>allocated_opportunity</code> on pakkumise sisu. Taotluse puuduolevad väljad (kontakt, laev/kalur) eeltäidetakse KOT-ist, LAEVIS-est ja eelmise aasta loast; puudu jääv küsitakse nõustumisel (E3-T01 <code>accept</code> sisend).</li>
@@ -109,7 +168,7 @@ Scenario: Determinism
 <li><strong>Maksmata püügivõimaluste tühistamine:</strong> E3-T06 töö kehtib ka <code>OFFER_BASED</code> taotlustele (tühistamise põhjus <code>FEE_NOT_PAID</code> või <code>OFFER_NOT_ACCEPTED</code>).</li>
 <li>Taotlustüüp <code>OFFER_BASED</code> on kõigis aruannetes eristatav.</li>
 </ol>
-<p><strong>AC.</strong></p>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: Pakkumise loomine
   Given kinnitatud proaktiivne jaotus, osaleja X läbis eelkontrolli
   Then  X-ile on loodud OFFER_BASED taotlus AWAITING_FEE_PAYMENT, allocated_opportunity täidetud ja e-kiri saadetud
@@ -134,6 +193,14 @@ Scenario: Tühistamine
 <hr>
 <h3 id="kl-e6-t03-taotlusvooru-väljalülitus-ja-üleminek"><a class="anchor" href="#kl-e6-t03-taotlusvooru-väljalülitus-ja-üleminek">#</a>KL-E6-T03 Taotlusvooru väljalülitus ja üleminek</h3>
 <p><strong>Eesmärk.</strong> Süsteem toetab stsenaariumivalikut <strong>seadistusega</strong> <code>scenario = APPLICATION_BASED | PROACTIVE</code> aastate kaupa, nii et üleminek ei vaja koodimuudatust ega katkesta eelnevaid aastaid.</p>
+<p><strong>Diagramm: stsenaariumi lüliti</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="flowchart TD
+  C[&quot;fishing_year_config.scenario&quot;] --&gt; S{&quot;Väärtus&quot;}
+  S -- APPLICATION_BASED --&gt; A[&quot;E1 taotlusvoor + E2-T04 käivitus&quot;]
+  S -- PROACTIVE --&gt; B[&quot;E6-T01 käivitus, ANNUAL taotlus -&gt; ERR_SCENARIO_NOT_APPLICABLE&quot;]">flowchart TD
+  C[&quot;fishing_year_config.scenario&quot;] --&gt; S{&quot;Väärtus&quot;}
+  S -- APPLICATION_BASED --&gt; A[&quot;E1 taotlusvoor + E2-T04 käivitus&quot;]
+  S -- PROACTIVE --&gt; B[&quot;E6-T01 käivitus, ANNUAL taotlus -&gt; ERR_SCENARIO_NOT_APPLICABLE&quot;]</pre></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li><code>fishing_year_config.scenario</code> (vaikimisi <code>APPLICATION_BASED</code>).</li>
@@ -141,7 +208,7 @@ Scenario: Tühistamine
 <li>Andmemudelis ei ole kahe stsenaariumi vahel konflikti: <code>application_type</code> eristab. Aruanded filtreerivad seda.</li>
 <li>Üleminekujuhend dokumendis <code>docs/operations/scenario-switch.md</code>: kontrollnimekiri (õigusmuudatus jõus, parameetrid, test-käivitus enne aasta algust).</li>
 </ol>
-<p><strong>AC.</strong></p>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: Baasstsenaarium
   Given scenario=APPLICATION_BASED
   Then  taotluse esitamine on lubatud ja E6 töö ei käivitu
@@ -176,4 +243,4 @@ var links=[].slice.call(document.querySelectorAll('.active .sub a'));
 if(links.length&&'IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){links.forEach(function(l){l.classList.toggle('cur',l.hash==='#'+en.target.id)})}})},{rootMargin:'-60px 0px -75% 0px'});
 links.forEach(function(l){var h=document.getElementById(l.hash.slice(1));if(h)io.observe(h)})}
 })();
-</script></body></html>
+</script><script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script><script>(function(){function dark(){var t=document.documentElement.dataset.theme;return t?t==='dark':matchMedia('(prefers-color-scheme:dark)').matches}function run(){document.querySelectorAll('pre.mermaid').forEach(function(e){e.removeAttribute('data-processed');e.textContent=e.dataset.src});mermaid.initialize({startOnLoad:false,theme:dark()?'dark':'default',securityLevel:'strict'});mermaid.run({querySelector:'pre.mermaid'})}run();document.getElementById('theme').addEventListener('click',function(){setTimeout(run,0)})})()</script></body></html>

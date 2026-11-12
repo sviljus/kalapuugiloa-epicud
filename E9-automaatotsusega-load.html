@@ -43,6 +43,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 #results small{display:block;color:var(--mut)}mark{background:#ffd54a66;color:inherit}
 @media(max-width:1100px){.shell{grid-template-columns:250px minmax(0,1fr)}.toc{display:none}}
 @media(max-width:760px){#menu{display:block}.shell{display:block}.side{display:none;position:fixed;top:57px;left:0;width:84vw;max-width:320px;background:var(--bg);z-index:25;height:calc(100vh - 57px)}body.nav .side{display:block}main{padding:16px}.brand small{display:none}}
+.diagram{margin:1em 0;padding:12px;background:var(--soft);border:1px solid var(--bd);border-radius:10px;overflow:auto;text-align:center}pre.mermaid{background:none;border:0;padding:0;margin:0}
 </style></head><body>
 <header class="top"><button id="menu" aria-label="Menüü">☰</button><a class="brand" href="index.html">Kalapüügiloa väljastamine <small>Epic'ud ja Task'id</small></a>
 <input id="q" type="search" placeholder="Otsi (/)" autocomplete="off"><button id="theme" aria-label="Teema">◐</button></header>
@@ -55,9 +56,65 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <p><strong>Oluline tõsiasi automaatsuse kohta.</strong> Wiki soovitab seadust täiendada, et KALATUUM võiks teha automaatseid väljastamisotsuseid. Kuni see ei ole jõus, on <code>decision.auto_issue.&lt;type&gt;</code> vaikimisi <code>false</code>, st süsteem teeb <strong>kõik kontrollid ja koostab otsuse valmis</strong>, ametnik vajutab ühe nupu. Lüliti sisselülitamine ei vaja koodimuudatust.</p>
 <p><strong>Task&#39;ide järjekord:</strong> T01 → T02, T03, T04 (kolm viimast on paralleelsed).</p>
 <hr>
+<p><strong>Diagramm: ühine otsusemootor</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="flowchart TD
+  T[&quot;Taotlus: eripüük / elektripüük / asustamine&quot;] --&gt; E[&quot;Reeglimootor (T01)&quot;]
+  REG[&quot;Registrid ja klassifikaatorid&quot;] --&gt; E
+  E --&gt; R{&quot;Tulemus&quot;}
+  R -- puudused --&gt; FIX[&quot;AWAITING_APPLICANT_FIX&quot;]
+  R -- vajab ametnikku --&gt; OFF[&quot;AWAITING_OFFICER&quot;]
+  R -- kõik ok --&gt; DP[&quot;DECISION_PREPARED&quot;]
+  DP --&gt; SW{&quot;decision.auto_issue.type&quot;}
+  SW -- true --&gt; ISS[&quot;ISSUED automaatselt&quot;]
+  SW -- false --&gt; OFC[&quot;Ametnik kinnitab ühe tegevusega&quot;] --&gt; ISS
+  OFF --&gt; OFC
+  ISS --&gt; FEE{&quot;Tasu nõutav?&quot;}
+  FEE -- jah --&gt; PAY[&quot;AWAITING_FEE -&gt; makse&quot;]
+  FEE -- ei --&gt; DOC[&quot;Dokument ja teavitus&quot;]
+  PAY --&gt; DOC">flowchart TD
+  T[&quot;Taotlus: eripüük / elektripüük / asustamine&quot;] --&gt; E[&quot;Reeglimootor (T01)&quot;]
+  REG[&quot;Registrid ja klassifikaatorid&quot;] --&gt; E
+  E --&gt; R{&quot;Tulemus&quot;}
+  R -- puudused --&gt; FIX[&quot;AWAITING_APPLICANT_FIX&quot;]
+  R -- vajab ametnikku --&gt; OFF[&quot;AWAITING_OFFICER&quot;]
+  R -- kõik ok --&gt; DP[&quot;DECISION_PREPARED&quot;]
+  DP --&gt; SW{&quot;decision.auto_issue.type&quot;}
+  SW -- true --&gt; ISS[&quot;ISSUED automaatselt&quot;]
+  SW -- false --&gt; OFC[&quot;Ametnik kinnitab ühe tegevusega&quot;] --&gt; ISS
+  OFF --&gt; OFC
+  ISS --&gt; FEE{&quot;Tasu nõutav?&quot;}
+  FEE -- jah --&gt; PAY[&quot;AWAITING_FEE -&gt; makse&quot;]
+  FEE -- ei --&gt; DOC[&quot;Dokument ja teavitus&quot;]
+  PAY --&gt; DOC</pre></div>
 <h3 id="kl-e9-t01-reeglipõhine-otsusemootor-ja-menetlus-ühine"><a class="anchor" href="#kl-e9-t01-reeglipõhine-otsusemootor-ja-menetlus-ühine">#</a>KL-E9-T01 Reeglipõhine otsusemootor ja menetlus (ühine)</h3>
 <p><strong>Eesmärk.</strong> Üldmootor, mis võtab loaliigi taotluse, teeb seadistatavad reeglid, annab tulemuse ja koostab otsuse.</p>
 <p><strong>Kontekst.</strong> TO-BE.09: „Kontrollide käigus hinnatakse … taotleja isiku- ja ettevõtteandmeid, varasemaid rikkumisi, kehtivaid piiranguid, varasemalt väljastatud lubasid ning muid õigusaktidest tulenevaid nõudeid. Kui kõik ärireeglid on täidetud, väljastab KALATUUM … automaatselt“; ebaõnnestumisel „luba ei väljastata ning süsteem kuvab taotlejale vastava põhjenduse“. MO_UC-01…18, MO_DR-15 (menetlustüübi konfiguratsioon), E1-T01 (olekumasina muster), E1-T04 (kontrollimootori muster), A-31.</p>
+<p><strong>Diagramm: menetluse olekud</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="stateDiagram-v2
+  [*] --&gt; DRAFT
+  DRAFT --&gt; SUBMITTED
+  SUBMITTED --&gt; AWAITING_APPLICANT_FIX
+  SUBMITTED --&gt; AWAITING_OFFICER
+  SUBMITTED --&gt; DECISION_PREPARED
+  AWAITING_APPLICANT_FIX --&gt; SUBMITTED
+  AWAITING_OFFICER --&gt; DECISION_PREPARED
+  DECISION_PREPARED --&gt; AWAITING_FEE
+  DECISION_PREPARED --&gt; ISSUED
+  DECISION_PREPARED --&gt; REFUSED
+  AWAITING_FEE --&gt; ISSUED
+  DRAFT --&gt; CANCELLED">stateDiagram-v2
+  [*] --&gt; DRAFT
+  DRAFT --&gt; SUBMITTED
+  SUBMITTED --&gt; AWAITING_APPLICANT_FIX
+  SUBMITTED --&gt; AWAITING_OFFICER
+  SUBMITTED --&gt; DECISION_PREPARED
+  AWAITING_APPLICANT_FIX --&gt; SUBMITTED
+  AWAITING_OFFICER --&gt; DECISION_PREPARED
+  DECISION_PREPARED --&gt; AWAITING_FEE
+  DECISION_PREPARED --&gt; ISSUED
+  DECISION_PREPARED --&gt; REFUSED
+  AWAITING_FEE --&gt; ISSUED
+  DRAFT --&gt; CANCELLED</pre></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li><strong>Menetlustüübid:</strong> <code>SPECIAL_FISHING_PERMIT</code>, <code>ELECTROFISHING_CERT</code>, <code>RELEASE_PERMIT</code>. Olekud (kõigile ühised): <code>DRAFT</code>, <code>SUBMITTED</code> (registreeritud), <code>AWAITING_APPLICANT_FIX</code> (puuduste kõrvaldamine), <code>AWAITING_OFFICER</code>, <code>DECISION_PREPARED</code>, <code>AWAITING_FEE</code> (ainult kui tasu nõutav), <code>ISSUED</code>, <code>REFUSED</code>, <code>CANCELLED</code>. Üleminekud: <code>DRAFT→SUBMITTED</code>, <code>SUBMITTED→AWAITING_APPLICANT_FIX|AWAITING_OFFICER|DECISION_PREPARED</code>, <code>AWAITING_APPLICANT_FIX→SUBMITTED</code> (kui taotleja parandab) või <code>→CANCELLED</code>, <code>AWAITING_OFFICER→DECISION_PREPARED|REFUSED</code>, <code>DECISION_PREPARED→AWAITING_FEE|ISSUED|REFUSED</code>, <code>AWAITING_FEE→ISSUED|REFUSED</code>, <code>DRAFT/SUBMITTED→CANCELLED</code> (taotleja tagasivõtmine kuni otsuseni). Lõppseisud: <code>ISSUED</code>, <code>REFUSED</code>, <code>CANCELLED</code>.</li>
@@ -85,7 +142,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <li><strong>Läbipaistvus:</strong> taotleja näeb <code>next_action</code>, kontrollide tulemusi (kasutajatekstid) ja ajalugu (E1-T06 muster). Kontrollitulemuste põhjendusi ei kuvata, kui need paljastaksid isikuandmeid (karistusregistri sisu jne): <code>user_text_key</code> on üldine.</li>
 <li><strong>Ametniku töölaud:</strong> <code>GET /admin/permits?state=&amp;type=&amp;overdue=</code> ja detailvaade (taotlus, reeglite tulemused, dokumendid, otsuse eelnõu).</li>
 </ol>
-<p><strong>AC.</strong></p>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: Kõik PASS, lüliti väljas
   Given kõik reeglid PASS, auto_issue=false
   Then  olek DECISION_PREPARED ja ametnik näeb eelnõu
@@ -142,7 +199,33 @@ Scenario: Isikuandmed
 </ul>
 <p><strong>Loa sisu (määrus § 4):</strong> registreerimisnumber loomise järjekorras (<code>EPL-&lt;aasta&gt;-&lt;nr 6 kohta&gt;</code>), „Loa saaja“ (nimi või asutuse-/ärinimi), „Püügi eesmärk“ (selgitus ja teadusuuringu lepingu rekvisiidid), „Püütav kogus“ (või märge „ei ole võimalik ette määrata“), „Püügivahend, püügivahendi märgistus“ (märgistus = eripüügiloa number või püügivahendi number), ajavahemik, veekogu, liigid, püüdja, lisatingimused (määrus § 5 variantidest, valib ametnik; kasutaja tekstid seadistatud: nt 1247 teatamise kohustused). <strong>Lisatingimuste valik on ainult ametniku käes</strong> (<code>NEEDS_OFFICER</code> SF-06 kaudu).</p>
 <p><strong>Aruandluskohustus:</strong> <code>SPECIAL_FISHING_PERMIT</code> tüübile <code>reporting_required=true</code> (A-34). Tähtaeg <code>report_due_date</code> loal (määrus § 5 p 8): vaikimisi loa kehtivuse lõpp + 30 päeva, ametnik saab muuta otsuse juures.</p>
-<p><strong>AC.</strong></p>
+<p><strong>Diagramm: eripüügiloa voog</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="sequenceDiagram
+  actor T as Taotleja
+  participant MO as MO + reeglimootor
+  participant FEE as Tasu (SF tabel)
+  participant PTA as PTA
+  T-&gt;&gt;MO: taotlus
+  MO-&gt;&gt;MO: reeglid SF-01..11
+  MO-&gt;&gt;FEE: tasu arvutus
+  alt auto_issue=false
+    MO-&gt;&gt;PTA: otsuse eelnõu
+    PTA-&gt;&gt;MO: kinnitab
+  end
+  MO--&gt;&gt;T: tasu, luba">sequenceDiagram
+  actor T as Taotleja
+  participant MO as MO + reeglimootor
+  participant FEE as Tasu (SF tabel)
+  participant PTA as PTA
+  T-&gt;&gt;MO: taotlus
+  MO-&gt;&gt;MO: reeglid SF-01..11
+  MO-&gt;&gt;FEE: tasu arvutus
+  alt auto_issue=false
+    MO-&gt;&gt;PTA: otsuse eelnõu
+    PTA-&gt;&gt;MO: kinnitab
+  end
+  MO--&gt;&gt;T: tasu, luba</pre></div>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: Täielik õnnestumine
   Given SF-01…SF-11 PASS, tasu 0, auto_issue=true
   Then  luba EPL-2027-000001 ISSUED, aruandluskohustus loodud
@@ -189,7 +272,21 @@ Scenario: Aruandluskohustus tähtaeg
 <div class="tw"><table><thead><tr><th>ID</th><th>Reegel</th><th>Tulemus</th></tr></thead><tbody><tr><td>EF-01</td><td>Kohustuslikud väljad ja tehnilised parameetrid täidetud ning arvuliselt mõistlikud (pinge &gt; 0, sagedus &gt; 0, kahvade arv ≥ 1)</td><td><code>FAIL</code> <code>ERR_VALIDATION</code></td></tr><tr><td>EF-02</td><td>Omanik ja kasutaja tuvastatud ja kehtivad (CHK-01/02)</td><td><code>FAIL</code></td></tr><tr><td>EF-03</td><td>Kasutajal ega omanikul ei ole kehtivat karistust (Karistusregister)</td><td><code>FAIL</code>, KPS § 21 lg 1 p 4 analoogia, <code>legal_basis</code> tekst: „Eripüügi tingimused (määrus § 9), kehtiv karistus“</td></tr><tr><td>EF-04</td><td>Tõend antakse „põhjendatud juhul keskkonnauuringute eesmärgil teostatavaks eripüügiks“ (§ 9): olemas on kehtiv eripüügiluba (<code>linked_special_permit_id</code> viitab <code>ACTIVE</code> <code>SPECIAL_FISHING_PERMIT</code>-ile, mille eesmärk on <code>SCIENCE</code> või <code>MONITORING</code>)</td><td><code>PASS</code> kui nii; <code>NEEDS_OFFICER</code> kui puudub või eesmärk muu</td></tr><tr><td>EF-05</td><td>Sama märgistusega elektripüügivahendile ei ole juba kehtivat tõendit</td><td><code>FAIL</code> <code>ERR_DUPLICATE_CERT</code></td></tr><tr><td>EF-06</td><td>OKAS-2 pooleliolev rikkumismenetlus (SF-08 analoog) ja KARI2 piirang (SF-09 analoog)</td><td><code>NEEDS_OFFICER</code> või <code>FAIL</code> nagu T02</td></tr></tbody></table></div>
 <p><strong>Tõend</strong> (määrus § 12): registreerimisnumber andmise järjekorras <code>EPT-&lt;aasta&gt;-&lt;nr 6 kohta&gt;</code>, vahendi andmed, omanik, kasutaja, kehtivus (<code>valid_from</code> = väljastamise kuupäev, <code>valid_to</code> = seotud eripüügiloa lõpp, kui seotud; muidu 1 aasta), kanne teadus- ja harrastuskalapüügi andmekogusse (<code>ResearchRegistryPort</code>, mock + HTTP karkass). Väljaandja A-36. Tasu puudub (määrus ei ütle).</p>
 <p><strong>Kehtetuks tunnistamine</strong> (§ 13): kasutaja kirjalik avaldus (või KL-ist esitatud avaldus) → <strong>hiljemalt 2 tööpäeva jooksul</strong> tunnistatakse tõend kehtetuks ja tehakse märge andmekogusse: <code>POST /certs/{id}/revoke-request</code> loob PTA ülesande tähtajaga <code>now + 2 tööpäeva</code> (A-35); <code>POST /admin/certs/{id}/revoke</code> kehtetuks tunnistab (LTO_UC-09).</p>
-<p><strong>AC.</strong></p>
+<p><strong>Diagramm: elektripüügi tõendi voog</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="flowchart LR
+  T[&quot;Taotlus&quot;] --&gt; E[&quot;Reeglimootor EF-01..06&quot;]
+  E --&gt; D[&quot;Otsuse eelnõu&quot;]
+  D --&gt; A{&quot;auto_issue?&quot;}
+  A -- ei --&gt; O[&quot;Ametnik kinnitab&quot;]
+  A -- jah --&gt; I[&quot;Tõend väljastatud&quot;]
+  O --&gt; I">flowchart LR
+  T[&quot;Taotlus&quot;] --&gt; E[&quot;Reeglimootor EF-01..06&quot;]
+  E --&gt; D[&quot;Otsuse eelnõu&quot;]
+  D --&gt; A{&quot;auto_issue?&quot;}
+  A -- ei --&gt; O[&quot;Ametnik kinnitab&quot;]
+  A -- jah --&gt; I[&quot;Tõend väljastatud&quot;]
+  O --&gt; I</pre></div>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: Edukas väljastamine
   Given EF-01…EF-06 PASS ja auto_issue=false
   Then  DECISION_PREPARED ja pärast kinnitust EPT-2027-000001 ISSUED, kanne andmekogusse
@@ -224,7 +321,19 @@ Scenario: Andmekogu maas
 <p><strong>Kehtivus:</strong> <code>valid_from</code> = väljastamise kuupäev, <code>valid_to</code> = <code>release_period.to</code>.</p>
 <p><strong>Seos eripüügiga:</strong> E9-T02 SF-05 loeb selle loa LTO-st.</p>
 <p><strong>Ulatusest väljas:</strong> asustamise akti esitamine (§ 4; KL_UC-16), eraldi tulevane Task.</p>
-<p><strong>AC.</strong></p>
+<p><strong>Diagramm: asustamisloa voog</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="flowchart LR
+  T[&quot;Taotlus&quot;] --&gt; E[&quot;Reeglimootor RP-01..08&quot;]
+  E --&gt; D[&quot;Otsuse eelnõu&quot;]
+  D --&gt; O[&quot;Ametnik kinnitab&quot;]
+  O --&gt; I[&quot;Asustamisluba väljastatud&quot;]
+  I --&gt; N[&quot;Teavitus&quot;]">flowchart LR
+  T[&quot;Taotlus&quot;] --&gt; E[&quot;Reeglimootor RP-01..08&quot;]
+  E --&gt; D[&quot;Otsuse eelnõu&quot;]
+  D --&gt; O[&quot;Ametnik kinnitab&quot;]
+  O --&gt; I[&quot;Asustamisluba väljastatud&quot;]
+  I --&gt; N[&quot;Teavitus&quot;]</pre></div>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: Õnnestumine
   Given RP-01…RP-07 PASS, RP-08 NEEDS_OFFICER, ametnik kinnitab
   Then  ASL-2027-000001 ISSUED, sisaldab asustaja, liiki, kogust, aega ja veekogu
@@ -272,4 +381,4 @@ var links=[].slice.call(document.querySelectorAll('.active .sub a'));
 if(links.length&&'IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){links.forEach(function(l){l.classList.toggle('cur',l.hash==='#'+en.target.id)})}})},{rootMargin:'-60px 0px -75% 0px'});
 links.forEach(function(l){var h=document.getElementById(l.hash.slice(1));if(h)io.observe(h)})}
 })();
-</script></body></html>
+</script><script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script><script>(function(){function dark(){var t=document.documentElement.dataset.theme;return t?t==='dark':matchMedia('(prefers-color-scheme:dark)').matches}function run(){document.querySelectorAll('pre.mermaid').forEach(function(e){e.removeAttribute('data-processed');e.textContent=e.dataset.src});mermaid.initialize({startOnLoad:false,theme:dark()?'dark':'default',securityLevel:'strict'});mermaid.run({querySelector:'pre.mermaid'})}run();document.getElementById('theme').addEventListener('click',function(){setTimeout(run,0)})})()</script></body></html>

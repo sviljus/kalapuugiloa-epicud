@@ -43,6 +43,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 #results small{display:block;color:var(--mut)}mark{background:#ffd54a66;color:inherit}
 @media(max-width:1100px){.shell{grid-template-columns:250px minmax(0,1fr)}.toc{display:none}}
 @media(max-width:760px){#menu{display:block}.shell{display:block}.side{display:none;position:fixed;top:57px;left:0;width:84vw;max-width:320px;background:var(--bg);z-index:25;height:calc(100vh - 57px)}body.nav .side{display:block}main{padding:16px}.brand small{display:none}}
+.diagram{margin:1em 0;padding:12px;background:var(--soft);border:1px solid var(--bd);border-radius:10px;overflow:auto;text-align:center}pre.mermaid{background:none;border:0;padding:0;margin:0}
 </style></head><body>
 <header class="top"><button id="menu" aria-label="Menüü">☰</button><a class="brand" href="index.html">Kalapüügiloa väljastamine <small>Epic'ud ja Task'id</small></a>
 <input id="q" type="search" placeholder="Otsi (/)" autocomplete="off"><button id="theme" aria-label="Teema">◐</button></header>
@@ -56,9 +57,59 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <p><strong>Skeem puudub</strong> (wikis on pilt <code>KALATUUM_TO-BE.05</code>, mida selle epic&#39;u koostamisel ei kasutatud). Voog tuleneb tekstist: taotlus → eeltäide ja taustakontroll → kohapealse kontrolli aja määramine → kontroll → otsus → luba või keeldumine.</p>
 <p><strong>Task&#39;ide järjekord:</strong> T01 → T02 → T03.</p>
 <hr>
+<p><strong>Diagramm: vesiviljeluse tegevusloa voog</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="sequenceDiagram
+  actor E as Ettevõtja
+  participant MO as MO
+  participant REG as Registrid
+  participant OK as OKAS-2
+  participant PTA as PTA ametnik
+  participant LTO as LTO
+  E-&gt;&gt;MO: taotlus (eeltäide, taustakontroll)
+  MO-&gt;&gt;REG: päringud
+  MO-&gt;&gt;OK: planInspection
+  OK--&gt;&gt;MO: InspectionResultReceived
+  MO-&gt;&gt;PTA: otsusepakett
+  PTA-&gt;&gt;MO: decide APPROVE / REFUSE
+  MO-&gt;&gt;LTO: tegevusluba (kui APPROVE)
+  MO--&gt;&gt;E: teavitus">sequenceDiagram
+  actor E as Ettevõtja
+  participant MO as MO
+  participant REG as Registrid
+  participant OK as OKAS-2
+  participant PTA as PTA ametnik
+  participant LTO as LTO
+  E-&gt;&gt;MO: taotlus (eeltäide, taustakontroll)
+  MO-&gt;&gt;REG: päringud
+  MO-&gt;&gt;OK: planInspection
+  OK--&gt;&gt;MO: InspectionResultReceived
+  MO-&gt;&gt;PTA: otsusepakett
+  PTA-&gt;&gt;MO: decide APPROVE / REFUSE
+  MO-&gt;&gt;LTO: tegevusluba (kui APPROVE)
+  MO--&gt;&gt;E: teavitus</pre></div>
 <h3 id="kl-e7-t01-vesiviljeluse-tegevusloa-taotlus-esitamine-eeltäide-taustakontroll"><a class="anchor" href="#kl-e7-t01-vesiviljeluse-tegevusloa-taotlus-esitamine-eeltäide-taustakontroll">#</a>KL-E7-T01 Vesiviljeluse tegevusloa taotlus (esitamine, eeltäide, taustakontroll)</h3>
 <p><strong>Eesmärk.</strong> Ettevõtja esitab taotluse, mis on registriandmetega eeltäidetud ja taustakontrollitud.</p>
 <p><strong>Kontekst.</strong> TO-BE.05: „Taotluse koostamisel kasutatakse võimalusel olemasolevaid registriandmeid ning süsteem teostab automaatselt vajalikud taustakontrollid.“ Registrid: Rahvastikuregister (tuvastamine, esindusõigus), Äriregister (tegevusõigus), ReM kliendiportaal (kliendiandmete kontroll ja eeltäitmine), muud riiklikud registrid ja PTA andmekogud. KL_UC-08, E1-T02 (identiteet, esindusõigus, rolli valik), E1-T04 (kontrollimootor), MO_UC-01…05.</p>
+<p><strong>Diagramm: taotluse olekud</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="stateDiagram-v2
+  [*] --&gt; DRAFT
+  DRAFT --&gt; SUBMITTED
+  DRAFT --&gt; CANCELLED
+  SUBMITTED --&gt; INSPECTION_SCHEDULED
+  SUBMITTED --&gt; CANCELLED
+  INSPECTION_SCHEDULED --&gt; INSPECTION_DONE
+  INSPECTION_DONE --&gt; DECIDED_APPROVED
+  INSPECTION_DONE --&gt; DECIDED_REFUSED
+  DECIDED_APPROVED --&gt; LICENCE_ISSUED">stateDiagram-v2
+  [*] --&gt; DRAFT
+  DRAFT --&gt; SUBMITTED
+  DRAFT --&gt; CANCELLED
+  SUBMITTED --&gt; INSPECTION_SCHEDULED
+  SUBMITTED --&gt; CANCELLED
+  INSPECTION_SCHEDULED --&gt; INSPECTION_DONE
+  INSPECTION_DONE --&gt; DECIDED_APPROVED
+  INSPECTION_DONE --&gt; DECIDED_REFUSED
+  DECIDED_APPROVED --&gt; LICENCE_ISSUED</pre></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Menetlustüüp <code>AQUACULTURE_LICENCE_APPLICATION</code> (MO): olekud <code>DRAFT</code>, <code>SUBMITTED</code>, <code>INSPECTION_SCHEDULED</code>, <code>INSPECTION_DONE</code>, <code>DECIDED_APPROVED</code>, <code>DECIDED_REFUSED</code>, <code>LICENCE_ISSUED</code>, <code>CANCELLED</code>. Üleminekud: <code>DRAFT→SUBMITTED→INSPECTION_SCHEDULED→INSPECTION_DONE→DECIDED_APPROVED→LICENCE_ISSUED</code> ja <code>INSPECTION_DONE→DECIDED_REFUSED</code>, <code>DRAFT→CANCELLED</code>, <code>SUBMITTED→CANCELLED</code> (taotleja tagasivõtmine kuni <code>INSPECTION_SCHEDULED</code>). Kasuta E1-T01 olekumasina mehhanismi (menetlustüübi konfiguratsioon).</li>
@@ -78,7 +129,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <li>Taotleja näeb staatust ja menetlusetappe reaalajas (KL_UC-09, sama API muster kui E1-T06).</li>
 <li>Esitatud taotlusi ei saa pärast <code>INSPECTION_SCHEDULED</code> taotleja poolt muuta. Parandused toimuvad ametniku ülesande kaudu.</li>
 </ol>
-<p><strong>AC.</strong></p>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: Edukas esitamine
   Given esindusõiguslik kasutaja, kõik AQ kontrollid PASS
   When  ta esitab
@@ -112,6 +163,24 @@ Scenario: Tagasivõtmine
 <h3 id="kl-e7-t02-kohapealse-kontrolli-planeerimine-ja-okas-2-integratsioon"><a class="anchor" href="#kl-e7-t02-kohapealse-kontrolli-planeerimine-ja-okas-2-integratsioon">#</a>KL-E7-T02 Kohapealse kontrolli planeerimine ja OKAS-2 integratsioon</h3>
 <p><strong>Eesmärk.</strong> Pärast esitamist määratakse kohapealne kontroll, ametnik viib selle läbi OKAS-2-s ja tulemus jõuab menetlusse.</p>
 <p><strong>Kontekst.</strong> TO-BE.05: „määratakse kohapealse kontrolli aeg ning PTA ametnik viib läbi kontrolli, mille käigus hinnatakse tegevuskoha vastavust“. OKAS-2: „planeeritakse kontrollid, koostatakse kontrolliandmeobjektid, fikseeritakse kontrolli tulemused“. OKAS-2 <span class="ext" title="Viide repo dokumendile, mida siin ei avaldata">TO-BE kontekstis</span>, probleemikoht „kohapealse kontrolli eraldatus menetlusest“ (kontroll ja menetlus on seotud).</p>
+<p><strong>Diagramm: OKAS-2 integratsioon</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="sequenceDiagram
+  participant MO as MO
+  participant P as InspectionPort
+  participant OK as OKAS-2
+  MO-&gt;&gt;P: planInspection(application, site, window)
+  P-&gt;&gt;OK: planeeri kontroll
+  OK--&gt;&gt;P: inspection_id
+  OK-&gt;&gt;MO: InspectionResultReceived (result, findings, protokoll)
+  MO-&gt;&gt;MO: INSPECTION_SCHEDULED -&gt; INSPECTION_DONE">sequenceDiagram
+  participant MO as MO
+  participant P as InspectionPort
+  participant OK as OKAS-2
+  MO-&gt;&gt;P: planInspection(application, site, window)
+  P-&gt;&gt;OK: planeeri kontroll
+  OK--&gt;&gt;P: inspection_id
+  OK-&gt;&gt;MO: InspectionResultReceived (result, findings, protokoll)
+  MO-&gt;&gt;MO: INSPECTION_SCHEDULED -&gt; INSPECTION_DONE</pre></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Liides <code>InspectionPort</code> (OKAS-2): <code>planInspection(application_ref, site, requested_window) → {inspection_id}</code>, <code>getInspection(inspection_id) → {state, date, result, findings[], protocol_doc_ref}</code>. Realiseeri HTTP-adapter ja mock. <strong>Konkreetsed OKAS-2 API-d on väljaspool ulatust.</strong> Port on lepingu pind: sündmus <code>InspectionResultReceived {inspection_id, result: COMPLIANT|NON_COMPLIANT|PARTIAL, findings[], protocol_doc_ref}</code> võetakse vastu REST-lõpp-punktis <code>POST /integrations/inspections/result</code> (autentimine ühiskasutatava saladuse või allkirjaga, idempotentne <code>inspection_id</code> + <code>event_id</code>).</li>
@@ -121,7 +190,7 @@ Scenario: Tagasivõtmine
 <li>Taotleja ei pääse OKAS-2 sisemistele andmetele. Ta näeb ainult kontrolli kuupäeva ja tulemuse üldseisu.</li>
 <li>Kui kontrolli kuupäev möödub ilma tulemuseta 14 päeva, loob süsteem PTA ülesande „Kontrolli tulemus puudub“.</li>
 </ol>
-<p><strong>AC.</strong></p>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: Planeerimine
   Given SUBMITTED
   When  ametnik valib kuupäeva 2027-03-10
@@ -151,6 +220,18 @@ Scenario: Tulemus puudub
 <h3 id="kl-e7-t03-otsus-tegevusloa-väljastamine-või-keeldumine"><a class="anchor" href="#kl-e7-t03-otsus-tegevusloa-väljastamine-või-keeldumine">#</a>KL-E7-T03 Otsus: tegevusloa väljastamine või keeldumine</h3>
 <p><strong>Eesmärk.</strong> PTA ametnik teeb põhjendatud otsuse, luba väljastatakse või menetlus lõpeb keeldumisega.</p>
 <p><strong>Kontekst.</strong> TO-BE.05: „Positiivse otsuse korral väljastatakse vesiviljeluse tegevusluba ning taotluse staatus muudetakse kinnitatuks. Negatiivse otsuse korral lõpetatakse menetlus põhjendatud otsusega.“ LTO_UC-01/02/15, MO_UC-15…18, A-31, A-32.</p>
+<p><strong>Diagramm: otsus</strong></p>
+<div class="diagram"><pre class="mermaid" data-src="flowchart TD
+  PK[&quot;decision-pack: taotlus, kontrollid, kontrolli tulemus&quot;] --&gt; D{&quot;PTA otsustab&quot;}
+  D -- APPROVE --&gt; L[&quot;Luba LTO-s + dokument DF-i&quot;]
+  D -- REFUSE --&gt; R[&quot;Põhjendatud keeldumisotsus&quot;]
+  L --&gt; N[&quot;Teavitus&quot;]
+  R --&gt; N">flowchart TD
+  PK[&quot;decision-pack: taotlus, kontrollid, kontrolli tulemus&quot;] --&gt; D{&quot;PTA otsustab&quot;}
+  D -- APPROVE --&gt; L[&quot;Luba LTO-s + dokument DF-i&quot;]
+  D -- REFUSE --&gt; R[&quot;Põhjendatud keeldumisotsus&quot;]
+  L --&gt; N[&quot;Teavitus&quot;]
+  R --&gt; N</pre></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>API (<code>PTA_OFFICER</code>): <code>GET /admin/aquaculture/{id}/decision-pack</code> (taotlus, kontrollitulemused, kohapealse kontrolli tulemus ja leiud, ajalugu), <code>POST …/decide</code> <code>{outcome: APPROVE|REFUSE, reasoning ≥ 100 märki, conditions[]?, valid_from, valid_to?}</code>.</li>
@@ -160,7 +241,7 @@ Scenario: Tulemus puudub
 <li>Kogu menetlus on auditis. Ajaloo säilitamine MO_UC-21.</li>
 <li><strong>Vaie</strong> pärast keeldumist käsitletakse HMS üldkorras väljaspool KALATUUM-it (ulatusest väljas, kuni E5 laiendatakse sellele menetlustüübile).</li>
 </ol>
-<p><strong>AC.</strong></p>
+<p><strong>Vastuvõtukriteeriumid.</strong></p>
 <pre><code class="lang-gherkin">Scenario: Väljastamine
   Given INSPECTION_DONE, kontroll COMPLIANT
   When  ametnik APPROVE põhjendusega
@@ -207,4 +288,4 @@ var links=[].slice.call(document.querySelectorAll('.active .sub a'));
 if(links.length&&'IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){links.forEach(function(l){l.classList.toggle('cur',l.hash==='#'+en.target.id)})}})},{rootMargin:'-60px 0px -75% 0px'});
 links.forEach(function(l){var h=document.getElementById(l.hash.slice(1));if(h)io.observe(h)})}
 })();
-</script></body></html>
+</script><script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script><script>(function(){function dark(){var t=document.documentElement.dataset.theme;return t?t==='dark':matchMedia('(prefers-color-scheme:dark)').matches}function run(){document.querySelectorAll('pre.mermaid').forEach(function(e){e.removeAttribute('data-processed');e.textContent=e.dataset.src});mermaid.initialize({startOnLoad:false,theme:dark()?'dark':'default',securityLevel:'strict'});mermaid.run({querySelector:'pre.mermaid'})}run();document.getElementById('theme').addEventListener('click',function(){setTimeout(run,0)})})()</script></body></html>

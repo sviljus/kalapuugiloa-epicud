@@ -43,6 +43,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 #results small{display:block;color:var(--mut)}mark{background:#ffd54a66;color:inherit}
 @media(max-width:1100px){.shell{grid-template-columns:250px minmax(0,1fr)}.toc{display:none}}
 @media(max-width:760px){#menu{display:block}.shell{display:block}.side{display:none;position:fixed;top:57px;left:0;width:84vw;max-width:320px;background:var(--bg);z-index:25;height:calc(100vh - 57px)}body.nav .side{display:block}main{padding:16px}.brand small{display:none}}
+.diagram{margin:1em 0;padding:12px;background:var(--soft);border:1px solid var(--bd);border-radius:10px;overflow:auto;text-align:center}pre.mermaid{background:none;border:0;padding:0;margin:0}
 </style></head><body>
 <header class="top"><button id="menu" aria-label="Menüü">☰</button><a class="brand" href="index.html">Kalapüügiloa väljastamine <small>Epic'ud ja Task'id</small></a>
 <input id="q" type="search" placeholder="Otsi (/)" autocomplete="off"><button id="theme" aria-label="Teema">◐</button></header>
@@ -52,13 +53,13 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <p class="lead">9 Epic'ut, 39 Task'i. Iga Task on kirjutatud nii, et agent saab selle realiseerida ilma küsimusi esitamata.</p>
 <div class="cards"><a class="card " href="E1-taotluse-esitamine.html"><span class="k">E1</span><strong>Kutselise kalapüügiloa taotluse esitamine</strong><span class="m">7 Task'i</span></a><a class="card " href="E2-puugivoimaluste-arvutus-ja-jaotus.html"><span class="k">E2</span><strong>Püügivõimaluste arvutamine ja jaotamine</strong><span class="m">6 Task'i</span></a><a class="card " href="E3-tasu-ja-loa-valjastamine.html"><span class="k">E3</span><strong>Püügivõimaluse vastuvõtt, püügiõiguse tasu ja kalapüügiloa väljastamine</strong><span class="m">7 Task'i</span></a><a class="card valikuline" href="E4-kasutamata-puugivoimaluste-umberjagamine.html"><span class="k">E4</span><strong>Kasutamata püügivõimaluste jagamine (TO-BE.03)</strong><span class="m">3 Task'i · <em>valikuline</em></span></a><a class="card valikuline" href="E5-vaidlustamine.html"><span class="k">E5</span><strong>Jagatud püügivõimaluste vaidlustamine (TO-BE.04)</strong><span class="m">3 Task'i · <em>valikuline</em></span></a><a class="card blokeeritud" href="E6-stsenaarium-2-delta.html"><span class="k">E6</span><strong>Alternatiivne stsenaarium: proaktiivne jaotus ja pakkumine (delta)</strong><span class="m">3 Task'i · <em>blokeeritud</em></span></a><a class="card " href="E7-vesiviljelus.html"><span class="k">E7</span><strong>Vesiviljeluse tegevusloa taotlemine ja väljastamine (TO-BE.05)</strong><span class="m">3 Task'i</span></a><a class="card " href="E8-harrastuspuuk.html"><span class="k">E8</span><strong>Harrastuspüük: püügivõimaluste haldus, kalastuskaart, püügiõigus (TO-BE.06–08)</strong><span class="m">3 Task'i</span></a><a class="card " href="E9-automaatotsusega-load.html"><span class="k">E9</span><strong>Reeglipõhised load: eripüük, elektripüügivahendi tõend, asustamisluba (TO-BE.09–11)</strong><span class="m">4 Task'i</span></a></div>
 <p><a class="btn" href="00-uldkontekst.html">Alusta üldkontekstist →</a></p></section><h1 id="kalapüügiloa-väljastamisega-seotud-protsessid-epic-39-ud-ja-task-39-id"><a class="anchor" href="#kalapüügiloa-väljastamisega-seotud-protsessid-epic-39-ud-ja-task-39-id">#</a>Kalapüügiloa väljastamisega seotud protsessid: Epic&#39;ud ja Task&#39;id</h1>
-<p>Siin kaustas on wiki lehe TO-BE protsessidest tuletatud <strong>9 Epic&#39;ut ja 39 Task&#39;i</strong>. Iga Task on kirjutatud nii, et agent saab selle realiseerida ilma küsimusi esitamata: eesmärk, allikad, sammud, andmed, liidesed, veakoodid, Gherkin-AC-d, sõltuvused ja (kus allikas vaikib) eeldus koos vaikeväärtusega.</p>
+<p>Siin kaustas on wiki lehe TO-BE protsessidest tuletatud <strong>9 Epic&#39;ut ja 39 Task&#39;i</strong>. Iga Task on kirjutatud nii, et agent saab selle realiseerida ilma küsimusi esitamata: eesmärk, allikad, sammud, andmed, liidesed, veakoodid, Gherkin-vastuvõtukriteeriumid, sõltuvused ja (kus allikas vaikib) eeldus koos vaikeväärtusega.</p>
 <p><strong>Alusta siit:</strong> <a href="00-uldkontekst.html">00-uldkontekst.md</a> (sõnastik, olekumudel, parameetrid P-nn, eeldused A-nn). Iga Task viitab sellele.</p>
 <h2 id="sisendi-valik"><a class="anchor" href="#sisendi-valik">#</a>Sisendi valik</h2>
 <p>Tellija andis kaks lehte: kitsas <a href="https://wiki.kemit.ee/spaces/KALANDUS/pages/321262813" target="_blank" rel="noopener">Kalapüügiloa väljastamisega seotud protsessid</a> (TO-BE.01–11) ja laiem ülemleht <a href="https://wiki.kemit.ee/spaces/KALANDUS/pages/321257955" target="_blank" rel="noopener">Ühtne teenus- ja menetlusvaade protsessid</a>. Ülemleht on <strong>pelk konteiner</strong> ja sisaldab ainult kaks alamlehte: eelmine ning <a href="https://wiki.kemit.ee/spaces/KALANDUS/pages/300141220" target="_blank" rel="noopener">Kalapüügiloa ja püügivõimaluse haldusega seotud protsessid</a> (TO-BE.12–15).</p>
 <p><strong>Valitud: kitsas leht 321262813.</strong> Põhjused:</p>
 <ol>
-<li><strong>Rohkem teostamiseks vajalikku detaili.</strong> Lehel on protsessimudelid (BPMN-pildid, mille hulgast TO-BE.01 ja alternatiivse stsenaariumi pakkumisprotsessi vaatasin läbi), mis annavad täpsed olekud, sammud, kuupäevad (1. sept – 1. dets, 31. dets, 1. jaan) ja süsteemidevahelised kutsed. Lisaks on lehel iga protsessi juures <strong>paragrahvipõhine</strong> õigusanalüüs (määrus § 2, 3, 12, 14), mis lubab kirjutada kontrollitavaid AC-sid.</li>
+<li><strong>Rohkem teostamiseks vajalikku detaili.</strong> Lehel on protsessimudelid (BPMN-pildid, mille hulgast TO-BE.01 ja alternatiivse stsenaariumi pakkumisprotsessi vaatasin läbi), mis annavad täpsed olekud, sammud, kuupäevad (1. sept – 1. dets, 31. dets, 1. jaan) ja süsteemidevahelised kutsed. Lisaks on lehel iga protsessi juures <strong>paragrahvipõhine</strong> õigusanalüüs (määrus § 2, 3, 12, 14), mis lubab kirjutada kontrollitavaid vastuvõtukriteeriume.</li>
 <li><strong>Laiema lehe lisaosa (TO-BE.12–15) on nõrgema sisendiga.</strong> Seal on kolm protsessi (muutmine, peatamine, müük/rent) ilma paragrahvitasemel analüüsita, kasutatud süsteemides on vaid KALATUUM, ja TO-BE.15 on ainult põhimõtteline soovitus. Need on loa <strong>elutsükli</strong>, mitte väljastamise protsessid. Nad nõuavad ka eraldi õiguslikke otsuseid (kes võib peatada, kohtutäituri pädevus, rahvusvahelised tehingud).</li>
 <li><strong>Mõlemad lehed ei lisaks teineteist</strong>: TO-BE.12–15 sõltuvad E1–E3 tulemustest (luba, versioonid, püügivõimaluste bilanss), seega on loogiline teha need hiljem.</li>
 </ol>
@@ -68,15 +69,27 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <h2 id="epic-39-ud"><a class="anchor" href="#epic-39-ud">#</a>Epic&#39;ud</h2>
 <div class="tw"><table><thead><tr><th>Epic</th><th>Wiki</th><th>Sisu</th><th>Task&#39;e</th><th>Seis</th></tr></thead><tbody><tr><td><a href="E1-taotluse-esitamine.html">KL-E1 Taotluse esitamine</a></td><td>TO-BE.01 (esimene pool)</td><td>identiteet, vorm, eeltäide, taustakontroll, esitamine, staatused, parameetrid</td><td>7</td><td>valmis</td></tr><tr><td><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html">KL-E2 Püügivõimaluste arvutus ja jaotus</a></td><td>TO-BE.02</td><td>andmemudel, mootor (§ 4–8), ajalugu, eelnõu, PTA kinnitus, jaotusotsus</td><td>6</td><td>valmis</td></tr><tr><td><a href="E3-tasu-ja-loa-valjastamine.html">KL-E3 Tasu ja loa väljastamine</a></td><td>TO-BE.01 (teine pool)</td><td>otsus, tasu, makse, luba, FLUX-sündmus, tasumata jätmine, teavitused</td><td>7</td><td>valmis</td></tr><tr><td><a href="E4-kasutamata-puugivoimaluste-umberjagamine.html">KL-E4 Kasutamata püügivõimaluste jagamine</a></td><td>TO-BE.03</td><td>ümberjaotus, lisapakkumine, lõplik otsus</td><td>3</td><td><strong>valikuline</strong></td></tr><tr><td><a href="E5-vaidlustamine.html">KL-E5 Vaidlustamine</a></td><td>TO-BE.04</td><td>vaie, menetlus, tulemus</td><td>3</td><td><strong>valikuline</strong></td></tr><tr><td><a href="E6-stsenaarium-2-delta.html">KL-E6 Alternatiivne stsenaarium</a></td><td>TO-BE.S2.01/.02</td><td>proaktiivne jaotus, pakkumine, lüliti</td><td>3</td><td><strong>blokeeritud</strong> (tellija valik)</td></tr><tr><td><a href="E7-vesiviljelus.html">KL-E7 Vesiviljeluse tegevusluba</a></td><td>TO-BE.05</td><td>taotlus, kohapealne kontroll (OKAS-2), otsus</td><td>3</td><td>valmis, õigusakt puudub</td></tr><tr><td><a href="E8-harrastuspuuk.html">KL-E8 Harrastuspüük</a></td><td>TO-BE.06–08</td><td>püügivõimaluste haldus, kalastuskaart, püügiõigus</td><td>3</td><td>valmis</td></tr><tr><td><a href="E9-automaatotsusega-load.html">KL-E9 Reeglipõhised load</a></td><td>TO-BE.09–11</td><td>otsusemootor, eripüük, elektripüügi tõend, asustamisluba</td><td>4</td><td>valmis</td></tr></tbody></table></div>
 <h2 id="järjestus-ja-sõltuvused"><a class="anchor" href="#järjestus-ja-sõltuvused">#</a>Järjestus ja sõltuvused</h2>
-<pre><code class="lang-">Mehhanismid (E1-T01 olekumasin, E1-T04 kontrollimootor, E1-T07 parameetrid, E3-T07 teavitused)
-        │
-E1 (taotlus) ──► E2 (jaotus) ──► E3 (tasu ja luba) ──► E4 (ümberjaotus, valikuline)
-                        │                │
-                        └────────────────┴──► E5 (vaie, valikuline)
-E3-T02/T03 (tasu, makse) ──► E8-T02/T03
-E1-T01/T04 mustrid ──► E7, E9
-E2-T02 (mootor) ──► E4-T01, E5-T02, E6-T01</code></pre>
+<div class="diagram"><pre class="mermaid" data-src="flowchart TD
+  M[&quot;Mehhanismid: E1-T01 olekumasin, E1-T04 kontrollid, E1-T07 parameetrid, E3-T07 teavitused&quot;]
+  M --&gt; E1[&quot;E1 taotlus&quot;] --&gt; E2[&quot;E2 jaotus&quot;] --&gt; E3[&quot;E3 tasu ja luba&quot;] --&gt; E4[&quot;E4 ümberjaotus (valikuline)&quot;]
+  E2 --&gt; E5[&quot;E5 vaie (valikuline)&quot;]
+  E3 --&gt; E5
+  E3 --&gt;|&quot;T02, T03&quot;| E8[&quot;E8 harrastuspüük&quot;]
+  E1 --&gt;|&quot;T01, T04 mustrid&quot;| E7[&quot;E7 vesiviljelus&quot;]
+  E1 --&gt;|&quot;T01, T04 mustrid&quot;| E9[&quot;E9 reeglipõhised load&quot;]
+  E2 --&gt;|&quot;T02 mootor&quot;| E6[&quot;E6 alternatiivne stsenaarium (blokeeritud)&quot;]">flowchart TD
+  M[&quot;Mehhanismid: E1-T01 olekumasin, E1-T04 kontrollid, E1-T07 parameetrid, E3-T07 teavitused&quot;]
+  M --&gt; E1[&quot;E1 taotlus&quot;] --&gt; E2[&quot;E2 jaotus&quot;] --&gt; E3[&quot;E3 tasu ja luba&quot;] --&gt; E4[&quot;E4 ümberjaotus (valikuline)&quot;]
+  E2 --&gt; E5[&quot;E5 vaie (valikuline)&quot;]
+  E3 --&gt; E5
+  E3 --&gt;|&quot;T02, T03&quot;| E8[&quot;E8 harrastuspüük&quot;]
+  E1 --&gt;|&quot;T01, T04 mustrid&quot;| E7[&quot;E7 vesiviljelus&quot;]
+  E1 --&gt;|&quot;T01, T04 mustrid&quot;| E9[&quot;E9 reeglipõhised load&quot;]
+  E2 --&gt;|&quot;T02 mootor&quot;| E6[&quot;E6 alternatiivne stsenaarium (blokeeritud)&quot;]</pre></div>
 <p><strong>Soovitatav ehitusjärjekord:</strong> (1) E1-T07, E1-T01, E3-T07, E2-T01, E3-T02 (iseseisvad alused); (2) E2-T02 (õiguslik tuum, testivektorid) ja E1-T02…T06; (3) E2-T03…T06; (4) E3-T01, T03…T06; (5) E7, E8, E9 paralleelselt eraldi tiimidena; (6) valikulised E4, E5; (7) E6 alles pärast tellija otsust.</p>
+<h2 id="õiguslikud-tõlgendused-mis-vajavad-õigusnõustaja-kinnitust"><a class="anchor" href="#õiguslikud-tõlgendused-mis-vajavad-õigusnõustaja-kinnitust">#</a>Õiguslikud tõlgendused, mis vajavad õigusnõustaja kinnitust</h2>
+<p>Allolevad tõlgendused on realiseeritavad ja seadistatavad, aga <strong>õiguslikult kinnitamata</strong>. Enne tootmist peab õigusnõustaja need kinnitama või parandama (tulemus kantakse eeldusse ja vajadusel testvektoritesse).</p>
+<div class="tw"><table><thead><tr><th>#</th><th>Küsimus</th><th>Eeldus</th><th>Praegune vaikelahendus</th><th>Mida kinnitada</th><th>Mõju</th></tr></thead><tbody><tr><td>1</td><td>Murdosade võrdsus (§ 7 lg 3: kokkulepe vs TO-BE „ei sõltu kokkulepetest“)</td><td>A-03</td><td>suurem T, varasem esitamisaeg, väiksem party_id</td><td>kas võrdsuse lahendus on lubatud ilma kokkuleppeta, ja milline</td><td>E2-T02</td></tr><tr><td>2</td><td>Ümardamine ja täisarvuline osa (§ 6 lg 3 vs § 7 lg 1–2)</td><td>A-16, A-19</td><td>testvektorid V1–V10, granulaarsus 1 / 0,01</td><td>kas tõlgendus klapib määruse mõttega</td><td>E2-T02</td></tr><tr><td>3</td><td>Taotletust väiksema jaotuse korral vabanev osa (§ 8 lg 4)</td><td>A-17</td><td>ei jaotata voorus ümber, läheb TO-BE.03 kogumisse</td><td>kas ümberjagamata jätmine on õige</td><td>E2, E4</td></tr><tr><td>4</td><td>Vaide põhjal ümberarvutus</td><td>A-29</td><td>parandab ainult vaidlustaja sisendit</td><td>kas tagasiulatuvat ümberarvutust ei ole vaja</td><td>E5</td></tr><tr><td>5</td><td>Automaatotsus (õigus ei ole jõus)</td><td>A-31</td><td>kutseline luba <code>true</code>, teised <code>false</code></td><td>kas automaatotsus on lubatud ja millistele loaliikidele</td><td>E3, E9</td></tr><tr><td>6</td><td>Ametniku kinnituse vajadus</td><td>A-04</td><td>nõutud (P-08 = <code>true</code>)</td><td>kas „vajadusel“ lubab automaatkinnitust</td><td>E2-T05</td></tr></tbody></table></div>
 <h2 id="ulatusest-väljas"><a class="anchor" href="#ulatusest-väljas">#</a>Ulatusest väljas</h2>
 <p>Neid ei sisalda ükski Task. Nad on seotud, aga vajavad eraldi analüüsi või Task&#39;e:</p>
 <ul>
@@ -86,26 +99,26 @@ E2-T02 (mootor) ──► E4-T01, E5-T02, E6-T01</code></pre>
 <li>Kalatootepartii-, püügiandmete- ja asustamisaktide esitamine (KJT).</li>
 <li>Autentimisteenus (KL_UC-01) ja ODS ETL-i ehitus.</li>
 <li>Kalapüügiloa peatamise, muutmise ja kehtetuks tunnistamise töövood (LTO andmemudel peab neid siiski toetama).</li>
-<li>Tasumäärade tegelik sisestus (lisad 1–5 PDF-id): seadistuse laadib inimene (<a href="E3-tasu-ja-loa-valjastamine.html">E3-T02</a>).</li>
+<li>Tasumäärade tegelik sisestus on tehtud 2027. aasta kohta (<span class="ext" title="Viide repo dokumendile, mida siin ei avaldata">fixtures/fee_rates_2027.csv</span>, 153 rida lisadest 1–5). Kaardistus klassifikaatoritega ja järgmiste aastate määrused: inimene (<a href="E3-tasu-ja-loa-valjastamine.html">E3-T02</a>).</li>
 </ul>
 <h2 id="teadaolevad-piirangud"><a class="anchor" href="#teadaolevad-piirangud">#</a>Teadaolevad piirangud</h2>
 <ol>
 <li><strong>Tehnoloogiapinu ja teenuste karkassid</strong> (MO, LTO, DF, KOT, AL) ei ole selles repos. Task&#39;id eeldavad, et sihtrepos on need olemas, või kirjeldavad, mida minimaalselt luua (A-02).</li>
 <li><strong>Välisliideste skeemid</strong> (OKAS-2, KARI2, andmekogu, makselahendus, SMS-operaator) on defineeritud portide ja mockidega, mitte tegelike lepingutega.</li>
-<li><strong>Õiguslikud tõlgendused</strong> (A-03, A-16, A-17, A-29, A-31) on realiseeritavad ja seadistatavad, aga <strong>õiguslikult kinnitamata</strong>. Soovitatav on enne tootmist saada kinnitus õigusnõustajalt (jälgitavus: iga eeldus nimetab, mida see mõjutab).</li>
+<li><strong>Õiguslikud tõlgendused</strong> (A-03, A-16, A-17, A-29, A-31) on realiseeritavad ja seadistatavad, aga <strong>õiguslikult kinnitamata</strong>: vt eespool tabel „Õiguslikud tõlgendused, mis vajavad õigusnõustaja kinnitust“.</li>
 <li><strong>Protsessimudeli pilte on tegelikult vaadatud kaks:</strong> baasstsenaariumi TO-BE.01 (taotlemine ja väljastamine) ja alternatiivstsenaariumi TO-BE.S2.02 (pakkumine ja väljastamine). Ülejäänud skeemide (TO-BE.02 arvutus, S2.01, TO-BE.03, .04, .05, .09) sisu tuleneb tekstist ja määrusest. Kui nende pildid sisaldavad tekstist puuduvaid samme, tuleb vastav Task üle vaadata.</li>
 <li>Testvektorid V1–V10 on kontrollitud referentsimplementatsiooniga ja klapivad. Teiste Task&#39;ide numbrinäited (nt tasu arvutus E9-T02) on käsitsi kontrollitud.</li>
 </ol>
 <h2 id="seotud"><a class="anchor" href="#seotud">#</a>Seotud</h2>
 <ul>
-<li><span class="ext" title="Viide repo dokumendile, mida siin ei avaldata">DoD ja AC raamistik</span></li>
+<li><span class="ext" title="Viide repo dokumendile, mida siin ei avaldata">DoD ja vastuvõtukriteeriumide raamistik</span></li>
 <li><span class="ext" title="Viide repo dokumendile, mida siin ei avaldata">Epic&#39;ute üldine ettepanek (E0–E16)</span></li>
 <li><span class="ext" title="Viide repo dokumendile, mida siin ei avaldata">Kokkuvõte</span></li>
 </ul>
 </article>
 <div class="pn"><span></span><a href="00-uldkontekst.html">Üldkontekst →</a></div>
 <footer>Ettepanek, mitte kinnitatud. Allikas: wiki leht 321262813.</footer></main>
-<aside class="toc"><b>Sellel lehel</b><ul><li><a href="#sisendi-valik">Sisendi valik</a></li><li><a href="#epic-39-ud">Epic&amp;#39;ud</a></li><li><a href="#järjestus-ja-sõltuvused">Järjestus ja sõltuvused</a></li><li><a href="#ulatusest-väljas">Ulatusest väljas</a></li><li><a href="#teadaolevad-piirangud">Teadaolevad piirangud</a></li><li><a href="#seotud">Seotud</a></li></ul></aside></div>
+<aside class="toc"><b>Sellel lehel</b><ul><li><a href="#sisendi-valik">Sisendi valik</a></li><li><a href="#epic-39-ud">Epic&amp;#39;ud</a></li><li><a href="#järjestus-ja-sõltuvused">Järjestus ja sõltuvused</a></li><li><a href="#õiguslikud-tõlgendused-mis-vajavad-õigusnõustaja-kinnitust">Õiguslikud tõlgendused, mis vajavad õigusnõustaja kinnitust</a></li><li><a href="#ulatusest-väljas">Ulatusest väljas</a></li><li><a href="#teadaolevad-piirangud">Teadaolevad piirangud</a></li><li><a href="#seotud">Seotud</a></li></ul></aside></div>
 <script>(function(){
 var r=document.documentElement;try{var t=localStorage.getItem('th');if(t)r.dataset.theme=t}catch(e){}
 document.getElementById('theme').onclick=function(){var d=r.dataset.theme||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');d=d==='dark'?'light':'dark';r.dataset.theme=d;try{localStorage.setItem('th',d)}catch(e){}};
@@ -123,4 +136,4 @@ var links=[].slice.call(document.querySelectorAll('.active .sub a'));
 if(links.length&&'IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){links.forEach(function(l){l.classList.toggle('cur',l.hash==='#'+en.target.id)})}})},{rootMargin:'-60px 0px -75% 0px'});
 links.forEach(function(l){var h=document.getElementById(l.hash.slice(1));if(h)io.observe(h)})}
 })();
-</script></body></html>
+</script><script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script><script>(function(){function dark(){var t=document.documentElement.dataset.theme;return t?t==='dark':matchMedia('(prefers-color-scheme:dark)').matches}function run(){document.querySelectorAll('pre.mermaid').forEach(function(e){e.removeAttribute('data-processed');e.textContent=e.dataset.src});mermaid.initialize({startOnLoad:false,theme:dark()?'dark':'default',securityLevel:'strict'});mermaid.run({querySelector:'pre.mermaid'})}run();document.getElementById('theme').addEventListener('click',function(){setTimeout(run,0)})})()</script></body></html>
