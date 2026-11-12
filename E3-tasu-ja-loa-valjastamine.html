@@ -54,7 +54,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <h2 id="taust-ja-seosed"><a class="anchor" href="#taust-ja-seosed">#</a>Taust ja seosed</h2>
 <ul>
 <li>Allikas: TO-BE.01 (teine pool: taotleja otsus, tasu, luba, FLUX)</li>
-<li>Määrus nr 164 § 12–§ 14</li>
+<li><a href="https://www.riigiteataja.ee/akt/120122025042?leiaKehtiv" target="_blank" rel="noopener">Määrus nr 164</a> § 12–§ 14</li>
 <li>UC: LTO_UC-01/02/06/11/12/13/14/16/17, MO_UC-08, PVT_UC-10/11/14</li>
 <li>IF/DR: LTO_IF-02/03/12/13, LTO_DR-05/06/07</li>
 <li>Eeldused: A-05, A-06, A-09, A-21…A-24</li>
@@ -123,9 +123,9 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <li>PVT_UC-11 (tagastamine)</li>
 <li>KL_UC-10 (kutseliste püügivõimaluste vaatamine)</li>
 <li>KL_UC-12/13</li>
-<li>Määrus nr 164 § 14 lg 1–2 (taotleja teavitab kehtivusest, püügivõimalustest, kaluritest/laevadest; osaline väljavõtt)</li>
-<li>Määrus nr 164 § 12 lg 2–6</li>
-<li>Määrus nr 164 § 13</li>
+<li><a href="https://www.riigiteataja.ee/akt/120122025042?leiaKehtiv" target="_blank" rel="noopener">Määrus nr 164</a> § 14 lg 1–2 (taotleja teavitab kehtivusest, püügivõimalustest, kaluritest/laevadest; osaline väljavõtt)</li>
+<li><a href="https://www.riigiteataja.ee/akt/120122025042?leiaKehtiv" target="_blank" rel="noopener">Määrus nr 164</a> § 12 lg 2–6</li>
+<li><a href="https://www.riigiteataja.ee/akt/120122025042?leiaKehtiv" target="_blank" rel="noopener">Määrus nr 164</a> § 13</li>
 <li>A-21</li>
 </ul>
 <p><strong>Mida tahame saavutada.</strong> Taotleja näeb talle eraldatud püügivõimalusi ja teeb otsuse: nõustub (määrab loa andmed), loobub või vaidlustab.</p>
@@ -201,7 +201,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <p><strong>Riskid ja sõltuvused.</strong></p>
 <ul>
 <li>Sõltub E2-T06 (jaotus) ja E3-T02 (tasu).</li>
-<li>Osalise väljavõtu ja erandite reeglid tulenevad määruse nr 164 § 14, tõlgendus A-17, A-21.</li>
+<li>Osalise väljavõtu ja erandite reeglid tulenevad <a href="https://www.riigiteataja.ee/akt/120122025042?leiaKehtiv" target="_blank" rel="noopener">määruse nr 164</a> § 14, tõlgendus A-17, A-21.</li>
 </ul>
 <p><strong>Mittefunktsionaalsed nõuded.</strong> Ühise ploki järgi (6.2).</p>
 <p><strong>Avatud küsimused äripoolele.</strong> Puuduvad.</p>
@@ -212,7 +212,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <p><strong>Taust ja seosed.</strong></p>
 <ul>
 <li><span class="ext" title="Viide repo dokumendile, mida siin ei avaldata">Määrus „Kutselise kalapüügi võimalused ja kalapüügiõiguse tasumäärad 2027“</span> (lisad 1–5)</li>
-<li>määrus nr 164 § 14 lg 1 (tasu vähemalt KeTS § 37 lg 4 p 3 ulatuses)</li>
+<li><a href="https://www.riigiteataja.ee/akt/120122025042?leiaKehtiv" target="_blank" rel="noopener">määrus nr 164</a> § 14 lg 1 (tasu vähemalt KeTS § 37 lg 4 p 3 ulatuses)</li>
 <li>A-05</li>
 <li>A-06</li>
 <li>A-24</li>
@@ -248,7 +248,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Seadistustabel <code>fishing_right_fee_rate</code>: <code>fishing_year</code>, <code>licence_kind</code>, <code>water_area_code</code>, <code>gear_type_code</code>, <code>species_code</code> (null = ei sõltu liigist), <code>unit</code>, <code>rate_eur</code> (decimal, 4 kohta), <code>source_annex</code> (nt „Lisa 1“), <code>valid_from</code>, <code>valid_to</code>. Iga aasta uus laadimine; vana jääb alles.</li>
-<li><strong>Laadimine:</strong> <code>POST /admin/fee-rates/import</code> (CSV, <code>PTA_ADMIN</code>). CSV veerud nagu tabelis. Valideeri: unikaalsus võtmel <code>(year, kind, area, gear, species, unit)</code>, <code>rate ≥ 0</code>. Tagasta vigade loetelu ridade numbritega. Fail <a href="fixtures/fee_rates_2027.csv" download><code>fixtures/fee_rates_2027.csv</code></a> sisaldab <strong>kõiki 2027. aasta tasumäärasid</strong> (153 rida, määruse nr 113 lisad 1–5, Riigi Teataja akt 103112026001), see on esimene laaditav seadistus ja ühtlasi testiandmestik. Veerud: <code>fishing_year, licence_kind, water_area_code, gear_type_code, species_code, unit, rate_eur, limit_qty, source_annex, water_area_name, area_note</code>. <code>limit_qty</code> on määruse piirarv (info, mitte tasuarvutuse sisend), <code>area_note</code> sisaldab püügiruudud või maakonna. Ühikud: <code>GEAR_COUNT</code> (tasu ühe püügivahendi kohta, lisad 1, 3, 4), <code>TONNE</code> (lisad 1 tabel 2, 2, 5), <code>FISHING_DAY</code> (lisa 5 tabel 2). Koodid (<code>gear_type_code</code>, <code>water_area_code</code>, <code>species_code</code>) on selle faili sisemised ja tuleb enne laadimist kaardistada klassifikaatoritega (A-24); kaardistamata kood → <code>ERR_VALIDATION</code>. Aasta rate puudub → <code>ERR_FEE_RATE_MISSING</code>. <strong>Inimese ülesanne: kontrollida CSV vastavust PDF-idele (ridade arv ja summad on kontrollitud skriptiga, kuid allkirjastatud kinnitus tuleb inimeselt) ning kinnitada klassifikaatorite kaardistus. Järgmise aasta määrused sisestab inimene samas vormis.</strong></li>
+<li><strong>Laadimine:</strong> <code>POST /admin/fee-rates/import</code> (CSV, <code>PTA_ADMIN</code>). CSV veerud nagu tabelis. Valideeri: unikaalsus võtmel <code>(year, kind, area, gear, species, unit)</code>, <code>rate ≥ 0</code>. Tagasta vigade loetelu ridade numbritega. Fail <a href="fixtures/fee_rates_2027.csv" download><code>fixtures/fee_rates_2027.csv</code></a> sisaldab <strong>kõiki 2027. aasta tasumäärasid</strong> (153 rida, <a href="https://www.riigiteataja.ee/akt/103112026001" target="_blank" rel="noopener">määruse nr 113</a> lisad 1–5, Riigi Teataja akt 103112026001), see on esimene laaditav seadistus ja ühtlasi testiandmestik. Veerud: <code>fishing_year, licence_kind, water_area_code, gear_type_code, species_code, unit, rate_eur, limit_qty, source_annex, water_area_name, area_note</code>. <code>limit_qty</code> on määruse piirarv (info, mitte tasuarvutuse sisend), <code>area_note</code> sisaldab püügiruudud või maakonna. Ühikud: <code>GEAR_COUNT</code> (tasu ühe püügivahendi kohta, lisad 1, 3, 4), <code>TONNE</code> (lisad 1 tabel 2, 2, 5), <code>FISHING_DAY</code> (lisa 5 tabel 2). Koodid (<code>gear_type_code</code>, <code>water_area_code</code>, <code>species_code</code>) on selle faili sisemised ja tuleb enne laadimist kaardistada klassifikaatoritega (A-24); kaardistamata kood → <code>ERR_VALIDATION</code>. Aasta rate puudub → <code>ERR_FEE_RATE_MISSING</code>. <strong>Inimese ülesanne: kontrollida CSV vastavust PDF-idele (ridade arv ja summad on kontrollitud skriptiga, kuid allkirjastatud kinnitus tuleb inimeselt) ning kinnitada klassifikaatorite kaardistus. Järgmise aasta määrused sisestab inimene samas vormis.</strong></li>
 <li><strong>Arvutus:</strong> <code>FeeCalculator.calculate(licence_draft) → {lines[], total_cents, minimum_cents}</code>:<ul>
 <li>rea tasu = <code>drawn_quantity × rate</code> (decimal), ümardatud sendini <strong>half up</strong> reakaupa; kokku = Σ ridu.</li>
 <li><code>minimum_cents = round(P-09 × total_cents)</code>; tasuda tuleb vähemalt <code>minimum_cents</code>, kuid vaikimisi (P-09 = 1,0) kogu <code>total_cents</code>.</li>
@@ -347,7 +347,7 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
 <p><strong>Parent Epic:</strong> KL-E3</p>
 <p><strong>Taust ja seosed.</strong></p>
 <ul>
-<li>Määrus nr 164 § 12–§ 14</li>
+<li><a href="https://www.riigiteataja.ee/akt/120122025042?leiaKehtiv" target="_blank" rel="noopener">Määrus nr 164</a> § 12–§ 14</li>
 <li>LTO_UC-01 (loomine)</li>
 <li>LTO_UC-02 (väljastamine pärast positiivset otsust)</li>
 <li>LTO_UC-12/13/14 (sidumine osapoolega, püügivõimalusega, menetlusega)</li>
