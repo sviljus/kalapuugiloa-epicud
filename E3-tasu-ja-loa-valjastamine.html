@@ -1,0 +1,409 @@
+<!doctype html><html lang="et"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KL-E3 Püügivõimaluse vastuvõtt, püügiõiguse tasu ja kalapüügiloa väljastamine · Kalapüügiloa Epic'ud</title><meta name="robots" content="noindex">
+<style>:root{--bg:#fff;--fg:#1c2430;--mut:#5b6675;--bd:#e2e6ec;--ac:#0b6bcb;--soft:#f4f7fb;--code:#f1f4f8}
+:root[data-theme=dark]{--bg:#10151c;--fg:#e4e9f0;--mut:#9aa6b6;--bd:#27303c;--ac:#6cb2ff;--soft:#171e28;--code:#1b2330}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#10151c;--fg:#e4e9f0;--mut:#9aa6b6;--bd:#27303c;--ac:#6cb2ff;--soft:#171e28;--code:#1b2330}}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+a{color:var(--ac)}
+.top{position:sticky;top:0;z-index:20;display:flex;gap:12px;align-items:center;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--bd)}
+.brand{font-weight:700;color:var(--fg);text-decoration:none}.brand small{font-weight:400;color:var(--mut);margin-left:6px}
+#q{margin-left:auto;width:min(320px,40vw);padding:7px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--soft);color:var(--fg)}
+button{background:var(--soft);color:var(--fg);border:1px solid var(--bd);border-radius:8px;padding:6px 10px;cursor:pointer}
+#menu{display:none}
+.shell{display:grid;grid-template-columns:270px minmax(0,1fr) 220px;max-width:1500px;margin:0 auto}
+.side{position:sticky;top:57px;align-self:start;height:calc(100vh - 57px);overflow:auto;padding:16px;border-right:1px solid var(--bd);font-size:14px}
+.side ul{list-style:none;margin:0;padding:0}.side>ul>li{margin-bottom:6px}.side>ul>li>a{font-weight:600;color:var(--fg);text-decoration:none;display:block;padding:4px 8px;border-radius:6px}
+.side li.active>a{background:var(--soft);color:var(--ac)}
+.sub{display:none;margin:2px 0 6px 10px!important;border-left:2px solid var(--bd)}.active .sub{display:block}
+.sub a{display:block;padding:2px 10px;color:var(--mut);text-decoration:none;font-size:13px}.sub a:hover,.sub a.cur{color:var(--ac)}
+main{padding:24px 40px 60px;min-width:0}article{max-width:860px}
+.toc{position:sticky;top:57px;align-self:start;padding:24px 16px;font-size:13px;max-height:calc(100vh - 57px);overflow:auto}
+.toc ul{list-style:none;padding:0}.toc a{display:block;color:var(--mut);text-decoration:none;padding:2px 0}.toc a:hover{color:var(--ac)}
+h1{font-size:2rem;line-height:1.2}h2{margin-top:2.4em;padding-top:.6em;border-top:1px solid var(--bd)}
+h3{margin-top:2.2em;padding:8px 12px;background:var(--soft);border-left:4px solid var(--ac);border-radius:4px}
+h4{margin-top:1.6em}
+.anchor{opacity:0;margin-left:-1.1em;padding-right:.3em;text-decoration:none}h2:hover .anchor,h3:hover .anchor,h4:hover .anchor{opacity:.6}
+code{background:var(--code);padding:1px 5px;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:14px;border-radius:8px;overflow:auto;border:1px solid var(--bd)}pre code{background:none;padding:0}
+.tw{overflow:auto;margin:1em 0}table{border-collapse:collapse;font-size:14px;min-width:100%}
+th,td{border:1px solid var(--bd);padding:6px 10px;vertical-align:top;text-align:left}th{background:var(--soft)}
+blockquote{margin:1em 0;padding:4px 16px;border-left:4px solid var(--bd);color:var(--mut)}
+.ext{border-bottom:1px dotted var(--mut);cursor:help}
+.hero{margin-bottom:2em}.lead{font-size:1.15rem;color:var(--mut)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin:20px 0}
+.card{display:flex;flex-direction:column;gap:6px;padding:16px;border:1px solid var(--bd);border-radius:12px;background:var(--soft);text-decoration:none;color:var(--fg);transition:.15s}
+.card:hover{border-color:var(--ac);transform:translateY(-2px)}.card .k{color:var(--ac);font-weight:700;font-size:13px}.card .m{color:var(--mut);font-size:13px}
+.card.valikuline{border-style:dashed}.card.blokeeritud{opacity:.7;border-style:dashed}
+.btn{display:inline-block;padding:10px 18px;background:var(--ac);color:var(--bg);border-radius:8px;text-decoration:none;font-weight:600}
+.pn{display:flex;justify-content:space-between;margin-top:3em;padding-top:1em;border-top:1px solid var(--bd)}
+footer{margin-top:2em;color:var(--mut);font-size:13px}
+#results{position:fixed;top:56px;right:16px;width:min(520px,calc(100vw - 32px));max-height:70vh;overflow:auto;background:var(--bg);border:1px solid var(--bd);border-radius:10px;box-shadow:0 12px 40px #0004;z-index:30}
+#results a{display:block;padding:10px 14px;border-bottom:1px solid var(--bd);text-decoration:none;color:var(--fg);font-size:14px}#results a:hover{background:var(--soft)}
+#results small{display:block;color:var(--mut)}mark{background:#ffd54a66;color:inherit}
+@media(max-width:1100px){.shell{grid-template-columns:250px minmax(0,1fr)}.toc{display:none}}
+@media(max-width:760px){#menu{display:block}.shell{display:block}.side{display:none;position:fixed;top:57px;left:0;width:84vw;max-width:320px;background:var(--bg);z-index:25;height:calc(100vh - 57px)}body.nav .side{display:block}main{padding:16px}.brand small{display:none}}
+</style></head><body>
+<header class="top"><button id="menu" aria-label="Menüü">☰</button><a class="brand" href="index.html">Kalapüügiloa väljastamine <small>Epic'ud ja Task'id</small></a>
+<input id="q" type="search" placeholder="Otsi (/)" autocomplete="off"><button id="theme" aria-label="Teema">◐</button></header>
+<div id="results" hidden></div>
+<div class="shell"><nav class="side"><ul><li class=""><a href="index.html">Ülevaade</a></li><li class=""><a href="00-uldkontekst.html">Üldkontekst</a></li><li class=""><a href="E1-taotluse-esitamine.html">E1 Kutselise kalapüügiloa taotluse esitamine</a><ul class="sub"><li><a href="E1-taotluse-esitamine.html#kl-e1-t01-taotlusmenetluse-tüüp-ja-olekumasin-mo">T01 Taotlusmenetluse tüüp ja olekumasin (MO)</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t02-taotleja-tuvastamine-esindusõigus-ja-rolli-valik">T02 Taotleja tuvastamine, esindusõigus ja rolli valik</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t03-taotluse-andmemudel-mustandi-api-ja-eeltäitmine">T03 Taotluse andmemudel, mustandi API ja eeltäitmine</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t04-taustakontrollide-mootor-registripõhine">T04 Taustakontrollide mootor (registripõhine)</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t05-taotluse-esitamine">T05 Taotluse esitamine</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t06-taotleja-vaated-minu-taotlused-ja-staatus">T06 Taotleja vaated: minu taotlused ja staatus</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t07-taotlusvooru-parameetrite-haldus-pta-admin">T07 Taotlusvooru parameetrite haldus (PTA_ADMIN)</a></li></ul></li><li class=""><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html">E2 Püügivõimaluste arvutamine ja jaotamine</a><ul class="sub"><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t01-pvt-andmemudel-jaotusüksus-jaotustulemus-jaotusotsus">T01 PVT andmemudel: jaotusüksus, jaotustulemus, jaotusotsus</a></li><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t03-ajalooliste-andmete-sisendi-adapter-ods-pvt">T03 Ajalooliste andmete sisendi adapter (ODS/PVT)</a></li><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t02-arvutusmootor-määrus-4-8">T02 Arvutusmootor (määrus § 4–§ 8)</a></li><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t04-jaotusarvutuse-käivitamine-ja-eelnõu-koostamine">T04 Jaotusarvutuse käivitamine ja eelnõu koostamine</a></li><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t05-pta-ülevaatus-parandus-ja-kinnitamine-ametnikuportaal">T05 PTA ülevaatus, parandus ja kinnitamine (Ametnikuportaal)</a></li><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t06-jaotusotsuse-väljastamine-avaldamine-ja-teavitamine">T06 Jaotusotsuse väljastamine, avaldamine ja teavitamine</a></li></ul></li><li class="active"><a href="E3-tasu-ja-loa-valjastamine.html">E3 Püügivõimaluse vastuvõtt, püügiõiguse tasu ja kalapüügiloa väljastamine</a><ul class="sub"><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t01-taotleja-otsus-jaotuse-kohta-nõustu-loobu">T01 Taotleja otsus jaotuse kohta (nõustu, loobu)</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t02-püügiõiguse-tasu-arvutus-ja-tasumäärade-seadistus">T02 Püügiõiguse tasu arvutus ja tasumäärade seadistus</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t03-maksekorraldus-ja-makse-staatuse-vastuvõtt">T03 Maksekorraldus ja makse staatuse vastuvõtt</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t04-kalapüügiloa-loomine-ja-väljastamine-lto">T04 Kalapüügiloa loomine ja väljastamine (LTO)</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t05-fishinglicencechanged-sündmus-ja-flux-lepe">T05 FishingLicenceChanged sündmus ja FLUX-lepe</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t06-tasu-tähtaja-järelvalve-ja-taotluse-tühistamine">T06 Tasu tähtaja järelvalve ja taotluse tühistamine</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t07-teavituste-kataloog-e-post-e1-e3-jaoks">T07 Teavituste kataloog (e-post) E1–E3 jaoks</a></li></ul></li><li class=""><a href="E4-kasutamata-puugivoimaluste-umberjagamine.html">E4 Kasutamata püügivõimaluste jagamine (TO-BE.03)</a><ul class="sub"><li><a href="E4-kasutamata-puugivoimaluste-umberjagamine.html#kl-e4-t01-ümberjaotuse-käivitus-ja-pakkumiste-arvutus">T01 Ümberjaotuse käivitus ja pakkumiste arvutus</a></li><li><a href="E4-kasutamata-puugivoimaluste-umberjagamine.html#kl-e4-t02-pakkumise-vastuvõtt-tasu-ja-loa-uus-versioon">T02 Pakkumise vastuvõtt, tasu ja loa uus versioon</a></li><li><a href="E4-kasutamata-puugivoimaluste-umberjagamine.html#kl-e4-t03-lõplik-jaotusotsus-ja-tulemuste-edastus-ods">T03 Lõplik jaotusotsus ja tulemuste edastus (ODS)</a></li></ul></li><li class=""><a href="E5-vaidlustamine.html">E5 Jagatud püügivõimaluste vaidlustamine (TO-BE.04)</a><ul class="sub"><li><a href="E5-vaidlustamine.html#kl-e5-t01-vaide-esitamine">T01 Vaide esitamine</a></li><li><a href="E5-vaidlustamine.html#kl-e5-t02-vaide-menetlemine-pta-s-ja-otsus">T02 Vaide menetlemine PTA-s ja otsus</a></li><li><a href="E5-vaidlustamine.html#kl-e5-t03-vaide-tulemuse-teavitus-ja-tähtaegade-taastamine">T03 Vaide tulemuse teavitus ja tähtaegade taastamine</a></li></ul></li><li class=""><a href="E6-stsenaarium-2-delta.html">E6 Alternatiivne stsenaarium: proaktiivne jaotus ja pakkumine (delta)</a><ul class="sub"><li><a href="E6-stsenaarium-2-delta.html#kl-e6-t01-proaktiivne-jaotus-jaotusüksuse-reeglistik-reserv-uutele-turuosalistele">T01 Proaktiivne jaotus (jaotusüksuse reeglistik, reserv uutele turuosalistele)</a></li><li><a href="E6-stsenaarium-2-delta.html#kl-e6-t02-pakkumine-ja-eeltäidetud-kinnitus-ilma-taotluseta">T02 Pakkumine ja eeltäidetud kinnitus (ilma taotluseta)</a></li><li><a href="E6-stsenaarium-2-delta.html#kl-e6-t03-taotlusvooru-väljalülitus-ja-üleminek">T03 Taotlusvooru väljalülitus ja üleminek</a></li></ul></li><li class=""><a href="E7-vesiviljelus.html">E7 Vesiviljeluse tegevusloa taotlemine ja väljastamine (TO-BE.05)</a><ul class="sub"><li><a href="E7-vesiviljelus.html#kl-e7-t01-vesiviljeluse-tegevusloa-taotlus-esitamine-eeltäide-taustakontroll">T01 Vesiviljeluse tegevusloa taotlus (esitamine, eeltäide, taustakontroll)</a></li><li><a href="E7-vesiviljelus.html#kl-e7-t02-kohapealse-kontrolli-planeerimine-ja-okas-2-integratsioon">T02 Kohapealse kontrolli planeerimine ja OKAS-2 integratsioon</a></li><li><a href="E7-vesiviljelus.html#kl-e7-t03-otsus-tegevusloa-väljastamine-või-keeldumine">T03 Otsus: tegevusloa väljastamine või keeldumine</a></li></ul></li><li class=""><a href="E8-harrastuspuuk.html">E8 Harrastuspüük: püügivõimaluste haldus, kalastuskaart, püügiõigus (TO-BE.06–08)</a><ul class="sub"><li><a href="E8-harrastuspuuk.html#kl-e8-t01-piirarvuga-kalastuskaardi-püügivõimaluste-lisamine-ja-avalikustamine-to-be-06">T01 Piirarvuga kalastuskaardi püügivõimaluste lisamine ja avalikustamine (TO-BE.06)</a></li><li><a href="E8-harrastuspuuk.html#kl-e8-t02-kalastuskaardi-soetamine-to-be-07">T02 Kalastuskaardi soetamine (TO-BE.07)</a></li><li><a href="E8-harrastuspuuk.html#kl-e8-t03-harrastuspüügiõiguse-soetamine-to-be-08">T03 Harrastuspüügiõiguse soetamine (TO-BE.08)</a></li></ul></li><li class=""><a href="E9-automaatotsusega-load.html">E9 Reeglipõhised load: eripüük, elektripüügivahendi tõend, asustamisluba (TO-BE.09–11)</a><ul class="sub"><li><a href="E9-automaatotsusega-load.html#kl-e9-t01-reeglipõhine-otsusemootor-ja-menetlus-ühine">T01 Reeglipõhine otsusemootor ja menetlus (ühine)</a></li><li><a href="E9-automaatotsusega-load.html#kl-e9-t02-eripüügiloa-taotlus-ja-reeglid-to-be-09">T02 Eripüügiloa taotlus ja reeglid (TO-BE.09)</a></li><li><a href="E9-automaatotsusega-load.html#kl-e9-t03-elektripüügivahendi-tõend-to-be-10">T03 Elektripüügivahendi tõend (TO-BE.10)</a></li><li><a href="E9-automaatotsusega-load.html#kl-e9-t04-asustamisloa-taotlus-ja-väljastamine-to-be-11">T04 Asustamisloa taotlus ja väljastamine (TO-BE.11)</a></li></ul></li></ul></nav>
+<main><article><h1 id="kl-e3-püügivõimaluse-vastuvõtt-püügiõiguse-tasu-ja-kalapüügiloa-väljastamine"><a class="anchor" href="#kl-e3-püügivõimaluse-vastuvõtt-püügiõiguse-tasu-ja-kalapüügiloa-väljastamine">#</a>KL-E3 Püügivõimaluse vastuvõtt, püügiõiguse tasu ja kalapüügiloa väljastamine</h1>
+<p>Loe enne: <a href="00-uldkontekst.html">ühine kontekst</a>, eriti A-05, A-06, A-09, A-21…A-24 ja P-04, P-05.</p>
+<h2 id="epic-39-u-kirjeldus"><a class="anchor" href="#epic-39-u-kirjeldus">#</a>Epic&#39;u kirjeldus</h2>
+<p><strong>Eesmärk.</strong> Taotleja tutvub talle jaotatud püügivõimalustega ning nõustub, loobub või vaidlustab. Nõustumise korral tasub ta püügiõiguse tasu, süsteem väljastab <strong>automaatselt</strong> kalapüügiloa ja edastab selle andmed FLUX-i. Kui taotleja loobub või ei tasu tähtajaks, vabaneb püügivõimalus ümberjagamiseks (<a href="E4-kasutamata-puugivoimaluste-umberjagamine.html">E4</a>).</p>
+<p><strong>Piir.</strong> Algab: taotlus <code>AWAITING_FEE_PAYMENT</code> (E2-T06). Lõpeb: taotlus <code>LICENCE_ISSUED</code> või <code>CANCELLED</code>.</p>
+<p><strong>Skeem (TO-BE.01 taotleja rada, teine pool):</strong> Taotleja tutvub jaotatud püügivõimalustega → kas nõustub tingimustega? JAH → alamprotsess „Kalapüügiloa tasu maksmine“ → makse on teostatud → taotluse staatus „Kinnitatud“ → kalapüügiloa loomine ja staatuse „Kehtiv“ määramine → FLUX sündmuse algatamine → EE FLUX Server koostab, rikastab ja valideerib sõnumi → P1000-09 sõnumi edastamine → „Püügiluba on väljastatud“. EI → kas lobub? JAH → taotleja tühistab taotluse → taotlus tühistatud. EI → kas soovib vaidlustada? JAH → TO-BE.04 (<a href="E5-vaidlustamine.html">E5</a>). EI → püügiõiguse tasu tähtaja möödumisel (pärast 31. detsembrit) → taotluse tühistamine → märge „Ei puuduta vaidlustamisel olevaid püügivõimalusi“ → 1. jaanuaril TO-BE.03.</p>
+<p><strong>Task&#39;ide järjekord:</strong> T02 → T01 → T03 → T04 → T05 → T06; T07 teavitused paralleelselt.</p>
+<hr>
+<h3 id="kl-e3-t01-taotleja-otsus-jaotuse-kohta-nõustu-loobu"><a class="anchor" href="#kl-e3-t01-taotleja-otsus-jaotuse-kohta-nõustu-loobu">#</a>KL-E3-T01 Taotleja otsus jaotuse kohta (nõustu, loobu)</h3>
+<p><strong>Eesmärk.</strong> Taotleja näeb talle eraldatud püügivõimalusi ja teeb otsuse. Nõustumisel määrab ta loa andmed.</p>
+<p><strong>Kontekst.</strong> Skeemi sammud „Tutvub jaotatud püügivõimalustega“, „Kas nõustub?“, „Kas lobub?“. PVT_UC-10 (püügivõimaluse vastuvõtmine), PVT_UC-11 (tagastamine), KL_UC-10 (kutseliste püügivõimaluste vaatamine), KL_UC-12/13. Määrus § 14 lg 1–2 (taotleja teavitab kehtivusest, püügivõimalustest, kaluritest/laevadest; osaline väljavõtt), § 12 lg 2–6, § 13. A-21.</p>
+<p><strong>Tee.</strong></p>
+<ol>
+<li><code>GET /fishing-licence-applications/{id}/offer</code> tagastab: otsuse number ja dokumendi link; iga <code>allocated_opportunity</code> rida koos <code>requested</code>, <code>allocated</code>, <code>changed_from_request</code>; arvutatud tasu (T02, kuvamiseks); tähtaeg P-05; vaide info.</li>
+<li><code>POST …/offer/accept</code> (nõuab <code>version</code>) body:<pre><code class="lang-json">{
+  &quot;lines&quot;: [{&quot;allocated_opportunity_id&quot;: &quot;…&quot;, &quot;drawn_quantity&quot;: 4.00}],
+  &quot;validity&quot;: {&quot;from&quot;: &quot;2027-01-10&quot;, &quot;to&quot;: &quot;2027-12-31&quot;},
+  &quot;vessels_or_fishermen&quot;: [{&quot;party_id&quot;: &quot;…&quot;, &quot;gear_count&quot;: 2}]
+}</code></pre>
+<ul>
+<li><code>drawn_quantity</code> võib olla väiksem kui <code>allocated_quantity</code> (osaline väljavõtt, § 14 lg 2). Peab olema <code>g</code> kordne ja <code>&gt; 0</code>; muidu rida jäetakse välja (<code>drawn=0</code> = ei võeta). Vähemalt üks rida peab olema <code>&gt; 0</code>.</li>
+<li><code>validity</code> kontrollitakse A-21 järgi (aasta <code>Y</code> sees, <code>from ≤ to</code>, <code>from ≥ väljastamise aja</code>).</li>
+<li><code>vessels_or_fishermen</code>: kalalaeva loa puhul laeva(d) taotluse laevast (üks laev = üks luba, § 12 lg 2). Kaluri loa puhul loale kantavad kalurid (mitu sama püügivahendiga kalurit ühele loale ainult siis, kui taotleja nii soovib, § 12 lg 2).</li>
+</ul>
+</li>
+<li><strong>Kontrollid enne nõustumist</strong> (kõik tagastatakse korraga):<ul>
+<li>Olek on <code>AWAITING_FEE_PAYMENT</code> ja tähtaeg P-05 ei ole möödas.</li>
+<li>§ 13 lg 3: kokku ühe laeva kohta ≤ 365 püügipäeva (<code>FISHING_DAY</code> ühikul). Ületamise korral <code>ERR_FISHING_DAYS_EXCEEDED</code>.</li>
+<li>§ 12 lg 4–5: sama veeala + sama püügivahendi + sama kaluri/laeva samaaegse kehtiva loa topelt ei tohi tekkida (arvestades ka juba väljastatud lube). Erand § 12 lg 4¹ (räime kastmõrd, lesta põhjanoot, mitme ≥ 10 m laevaga) on lubatud, kui <code>gear_type</code> ja <code>water_area</code> kuuluvad seadistatud erandiloendisse <code>licence_overlap_exceptions</code> (PTA_ADMIN haldab). Rikkumine: <code>ERR_OVERLAPPING_LICENCE</code>.</li>
+<li>§ 13 lg 4 (kastmõrra/põhjanoodaga laev ≥ 10 m): kaluri loale tuleb lisada laeva nimi, pardanumber ja registri sisenumber. Puudumisel <code>ERR_VESSEL_DETAILS_REQUIRED</code>.</li>
+</ul>
+</li>
+<li>Õnnestumisel: salvesta <code>licence_draft</code> (T04 sisend: <code>validity</code>, <code>lines</code>, <code>vessels_or_fishermen</code>) ja <code>accepted_at</code>, kutsu T03 maksekorralduse loomine. Taotluse olek <strong>ei muutu</strong> (jääb <code>AWAITING_FEE_PAYMENT</code> kuni makseni, skeem: „Kinnitatud“ pärast makset).</li>
+<li><code>POST …/offer/decline</code> (kinnitusdialoog UI-s, põhjus valikuline): <code>AWAITING_FEE_PAYMENT→CANCELLED</code> põhjusega <code>DECLINED_BY_APPLICANT</code>. Vabaneb <strong>kogu</strong> eraldatud kogus: salvesta <code>released_opportunity</code> (T06) ja märgi E4 jaoks.</li>
+<li><strong>Osaline väljavõtt:</strong> kui <code>drawn &lt; allocated</code>, vabaneb vahe kohe <code>released_opportunity</code> kirjena põhjusega <code>PARTIAL_DRAW</code> (jääb E4 kasutamata püügivõimaluste kogumisse; määrus § 14 lg 2 ei kirjuta, mis juhtub, A-17 analoogia).</li>
+<li>Taotleja saab oma <code>accept</code> otsust muuta kuni makse algatamiseni: <code>POST …/offer/accept</code> on idempotentne ja kirjutab <code>licence_draft</code>-i üle; pärast makse algatamist (T03 <code>payment.state ≠ NONE</code>) → <code>ERR_INVALID_STATE_TRANSITION</code>.</li>
+</ol>
+<p><strong>AC.</strong></p>
+<pre><code class="lang-gherkin">Scenario: Nõustumine täies mahus
+  Given taotlus AWAITING_FEE_PAYMENT, allocated=5 ühes reas
+  When  accept drawn=5, validity 2027-01-10…2027-12-31
+  Then  licence_draft on salvestatud, maksekorraldus on loodud, olek on AWAITING_FEE_PAYMENT
+
+Scenario: Osaline väljavõtt
+  Given allocated=5
+  When  accept drawn=3
+  Then  released_opportunity (kogus 2, PARTIAL_DRAW) on loodud ja tasu arvutatakse 3-le
+
+Scenario: Vale kuupäev
+  When  validity.to = 2028-01-05
+  Then  ERR_VALIDATION (kehtivus väljub aastast 2027)
+
+Scenario: 365 päeva
+  Given kolm FISHING_DAY rida kokku 400 päeva samale laevale
+  Then  ERR_FISHING_DAYS_EXCEEDED
+
+Scenario: Kattuv luba
+  Given sama laev, veeala ja püügivahend on juba kehtiva loa all
+  Then  ERR_OVERLAPPING_LICENCE
+
+Scenario: Erand 4¹
+  Given räimepüük kastmõrraga, kaks ≥10 m laeva, erandiloend lubab
+  Then  nõustumine õnnestub ja püügivahendi arv kantakse ainult esimesele loale
+
+Scenario: Loobumine
+  When  decline
+  Then  CANCELLED(DECLINED_BY_APPLICANT), released_opportunity kogu eraldatud kogusega, audit
+
+Scenario: Tähtaeg möödas
+  Given täna on pärast P-05
+  When  accept
+  Then  ERR_INVALID_STATE_TRANSITION (tühistamine toimub T06 töö kaudu)
+
+Scenario: Makse algatatud
+  Given makse on algatatud
+  When  accept uuesti
+  Then  ERR_INVALID_STATE_TRANSITION</code></pre>
+<p><strong>Eeldused.</strong> A-17, A-21. <strong>Sõltub:</strong> KL-E2-T06, KL-E3-T02.</p>
+<hr>
+<h3 id="kl-e3-t02-püügiõiguse-tasu-arvutus-ja-tasumäärade-seadistus"><a class="anchor" href="#kl-e3-t02-püügiõiguse-tasu-arvutus-ja-tasumäärade-seadistus">#</a>KL-E3-T02 Püügiõiguse tasu arvutus ja tasumäärade seadistus</h3>
+<p><strong>Eesmärk.</strong> Süsteem arvutab iga loa tasu seadistatud aastapõhiste tasumäärade järgi.</p>
+<p><strong>Kontekst.</strong> <span class="ext" title="Viide repo dokumendile, mida siin ei avaldata">Määrus „Kutselise kalapüügi võimalused ja kalapüügiõiguse tasumäärad 2027“</span> (lisad 1–5), määrus nr 164 § 14 lg 1 (tasu vähemalt KeTS § 37 lg 4 p 3 ulatuses), A-05, A-06, A-24.</p>
+<p><strong>Tee.</strong></p>
+<ol>
+<li>Seadistustabel <code>fishing_right_fee_rate</code>: <code>fishing_year</code>, <code>licence_kind</code>, <code>water_area_code</code>, <code>gear_type_code</code>, <code>species_code</code> (null = ei sõltu liigist), <code>unit</code>, <code>rate_eur</code> (decimal, 4 kohta), <code>source_annex</code> (nt „Lisa 1“), <code>valid_from</code>, <code>valid_to</code>. Iga aasta uus laadimine; vana jääb alles.</li>
+<li><strong>Laadimine:</strong> <code>POST /admin/fee-rates/import</code> (CSV, <code>PTA_ADMIN</code>). CSV veerud nagu tabelis. Valideeri: unikaalsus võtmel <code>(year, kind, area, gear, species, unit)</code>, <code>rate ≥ 0</code>. Tagasta vigade loetelu ridade numbritega. Lisaks mallfail <code>fixtures/fee_rates_2027.csv</code> mõne reaga testiks. <strong>Päris tasumäärad (lisad 1–5 PDF-id) kantakse CSV-sse inimese poolt, agent ei oma neid andmeid. Aasta rate puudub → <code>ERR_FEE_RATE_MISSING</code>.</strong></li>
+<li><strong>Arvutus:</strong> <code>FeeCalculator.calculate(licence_draft) → {lines[], total_cents, minimum_cents}</code>:<ul>
+<li>rea tasu = <code>drawn_quantity × rate</code> (decimal), ümardatud sendini <strong>half up</strong> reakaupa; kokku = Σ ridu.</li>
+<li><code>minimum_cents = round(P-09 × total_cents)</code>; tasuda tuleb vähemalt <code>minimum_cents</code>, kuid vaikimisi (P-09 = 1,0) kogu <code>total_cents</code>.</li>
+<li>Rea jaoks puudub tasumäär → <code>ERR_FEE_RATE_MISSING</code> (nimetab rea). <strong>Mitte</strong> 0 €.</li>
+</ul>
+</li>
+<li>API: <code>GET …/offer/fee</code> tagastab arvutuse (nõustumisel salvestatud snapshot, muutmatu pärast makse algatamist). Snapshotis on kasutatud tasumäärade ID-d, et summa oleks hiljem seletatav.</li>
+</ol>
+<p><strong>AC.</strong></p>
+<pre><code class="lang-gherkin">Scenario: Arvutus
+  Given rate=12.5000 €/tonn ja drawn=4.00 tonni
+  Then  rea tasu=5000 senti
+
+Scenario: Ümardus
+  Given rate=0.3333 €/tonn, drawn=1.00
+  Then  rea tasu=33 senti (half up)
+
+Scenario: Mitu rida
+  Given kaks rida 5000 ja 1234 senti
+  Then  total_cents=6234
+
+Scenario: Tasumäär puudub
+  Given tasumäära kirjet pole
+  Then  ERR_FEE_RATE_MISSING ja summa ei ole 0
+
+Scenario: Import
+  When  CSV sisaldab duplikaadivõtit
+  Then  ERR_VALIDATION koos ridade numbritega ja midagi ei laadita (kõik-või-mitte-midagi)
+
+Scenario: Snapshot
+  Given makse on algatatud
+  When  tasumäär muudetakse
+  Then  loa tasu ei muutu</code></pre>
+<p><strong>Eeldused.</strong> A-06, A-24. <strong>Sõltub:</strong> ei ole (arvutus on iseseisev).</p>
+<hr>
+<h3 id="kl-e3-t03-maksekorraldus-ja-makse-staatuse-vastuvõtt"><a class="anchor" href="#kl-e3-t03-maksekorraldus-ja-makse-staatuse-vastuvõtt">#</a>KL-E3-T03 Maksekorraldus ja makse staatuse vastuvõtt</h3>
+<p><strong>Eesmärk.</strong> Nõustunud taotleja saab tasuda, süsteem võtab vastu kinnituse ja kinnitab taotluse.</p>
+<p><strong>Kontekst.</strong> LTO_IF-13 (olemasolev kalaluba.ee makselahendus: MobiGW, SEB e-äri; „KALATUUM ei töötle makseid iseseisvalt“), skeem „Kalapüügiloa tasu maksmine“ alamprotsess, „Maksmine on teostatud“, „Taotluse staatuse muutmine ‚Kinnitatud‘ staatuseks“, TO-BE.01: „Edukalt laekunud makse on eelduseks loa väljastamisele“. A-24.</p>
+<p><strong>Tee.</strong></p>
+<ol>
+<li>Liides <code>PaymentGatewayPort</code>: <code>createOrder(reference, amount_cents, currency, return_url, notify_url, description) → {payment_id, redirect_url}</code> ja <code>getStatus(payment_id)</code>. Realiseeri adapter olemasoleva kalaluba.ee makselahenduse vastu. Konkreetne lepe on sellest repost väljas, seega: tee port + <strong>mock-adapter</strong> + HTTP-adapteri karkass seadistuse taga (<code>payment.adapter=mock|http</code>), mis kasutab konfigureeritavat baas-URL-i. Mock-adapter peab toetama stsenaariume <code>PAID</code>, <code>FAILED</code>, <code>CANCELLED_BY_USER</code>, <code>PENDING</code>, <code>TIMEOUT</code>.</li>
+<li><code>payment</code> olem: <code>id</code>, <code>application_id</code>, <code>licence_draft_id</code>, <code>amount_cents</code>, <code>currency</code>, <code>state</code> (<code>NONE</code>, <code>PENDING</code>, <code>PAID</code>, <code>FAILED</code>, <code>EXPIRED</code>), <code>external_ref</code>, <code>created_at</code>, <code>paid_at</code>, <code>raw_status_ref</code>.</li>
+<li><code>POST …/offer/pay</code> loob <code>payment</code> (state <code>PENDING</code>) ja tagastab <code>redirect_url</code>. Kui <code>PENDING</code> makse on juba olemas ja mitte aegunud, tagastatakse sama <code>redirect_url</code> (topelt ei looda).</li>
+<li><strong>Staatuse vastuvõtt:</strong> <code>POST /integrations/payments/notify</code> (autentimine allkirja või ühiskasutatava saladusega, seadistuses). Idempotentne <code>payment_id</code>+<code>state</code> järgi. Lisaks tagasipöördumisel <code>GET …/offer/pay/return</code> kutsutakse <code>getStatus</code>, kuna teade võib hilineda. Pärast kordusi (kuni 15 min iga 1 min) kui jääb <code>PENDING</code>, jätkub taustatöö kuni P-05.</li>
+<li><code>PAID</code>: kontrolli, et summa ≥ <code>minimum_cents</code> ja = <code>total_cents</code> (A-24). Kui summa on vähem kui <code>minimum_cents</code> → makse märgitakse <code>PAID</code> aga taotlus jääb <code>AWAITING_FEE_PAYMENT</code>, PTA ülesanne „Osaline makse“ (A-08), loa <strong>ei väljastata</strong>. Kui summa vastab: <code>AWAITING_FEE_PAYMENT→CONFIRMED</code>, avalda <code>FeePaid</code> ja käivita T04.</li>
+<li><code>FAILED</code>/<code>CANCELLED_BY_USER</code>: <code>payment.state=FAILED</code>, taotlus jääb <code>AWAITING_FEE_PAYMENT</code>, taotleja saab uuesti proovida (uus <code>payment</code>).</li>
+<li>Kõik maksesündmused on auditis (<code>AL_UC-04</code>), ilma kaardi- või pangakonto andmeteta.</li>
+<li>Maksekorralduse viide on taotluse number (A-24). Maksetähtaeg ei ületa P-05.</li>
+</ol>
+<p><strong>AC.</strong></p>
+<pre><code class="lang-gherkin">Scenario: Edukas makse
+  Given licence_draft, total=6234 senti
+  When  mock saadab PAID 6234
+  Then  payment PAID, taotlus CONFIRMED, FeePaid avaldatud ja T04 käivitub
+
+Scenario: Topelt-teade
+  When  sama PAID-teade tuleb kaks korda
+  Then  teine on no-op, CONFIRMED üks kord
+
+Scenario: Ebaõnnestunud makse
+  When  mock saadab FAILED
+  Then  taotlus jääb AWAITING_FEE_PAYMENT ja uus katse on võimalik
+
+Scenario: Hilinenud teade
+  Given kasutaja naaseb return_url kaudu ja teadet pole
+  Then  getStatus kutsutakse ja PAID kinnitatakse
+
+Scenario: Vale summa
+  Given PAID 1000 senti, nõutud 6234
+  Then  taotlus jääb AWAITING_FEE_PAYMENT ja PTA ülesanne on loodud, luba ei väljastata
+
+Scenario: Allkirjata teade
+  When  notify tuleb ilma kehtiva allkirjata
+  Then  401 ja midagi ei muutu
+
+Scenario: Topeltklõps
+  When  offer/pay kutsutakse kaks korda
+  Then  sama redirect_url ja üks payment</code></pre>
+<p><strong>Eeldused.</strong> A-24, A-12. <strong>Sõltub:</strong> KL-E3-T01, T02.</p>
+<hr>
+<h3 id="kl-e3-t04-kalapüügiloa-loomine-ja-väljastamine-lto"><a class="anchor" href="#kl-e3-t04-kalapüügiloa-loomine-ja-väljastamine-lto">#</a>KL-E3-T04 Kalapüügiloa loomine ja väljastamine (LTO)</h3>
+<p><strong>Eesmärk.</strong> Pärast makset loob KALATUUM automaatselt kalapüügiloa ilma ametniku sekkumiseta.</p>
+<p><strong>Kontekst.</strong> Määrus § 12–§ 14, LTO_UC-01 (loomine), LTO_UC-02 (väljastamine pärast positiivset otsust), LTO_UC-12/13/14 (sidumine osapoolega, püügivõimalusega, menetlusega), LTO_UC-15 (dokumendid), LTO_UC-16 (väliste tingimuste kontroll), LTO_UC-11, LTO_DR-05/06/07/17/19, A-21…A-23. Skeem: „Kalapüügiloa loomine ja staatuse ‚Kehtiv‘ määramine“. TO-BE.01: „loa väljastamine toimub automaatselt pärast tingimuste täitmist“.</p>
+<p><strong>Tee.</strong></p>
+<ol>
+<li>Käivitub sündmusest <code>FeePaid</code>.</li>
+<li><strong>Kuupäeva reegel (§ 14 lg 1):</strong> kui <code>now &lt; decision_confirmed_at + P-04 päeva</code>, jääb luba ootele ja taustatöö proovib uuesti, kui lubatud aeg on käes (<code>scheduled_issue_at</code>). Olek jääb <code>CONFIRMED</code>.</li>
+<li><strong>Viimane kontroll</strong> (<code>LTO_UC-16</code>): käivita uuesti CHK-01…CHK-05 (E1-T04) ja § 12 lg 4–5 kattuvuse kontroll (T01). Kui ebaõnnestub (FAIL): <strong>ei väljastata</strong>, PTA ülesanne „Loa väljastamine blokeeritud“ põhjusega (A-08), olek jääb <code>CONFIRMED</code>, taotleja saab teavituse. (Makse on tehtud, seega tagastus on käsitsi menetlus.) <code>UNAVAILABLE</code>: kordus A-10, siis PTA ülesanne.</li>
+<li><strong>Loa loomine</strong> (üks tehing): LTO <code>licence</code> + <code>licence_version</code> v1:<ul>
+<li><code>licence_number</code> (A-22), <code>kind</code> (<code>VESSEL_LICENCE</code>/<code>FISHERMAN_LICENCE</code>), <code>holder_party_id</code>, <code>fishing_year</code>, <code>valid_from</code>, <code>valid_to</code> (T01), <code>status=ACTIVE</code>, <code>issued_at</code>, <code>issuer=PTA</code>.</li>
+<li><code>licence_line</code> (1…n): <code>catch_opportunity_id</code>, <code>species</code>, <code>water_area</code>, <code>gear_type</code>, <code>quantity</code> (= <code>drawn_quantity</code>), <code>unit</code>, <code>gear_count</code>, <code>conditions</code> (tekst ja koodid, § 13 lg 2 viitab KPS § 42 lg 7 tingimustele: püügivahendi liik, arv, veeala, lubatud saak; võetakse <code>catch_opportunity</code> atribuutidest ja klassifikaatoritest).</li>
+<li><code>licence_subject</code>: laev (nimi, pardanumber, registri sisenumber, LAEVIS ID) või kalurid; §13 lg 4 lisaväljad; kui veeala on väljaspool EV jurisdiktsiooni (§ 13 lg 5): <code>fishing_place</code>, <code>right_acquisition_basis</code>.</li>
+<li>Seosed: <code>application_id</code> (LTO_UC-14), <code>allocation_decision_id</code>, <code>catch_opportunity_id</code>-d (LTO_UC-13), <code>payment_id</code>.</li>
+</ul>
+</li>
+<li><strong>Seos püügivõimalusega (PVT_UC-14):</strong> märgi <code>allocated_opportunity</code>-d kasutatuks (<code>status=USED</code> koguses <code>drawn</code>) ja lisa PVT ajalukku „õiguspäraselt omandatud“ kirje (see on järgmiste aastate ajaloo sisend, E2-T03).</li>
+<li><strong>Dokument (LTO_UC-15):</strong> genereeri PDF (A-23), salvesta DF-i, seo loaga. Väljaspool EV jurisdiktsiooni asuva veeala korral lisaks ingliskeelne tõlge (§ 14 lg 4). Dokumendi vorm on <code>licence_form_template</code> (versioonitud). <strong>Väljaloetelu, kui lisade vormi ei ole ligipääsetav:</strong> loa number; väljaandja; omanik (nimi, registrikood/isikukoodi maskeeritud kuju ainult nime + registrikood juriidilisel isikul); laeva või kaluri andmed; kehtivus alates/kuni; tabel püügivõimalustest (liik, veeala, vahend, kogus, ühik, püügivahendite arv); tingimused; väljastamise kuupäev; elektrooniline tempel ja kontrollkood.</li>
+<li>Taotluse olek <code>CONFIRMED→LICENCE_ISSUED</code>. Loa avaldamine kalaluba.ee-s (LTO_IF-10).</li>
+<li>Avalda sündmus <code>FishingLicenceChanged</code> (T05) ja LTO_IF-12 audit.</li>
+<li>Saada teavitus taotlejale (T07): luba on väljastatud, dokument manuses/lingina.</li>
+<li><strong>Idempotentsus:</strong> <code>application_id</code> järgi üks luba. Korduv sündmus ei loo teist.</li>
+<li><strong>Ametniku sekkumine ei ole nõutud</strong> õnnestunud teel (automaatne väljastamine, § 14 lg 3 ja TO-BE.01 õigusmuudatus „lubada süsteemipõhine automaatne loa väljastamine“). Õigusliku aluse kinnitus on lahtine, aga tehniliselt käitub süsteem nii, et automaatset väljastamist saab seadistusega välja lülitada (<code>licence.auto_issue=true</code> vaikimisi). Kui <code>false</code>, loob süsteem PTA ülesande „Kinnita loa väljastamine“ ja luba väljastatakse alles ametniku kinnitusel.</li>
+</ol>
+<p><strong>AC.</strong></p>
+<pre><code class="lang-gherkin">Scenario: Automaatne väljastamine
+  Given FeePaid, jaotusotsus kinnitati 5 päeva tagasi
+  When  T04 jookseb
+  Then  luba KPL-2027-000001 on ACTIVE, versioon 1, PDF DF-s, taotlus LICENCE_ISSUED, FishingLicenceChanged avaldatud
+
+Scenario: Kolme päeva reegel
+  Given jaotusotsus kinnitati täna ja makse laekus
+  Then  luba jääb ootele, olek CONFIRMED, scheduled_issue_at = otsus + 3 päeva
+  When  tuleb scheduled_issue_at
+  Then  luba väljastatakse
+
+Scenario: Viimane kontroll ebaõnnestub
+  Given CHK-04 on nüüd FAIL
+  Then  luba ei väljastata, PTA ülesanne on loodud ja taotleja on teavitatud
+
+Scenario: Väljaspool EV jurisdiktsiooni
+  Given veeala on NAFO
+  Then  PDF-il on ingliskeelne tõlge ja luba sisaldab fishing_place ja right_acquisition_basis
+
+Scenario: Kaluri luba kastmõrraga ≥10 m laeval
+  Then  luba sisaldab laeva nime, pardanumbrit ja registri sisenumbrit
+
+Scenario: Idempotentsus
+  When  FeePaid tuleb kaks korda
+  Then  luba on üks
+
+Scenario: Osaline väljavõtt
+  Given drawn=3, allocated=5
+  Then  litsentsi rea kogus on 3 ja PVT-s on 3 omandatud, 2 vabastatud
+
+Scenario: Automaatväljastus välja lülitatud
+  Given licence.auto_issue=false
+  Then  luba jääb PTA kinnituse ootele ja olek jääb CONFIRMED
+
+Scenario: Audit
+  Then  luua auditisündmus iga sammu kohta (loomine, sidumine, dokument, olekumuutus)</code></pre>
+<p><strong>Eeldused.</strong> A-09, A-12, A-21, A-22, A-23. <strong>Sõltub:</strong> KL-E3-T03, KL-E1-T04, LTO teenuse karkass (LTO_DR-01; kui puudub, loo minimaalne selle Task&#39;i raames).</p>
+<hr>
+<h3 id="kl-e3-t05-fishinglicencechanged-sündmus-ja-flux-lepe"><a class="anchor" href="#kl-e3-t05-fishinglicencechanged-sündmus-ja-flux-lepe">#</a>KL-E3-T05 FishingLicenceChanged sündmus ja FLUX-lepe</h3>
+<p><strong>Eesmärk.</strong> Väljastatud loa kohta jõuab teade EE FLUX Serverini nii, et sündmusi ei kaota ega dubleeri.</p>
+<p><strong>Kontekst.</strong> Skeem: „FLUX sündmuse algatamine“ → „FLUX sõnumi koostamine, rikastamine ja valideerimine“ → „FLUX P1000-09 sõnumi edastamine“. <span class="ext" title="Viide repo dokumendile, mida siin ei avaldata">EE FLUX Server</span> (FLX.UC.02: kalapüügilubade vahetamine, P1000-09 Fishing Licence Authorisation and Permit). LTO_IF-12. A-09.</p>
+<p><strong>Tee.</strong></p>
+<ol>
+<li>Sündmuse skeem <code>FishingLicenceChanged</code> v1 (JSON Schema failina repos <code>contracts/events/</code>):<pre><code class="lang-json">{
+  &quot;event_id&quot;: &quot;uuid&quot;, &quot;event_type&quot;: &quot;FishingLicenceChanged&quot;, &quot;version&quot;: 1,
+  &quot;occurred_at&quot;: &quot;2027-01-10T10:15:00Z&quot;,
+  &quot;change_type&quot;: &quot;ISSUED | AMENDED | SUSPENDED | REVOKED | EXPIRED&quot;,
+  &quot;licence&quot;: {&quot;licence_id&quot;: &quot;…&quot;, &quot;licence_number&quot;: &quot;KPL-2027-000001&quot;, &quot;licence_version&quot;: 1,
+    &quot;kind&quot;: &quot;VESSEL_LICENCE&quot;, &quot;status&quot;: &quot;ACTIVE&quot;, &quot;valid_from&quot;: &quot;2027-01-10&quot;, &quot;valid_to&quot;: &quot;2027-12-31&quot;,
+    &quot;holder&quot;: {&quot;party_id&quot;: &quot;…&quot;, &quot;registry_code&quot;: &quot;…&quot;},
+    &quot;vessel&quot;: {&quot;laevis_id&quot;: &quot;…&quot;, &quot;name&quot;: &quot;…&quot;, &quot;cfr&quot;: &quot;…&quot;}, &quot;fishermen&quot;: [],
+    &quot;lines&quot;: [{&quot;species_code&quot;: &quot;HER&quot;, &quot;water_area_code&quot;: &quot;…&quot;, &quot;gear_type_code&quot;: &quot;…&quot;, &quot;quantity&quot;: &quot;4.00&quot;, &quot;unit&quot;: &quot;TONNE&quot;}]}
+}</code></pre>
+(<code>vessel.cfr</code> ja <code>holder.registry_code</code> võetakse allikatest; väljad, mida EE FLUX Server vajab, selgitab FLUX-i töö; väljade lisamine on tagasiühilduv.) Selles Task&#39;is realiseeritakse <strong>ainult <code>ISSUED</code></strong>; teised <code>change_type</code> väärtused on skeemis, aga neid saadetakse teistest töövoogudest.</li>
+<li><strong>Outbox:</strong> sündmus kirjutatakse samas tehingus loa loomisega outbox-tabelisse; eraldi väljastaja saadab (at-least-once). <code>event_id</code> on stabiilne ja tarbija deduplitseerib.</li>
+<li><strong>Kordused:</strong> eksponentsiaalne kuni 24 h, siis <code>DEAD_LETTER</code> + PTA ülesanne „FLUX sündmus ei jõua kohale“ ja administraatori hoiatus. Taastus käsitsi <code>POST /admin/outbox/{id}/retry</code>.</li>
+<li><strong>Staatuse tagasiside:</strong> EE FLUX Server saadab tagasi <code>FluxDispatchResult {event_id, result: ACCEPTED|REJECTED, reason}</code>. Salvesta loale <code>flux_dispatch_status</code> (<code>PENDING|ACCEPTED|REJECTED</code>). <code>REJECTED</code> loob PTA ülesande, <strong>ei muuda loa kehtivust</strong>.</li>
+<li><strong>Lepingutest:</strong> tarbija-lepingu (consumer-driven) test, mis valideerib sündmust JSON-skeemi vastu, ning mock-tarbija, mis kvittib <code>ACCEPTED</code>.</li>
+<li><strong>Ulatusest väljas:</strong> P1000-09 sõnumi koostamine, FLUX TL edastus.</li>
+</ol>
+<p><strong>AC.</strong></p>
+<pre><code class="lang-gherkin">Scenario: Sündmus loa väljastamisel
+  When  luba KPL-2027-000001 väljastatakse
+  Then  outbox'is on sündmus ISSUED, mis valideerub skeemi vastu
+
+Scenario: Atomaarsus
+  Given tehing loa loomisel rullub tagasi
+  Then  outbox'is ei ole sündmust
+
+Scenario: Edastamine ja deduplitseerimine
+  When  väljastaja saadab sama event_id kaks korda
+  Then  mock-tarbija töötleb ühe korra
+
+Scenario: Tarbija maas
+  Given tarbija ei vasta 24 h
+  Then  sündmus on DEAD_LETTER, PTA ülesanne on loodud
+
+Scenario: Tagasiside
+  When  tuleb FluxDispatchResult REJECTED
+  Then  flux_dispatch_status=REJECTED, PTA ülesanne, luba jääb ACTIVE</code></pre>
+<p><strong>Eeldused.</strong> A-09. <strong>Sõltub:</strong> KL-E3-T04.</p>
+<hr>
+<h3 id="kl-e3-t06-tasu-tähtaja-järelvalve-ja-taotluse-tühistamine"><a class="anchor" href="#kl-e3-t06-tasu-tähtaja-järelvalve-ja-taotluse-tühistamine">#</a>KL-E3-T06 Tasu tähtaja järelvalve ja taotluse tühistamine</h3>
+<p><strong>Eesmärk.</strong> Kui taotleja ei tasu tähtajaks ja ei ole loobunud ega vaidlustanud, tühistab süsteem taotluse ning vabastab püügivõimalused.</p>
+<p><strong>Kontekst.</strong> Skeemi „Püügiõiguse tasu tähtaja möödumisel“ → „Taotluse tühistamine“ → märge „Ei puuduta vaidlustamisel olevaid püügivõimalusi“ → „1. jaanuaril“ → TO-BE.03. A-07, P-05, P-06.</p>
+<p><strong>Tee.</strong></p>
+<ol>
+<li><strong>Ajastatud töö</strong> (<code>SYSTEM</code>) iga päev 00:05: leia kõik taotlused, mille olek on <code>AWAITING_FEE_PAYMENT</code>, <code>now &gt; tähtaeg 23:59:59</code> ja mille <code>payment.state ∉ {PAID}</code>. <strong>Tähtaeg</strong> on <code>application.fee_deadline_override</code>, kui see on täidetud (seab <a href="E5-vaidlustamine.html">E5-T03</a>), muidu P-05. <strong>Välista</strong> olekud <code>ALLOCATION_DISPUTED</code> ning taotlused, millel on aktiivne vaie (E5), seega neid ei puututa („Ei puuduta vaidlustamisel olevaid püügivõimalusi“). Samuti ei puutu <code>PAID</code>, mille loa väljastamine ootab (3 päeva reegel või PTA blokk).</li>
+<li>Iga leitud taotlus: <code>AWAITING_FEE_PAYMENT→CANCELLED</code> põhjusega <code>FEE_NOT_PAID</code>. Loo <code>released_opportunity</code> kirjed kogu <code>allocated</code> (või kui oli <code>accept</code>, siis <code>drawn</code>; kui oli osaline, siis lisaks vabastatu) koguses. Teavita taotlejat (T07).</li>
+<li><strong><code>released_opportunity</code>:</strong> <code>id</code>, <code>fishing_year</code>, <code>catch_opportunity_id</code>, <code>quantity</code>, <code>source_application_id</code>, <code>reason</code> (<code>DECLINED_BY_APPLICANT</code>|<code>FEE_NOT_PAID</code>|<code>PARTIAL_DRAW</code>|<code>OFFICER</code>|<code>UNALLOCATED_REMAINDER</code>), <code>released_at</code>, <code>status</code> (<code>AVAILABLE</code>|<code>REOFFERED</code>|<code>FINAL_REMAINDER</code>), <code>dispute_hold</code> (bool, E5). Sama kirje on E4 sisend (E4-T01 loeb neid). Kirjed, mis tekkisid E2 jääkidest (<code>UNALLOCATED_REMAINDER</code>), kirjutab samasse tabelisse <a href="E2-puugivoimaluste-arvutus-ja-jaotus.html">KL-E2-T06 punkt 9</a>.</li>
+<li><ol>
+<li>jaanuaril (P-06) käivitab E4 oma töö, mitte see Task. See Task ainult tagab, et vabanenud kogused on <code>released_opportunity</code>-s.</li>
+</ol>
+</li>
+<li>Töö on idempotentne ja taastatav (kui päev jäi vahele, järgmine kord tühistab).</li>
+<li><strong>Hoiatused:</strong> 7 ja 1 päeva enne P-05 saadetakse meeldetuletus kõigile <code>AWAITING_FEE_PAYMENT</code> taotlejatele (T07).</li>
+</ol>
+<p><strong>AC.</strong></p>
+<pre><code class="lang-gherkin">Scenario: Tähtaeg möödub
+  Given taotlus AWAITING_FEE_PAYMENT, makset pole, täna on 2027-01-01
+  When  töö jookseb
+  Then  taotlus CANCELLED(FEE_NOT_PAID) ja released_opportunity on loodud kogu eraldatud koguses
+
+Scenario: Vaidlustatud ei puututa
+  Given taotlus ALLOCATION_DISPUTED
+  Then  töö jätab selle puutumata
+
+Scenario: Makstud ootel luba
+  Given payment PAID ja luba ootab kolme päeva reegli täitumist
+  Then  taotlust ei tühistata
+
+Scenario: Vahelejäänud päev
+  Given töö ei jooksnud 2027-01-01
+  When  jookseb 2027-01-02
+  Then  tühistamine toimub
+
+Scenario: Meeldetuletus
+  Given AWAITING_FEE_PAYMENT ja P-05=2026-12-31
+  Then  e-kirjad 2026-12-24 ja 2026-12-30
+
+Scenario: Idempotentsus
+  When  töö jookseb kaks korda samal päeval
+  Then  released_opportunity kirjeid ei teki topelt</code></pre>
+<p><strong>Eeldused.</strong> A-07, A-12. <strong>Sõltub:</strong> KL-E3-T01, T03.</p>
+<hr>
+<h3 id="kl-e3-t07-teavituste-kataloog-e-post-e1-e3-jaoks"><a class="anchor" href="#kl-e3-t07-teavituste-kataloog-e-post-e1-e3-jaoks">#</a>KL-E3-T07 Teavituste kataloog (e-post) E1–E3 jaoks</h3>
+<p><strong>Eesmärk.</strong> Taotleja saab kõik protsessi olulised teavitused kataloogi järgi, ühe mallisüsteemiga.</p>
+<p><strong>Kontekst.</strong> Skeemi „Vastava teavituse edastamine“, TO-BE.01 probleemikoht „Aeganõudev ja mitmeetapiline suhtlus“ (süsteemne teavitamine). A-13.</p>
+<p><strong>Kataloog:</strong> (võti — saatja sündmus — sisu põhipunktid)</p>
+<div class="tw"><table><thead><tr><th>Võti</th><th>Sündmus</th><th>Sisu</th></tr></thead><tbody><tr><td><code>application.submitted</code></td><td>E1-T05</td><td>Taotlus nr … on esitatud, link</td></tr><tr><td><code>application.excluded</code></td><td>E2-T06</td><td>Taotlus ei osale jaotuses, põhjus, vaide info</td></tr><tr><td><code>allocation.published</code></td><td>E2-T06</td><td>Otsuse nr, tulemus, link, tähtaeg P-05, vaide info</td></tr><tr><td><code>fee.reminder_7d</code> / <code>fee.reminder_1d</code></td><td>E3-T06</td><td>Tasumata tasu, summa, tähtaeg</td></tr><tr><td><code>fee.paid</code></td><td>E3-T03</td><td>Makse kinnitatud</td></tr><tr><td><code>licence.issued</code></td><td>E3-T04</td><td>Luba nr, kehtivus, dokument</td></tr><tr><td><code>licence.blocked</code></td><td>E3-T04</td><td>Loa väljastamine viibib, PTA võtab ühendust</td></tr><tr><td><code>application.cancelled</code></td><td>E3-T01/T06</td><td>Põhjus (loobumine / tasumata)</td></tr><tr><td><code>fee.partial</code></td><td>E3-T03</td><td>Makstud summa on liiga väike</td></tr></tbody></table></div>
+<p><strong>Tee.</strong> (1) <code>NotificationService.send(key, recipient, params)</code> ja mallid failidena (i18n <code>et</code>, valmis kohad <code>en</code>), muutujatega, HTML + plain text. (2) Adressaat on <code>contact_email</code>; kui puudub, osapoole peamine e-post KOT-ist; kui ka seda ei ole, <code>NOTIFICATION_NO_ADDRESS</code> auditisündmus ja PTA ülesanne. (3) Kõik teavitused salvestatakse (<code>notification_log</code>: võti, adressaat, saadetud, tulemus), sisu isikuandmeteta peale vajaliku. (4) Kordus 3 korda 1 h vahega. (5) Kõik teavitused sisaldavad taotluse numbrit ja linki, kuid mitte kunagi isikukoodi, maksekaardi ega karistusandmeid. (6) Taotleja ei saa teavitusi välja lülitada, mis on seadusest tulenevad (otsused, vaided).</p>
+<p><strong>AC.</strong></p>
+<pre><code class="lang-gherkin">Scenario: Malli renderdamine
+  When  send(&quot;licence.issued&quot;, …)
+  Then  e-kiri sisaldab loa numbrit, kehtivust ja linki ning ei sisalda isikukoodi
+
+Scenario: Aadress puudub
+  Given contact_email on tühi ja KOT-is e-posti pole
+  Then  kirjutatakse NOTIFICATION_NO_ADDRESS ja PTA ülesanne
+
+Scenario: Tõrge
+  Given SMTP ei vasta
+  Then  kuni 3 korduskatset ja logi
+
+Scenario: Kõik võtmed on kaetud
+  Then  kataloogi igal võtmel on et-mall (automaattest kontrollib)</code></pre>
+<p><strong>Eeldused.</strong> A-13. <strong>Sõltub:</strong> ei ole (teised Task&#39;id tarbivad seda).</p>
+</article>
+<div class="pn"><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html">← E2 Püügivõimaluste arvutamine ja jaotamine</a><a href="E4-kasutamata-puugivoimaluste-umberjagamine.html">E4 Kasutamata püügivõimaluste jagamine (TO-BE.03) →</a></div>
+<footer>Ettepanek, mitte kinnitatud. Allikas: wiki leht 321262813.</footer></main>
+<aside class="toc"><b>Sellel lehel</b><ul><li><a href="#epic-39-u-kirjeldus">Epic&amp;#39;u kirjeldus</a></li></ul></aside></div>
+<script>(function(){
+var r=document.documentElement;try{var t=localStorage.getItem('th');if(t)r.dataset.theme=t}catch(e){}
+document.getElementById('theme').onclick=function(){var d=r.dataset.theme||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');d=d==='dark'?'light':'dark';r.dataset.theme=d;try{localStorage.setItem('th',d)}catch(e){}};
+document.getElementById('menu').onclick=function(){document.body.classList.toggle('nav')};
+var q=document.getElementById('q'),box=document.getElementById('results'),idx=null;
+function load(){return idx?Promise.resolve(idx):fetch('search.json').then(function(x){return x.json()}).then(function(j){return idx=j})}
+function esc(s){return s.replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})}
+q.addEventListener('input',function(){var v=q.value.trim().toLowerCase();if(v.length<2){box.hidden=true;return}
+load().then(function(d){var out=[];d.forEach(function(p){var x=p.x.toLowerCase(),i=x.indexOf(v);if(i<0&&p.t.toLowerCase().indexOf(v)<0)return;var c=0,j=i;while(j>=0){c++;j=x.indexOf(v,j+1)}
+var s=i>=0?esc(p.x.slice(Math.max(0,i-50),i+90)).replace(new RegExp(esc(v).replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'ig'),function(m){return'<mark>'+m+'</mark>'}):'';out.push({p:p,c:c,s:s})});
+out.sort(function(a,b){return b.c-a.c});box.innerHTML=out.length?out.map(function(o){return'<a href="'+o.p.u+'"><b>'+esc(o.p.t)+'</b> <small>'+o.c+' vastet</small><small>…'+o.s+'…</small></a>'}).join(''):'<a>Tulemusi pole</a>';box.hidden=false})});
+document.addEventListener('keydown',function(e){if(e.key==='/'&&document.activeElement!==q){e.preventDefault();q.focus()}if(e.key==='Escape'){box.hidden=true;q.blur()}});
+document.addEventListener('click',function(e){if(!box.contains(e.target)&&e.target!==q)box.hidden=true});
+var links=[].slice.call(document.querySelectorAll('.active .sub a'));
+if(links.length&&'IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){links.forEach(function(l){l.classList.toggle('cur',l.hash==='#'+en.target.id)})}})},{rootMargin:'-60px 0px -75% 0px'});
+links.forEach(function(l){var h=document.getElementById(l.hash.slice(1));if(h)io.observe(h)})}
+})();
+</script></body></html>

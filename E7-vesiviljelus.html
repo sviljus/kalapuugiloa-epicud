@@ -1,0 +1,210 @@
+<!doctype html><html lang="et"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KL-E7 Vesiviljeluse tegevusloa taotlemine ja väljastamine (TO-BE.05) · Kalapüügiloa Epic'ud</title><meta name="robots" content="noindex">
+<style>:root{--bg:#fff;--fg:#1c2430;--mut:#5b6675;--bd:#e2e6ec;--ac:#0b6bcb;--soft:#f4f7fb;--code:#f1f4f8}
+:root[data-theme=dark]{--bg:#10151c;--fg:#e4e9f0;--mut:#9aa6b6;--bd:#27303c;--ac:#6cb2ff;--soft:#171e28;--code:#1b2330}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#10151c;--fg:#e4e9f0;--mut:#9aa6b6;--bd:#27303c;--ac:#6cb2ff;--soft:#171e28;--code:#1b2330}}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+a{color:var(--ac)}
+.top{position:sticky;top:0;z-index:20;display:flex;gap:12px;align-items:center;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--bd)}
+.brand{font-weight:700;color:var(--fg);text-decoration:none}.brand small{font-weight:400;color:var(--mut);margin-left:6px}
+#q{margin-left:auto;width:min(320px,40vw);padding:7px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--soft);color:var(--fg)}
+button{background:var(--soft);color:var(--fg);border:1px solid var(--bd);border-radius:8px;padding:6px 10px;cursor:pointer}
+#menu{display:none}
+.shell{display:grid;grid-template-columns:270px minmax(0,1fr) 220px;max-width:1500px;margin:0 auto}
+.side{position:sticky;top:57px;align-self:start;height:calc(100vh - 57px);overflow:auto;padding:16px;border-right:1px solid var(--bd);font-size:14px}
+.side ul{list-style:none;margin:0;padding:0}.side>ul>li{margin-bottom:6px}.side>ul>li>a{font-weight:600;color:var(--fg);text-decoration:none;display:block;padding:4px 8px;border-radius:6px}
+.side li.active>a{background:var(--soft);color:var(--ac)}
+.sub{display:none;margin:2px 0 6px 10px!important;border-left:2px solid var(--bd)}.active .sub{display:block}
+.sub a{display:block;padding:2px 10px;color:var(--mut);text-decoration:none;font-size:13px}.sub a:hover,.sub a.cur{color:var(--ac)}
+main{padding:24px 40px 60px;min-width:0}article{max-width:860px}
+.toc{position:sticky;top:57px;align-self:start;padding:24px 16px;font-size:13px;max-height:calc(100vh - 57px);overflow:auto}
+.toc ul{list-style:none;padding:0}.toc a{display:block;color:var(--mut);text-decoration:none;padding:2px 0}.toc a:hover{color:var(--ac)}
+h1{font-size:2rem;line-height:1.2}h2{margin-top:2.4em;padding-top:.6em;border-top:1px solid var(--bd)}
+h3{margin-top:2.2em;padding:8px 12px;background:var(--soft);border-left:4px solid var(--ac);border-radius:4px}
+h4{margin-top:1.6em}
+.anchor{opacity:0;margin-left:-1.1em;padding-right:.3em;text-decoration:none}h2:hover .anchor,h3:hover .anchor,h4:hover .anchor{opacity:.6}
+code{background:var(--code);padding:1px 5px;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:14px;border-radius:8px;overflow:auto;border:1px solid var(--bd)}pre code{background:none;padding:0}
+.tw{overflow:auto;margin:1em 0}table{border-collapse:collapse;font-size:14px;min-width:100%}
+th,td{border:1px solid var(--bd);padding:6px 10px;vertical-align:top;text-align:left}th{background:var(--soft)}
+blockquote{margin:1em 0;padding:4px 16px;border-left:4px solid var(--bd);color:var(--mut)}
+.ext{border-bottom:1px dotted var(--mut);cursor:help}
+.hero{margin-bottom:2em}.lead{font-size:1.15rem;color:var(--mut)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin:20px 0}
+.card{display:flex;flex-direction:column;gap:6px;padding:16px;border:1px solid var(--bd);border-radius:12px;background:var(--soft);text-decoration:none;color:var(--fg);transition:.15s}
+.card:hover{border-color:var(--ac);transform:translateY(-2px)}.card .k{color:var(--ac);font-weight:700;font-size:13px}.card .m{color:var(--mut);font-size:13px}
+.card.valikuline{border-style:dashed}.card.blokeeritud{opacity:.7;border-style:dashed}
+.btn{display:inline-block;padding:10px 18px;background:var(--ac);color:var(--bg);border-radius:8px;text-decoration:none;font-weight:600}
+.pn{display:flex;justify-content:space-between;margin-top:3em;padding-top:1em;border-top:1px solid var(--bd)}
+footer{margin-top:2em;color:var(--mut);font-size:13px}
+#results{position:fixed;top:56px;right:16px;width:min(520px,calc(100vw - 32px));max-height:70vh;overflow:auto;background:var(--bg);border:1px solid var(--bd);border-radius:10px;box-shadow:0 12px 40px #0004;z-index:30}
+#results a{display:block;padding:10px 14px;border-bottom:1px solid var(--bd);text-decoration:none;color:var(--fg);font-size:14px}#results a:hover{background:var(--soft)}
+#results small{display:block;color:var(--mut)}mark{background:#ffd54a66;color:inherit}
+@media(max-width:1100px){.shell{grid-template-columns:250px minmax(0,1fr)}.toc{display:none}}
+@media(max-width:760px){#menu{display:block}.shell{display:block}.side{display:none;position:fixed;top:57px;left:0;width:84vw;max-width:320px;background:var(--bg);z-index:25;height:calc(100vh - 57px)}body.nav .side{display:block}main{padding:16px}.brand small{display:none}}
+</style></head><body>
+<header class="top"><button id="menu" aria-label="Menüü">☰</button><a class="brand" href="index.html">Kalapüügiloa väljastamine <small>Epic'ud ja Task'id</small></a>
+<input id="q" type="search" placeholder="Otsi (/)" autocomplete="off"><button id="theme" aria-label="Teema">◐</button></header>
+<div id="results" hidden></div>
+<div class="shell"><nav class="side"><ul><li class=""><a href="index.html">Ülevaade</a></li><li class=""><a href="00-uldkontekst.html">Üldkontekst</a></li><li class=""><a href="E1-taotluse-esitamine.html">E1 Kutselise kalapüügiloa taotluse esitamine</a><ul class="sub"><li><a href="E1-taotluse-esitamine.html#kl-e1-t01-taotlusmenetluse-tüüp-ja-olekumasin-mo">T01 Taotlusmenetluse tüüp ja olekumasin (MO)</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t02-taotleja-tuvastamine-esindusõigus-ja-rolli-valik">T02 Taotleja tuvastamine, esindusõigus ja rolli valik</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t03-taotluse-andmemudel-mustandi-api-ja-eeltäitmine">T03 Taotluse andmemudel, mustandi API ja eeltäitmine</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t04-taustakontrollide-mootor-registripõhine">T04 Taustakontrollide mootor (registripõhine)</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t05-taotluse-esitamine">T05 Taotluse esitamine</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t06-taotleja-vaated-minu-taotlused-ja-staatus">T06 Taotleja vaated: minu taotlused ja staatus</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t07-taotlusvooru-parameetrite-haldus-pta-admin">T07 Taotlusvooru parameetrite haldus (PTA_ADMIN)</a></li></ul></li><li class=""><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html">E2 Püügivõimaluste arvutamine ja jaotamine</a><ul class="sub"><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t01-pvt-andmemudel-jaotusüksus-jaotustulemus-jaotusotsus">T01 PVT andmemudel: jaotusüksus, jaotustulemus, jaotusotsus</a></li><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t03-ajalooliste-andmete-sisendi-adapter-ods-pvt">T03 Ajalooliste andmete sisendi adapter (ODS/PVT)</a></li><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t02-arvutusmootor-määrus-4-8">T02 Arvutusmootor (määrus § 4–§ 8)</a></li><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t04-jaotusarvutuse-käivitamine-ja-eelnõu-koostamine">T04 Jaotusarvutuse käivitamine ja eelnõu koostamine</a></li><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t05-pta-ülevaatus-parandus-ja-kinnitamine-ametnikuportaal">T05 PTA ülevaatus, parandus ja kinnitamine (Ametnikuportaal)</a></li><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t06-jaotusotsuse-väljastamine-avaldamine-ja-teavitamine">T06 Jaotusotsuse väljastamine, avaldamine ja teavitamine</a></li></ul></li><li class=""><a href="E3-tasu-ja-loa-valjastamine.html">E3 Püügivõimaluse vastuvõtt, püügiõiguse tasu ja kalapüügiloa väljastamine</a><ul class="sub"><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t01-taotleja-otsus-jaotuse-kohta-nõustu-loobu">T01 Taotleja otsus jaotuse kohta (nõustu, loobu)</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t02-püügiõiguse-tasu-arvutus-ja-tasumäärade-seadistus">T02 Püügiõiguse tasu arvutus ja tasumäärade seadistus</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t03-maksekorraldus-ja-makse-staatuse-vastuvõtt">T03 Maksekorraldus ja makse staatuse vastuvõtt</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t04-kalapüügiloa-loomine-ja-väljastamine-lto">T04 Kalapüügiloa loomine ja väljastamine (LTO)</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t05-fishinglicencechanged-sündmus-ja-flux-lepe">T05 FishingLicenceChanged sündmus ja FLUX-lepe</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t06-tasu-tähtaja-järelvalve-ja-taotluse-tühistamine">T06 Tasu tähtaja järelvalve ja taotluse tühistamine</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t07-teavituste-kataloog-e-post-e1-e3-jaoks">T07 Teavituste kataloog (e-post) E1–E3 jaoks</a></li></ul></li><li class=""><a href="E4-kasutamata-puugivoimaluste-umberjagamine.html">E4 Kasutamata püügivõimaluste jagamine (TO-BE.03)</a><ul class="sub"><li><a href="E4-kasutamata-puugivoimaluste-umberjagamine.html#kl-e4-t01-ümberjaotuse-käivitus-ja-pakkumiste-arvutus">T01 Ümberjaotuse käivitus ja pakkumiste arvutus</a></li><li><a href="E4-kasutamata-puugivoimaluste-umberjagamine.html#kl-e4-t02-pakkumise-vastuvõtt-tasu-ja-loa-uus-versioon">T02 Pakkumise vastuvõtt, tasu ja loa uus versioon</a></li><li><a href="E4-kasutamata-puugivoimaluste-umberjagamine.html#kl-e4-t03-lõplik-jaotusotsus-ja-tulemuste-edastus-ods">T03 Lõplik jaotusotsus ja tulemuste edastus (ODS)</a></li></ul></li><li class=""><a href="E5-vaidlustamine.html">E5 Jagatud püügivõimaluste vaidlustamine (TO-BE.04)</a><ul class="sub"><li><a href="E5-vaidlustamine.html#kl-e5-t01-vaide-esitamine">T01 Vaide esitamine</a></li><li><a href="E5-vaidlustamine.html#kl-e5-t02-vaide-menetlemine-pta-s-ja-otsus">T02 Vaide menetlemine PTA-s ja otsus</a></li><li><a href="E5-vaidlustamine.html#kl-e5-t03-vaide-tulemuse-teavitus-ja-tähtaegade-taastamine">T03 Vaide tulemuse teavitus ja tähtaegade taastamine</a></li></ul></li><li class=""><a href="E6-stsenaarium-2-delta.html">E6 Alternatiivne stsenaarium: proaktiivne jaotus ja pakkumine (delta)</a><ul class="sub"><li><a href="E6-stsenaarium-2-delta.html#kl-e6-t01-proaktiivne-jaotus-jaotusüksuse-reeglistik-reserv-uutele-turuosalistele">T01 Proaktiivne jaotus (jaotusüksuse reeglistik, reserv uutele turuosalistele)</a></li><li><a href="E6-stsenaarium-2-delta.html#kl-e6-t02-pakkumine-ja-eeltäidetud-kinnitus-ilma-taotluseta">T02 Pakkumine ja eeltäidetud kinnitus (ilma taotluseta)</a></li><li><a href="E6-stsenaarium-2-delta.html#kl-e6-t03-taotlusvooru-väljalülitus-ja-üleminek">T03 Taotlusvooru väljalülitus ja üleminek</a></li></ul></li><li class="active"><a href="E7-vesiviljelus.html">E7 Vesiviljeluse tegevusloa taotlemine ja väljastamine (TO-BE.05)</a><ul class="sub"><li><a href="E7-vesiviljelus.html#kl-e7-t01-vesiviljeluse-tegevusloa-taotlus-esitamine-eeltäide-taustakontroll">T01 Vesiviljeluse tegevusloa taotlus (esitamine, eeltäide, taustakontroll)</a></li><li><a href="E7-vesiviljelus.html#kl-e7-t02-kohapealse-kontrolli-planeerimine-ja-okas-2-integratsioon">T02 Kohapealse kontrolli planeerimine ja OKAS-2 integratsioon</a></li><li><a href="E7-vesiviljelus.html#kl-e7-t03-otsus-tegevusloa-väljastamine-või-keeldumine">T03 Otsus: tegevusloa väljastamine või keeldumine</a></li></ul></li><li class=""><a href="E8-harrastuspuuk.html">E8 Harrastuspüük: püügivõimaluste haldus, kalastuskaart, püügiõigus (TO-BE.06–08)</a><ul class="sub"><li><a href="E8-harrastuspuuk.html#kl-e8-t01-piirarvuga-kalastuskaardi-püügivõimaluste-lisamine-ja-avalikustamine-to-be-06">T01 Piirarvuga kalastuskaardi püügivõimaluste lisamine ja avalikustamine (TO-BE.06)</a></li><li><a href="E8-harrastuspuuk.html#kl-e8-t02-kalastuskaardi-soetamine-to-be-07">T02 Kalastuskaardi soetamine (TO-BE.07)</a></li><li><a href="E8-harrastuspuuk.html#kl-e8-t03-harrastuspüügiõiguse-soetamine-to-be-08">T03 Harrastuspüügiõiguse soetamine (TO-BE.08)</a></li></ul></li><li class=""><a href="E9-automaatotsusega-load.html">E9 Reeglipõhised load: eripüük, elektripüügivahendi tõend, asustamisluba (TO-BE.09–11)</a><ul class="sub"><li><a href="E9-automaatotsusega-load.html#kl-e9-t01-reeglipõhine-otsusemootor-ja-menetlus-ühine">T01 Reeglipõhine otsusemootor ja menetlus (ühine)</a></li><li><a href="E9-automaatotsusega-load.html#kl-e9-t02-eripüügiloa-taotlus-ja-reeglid-to-be-09">T02 Eripüügiloa taotlus ja reeglid (TO-BE.09)</a></li><li><a href="E9-automaatotsusega-load.html#kl-e9-t03-elektripüügivahendi-tõend-to-be-10">T03 Elektripüügivahendi tõend (TO-BE.10)</a></li><li><a href="E9-automaatotsusega-load.html#kl-e9-t04-asustamisloa-taotlus-ja-väljastamine-to-be-11">T04 Asustamisloa taotlus ja väljastamine (TO-BE.11)</a></li></ul></li></ul></nav>
+<main><article><h1 id="kl-e7-vesiviljeluse-tegevusloa-taotlemine-ja-väljastamine"><a class="anchor" href="#kl-e7-vesiviljeluse-tegevusloa-taotlemine-ja-väljastamine">#</a>KL-E7 Vesiviljeluse tegevusloa taotlemine ja väljastamine</h1>
+<p>Loe enne: <a href="00-uldkontekst.html">ühine kontekst</a>, eriti A-08, A-10, A-12, A-32, A-35.</p>
+<h2 id="epic-39-u-kirjeldus"><a class="anchor" href="#epic-39-u-kirjeldus">#</a>Epic&#39;u kirjeldus</h2>
+<p><strong>Eesmärk.</strong> Vesiviljeluse ettevõtja esitab tegevusloa taotluse kalaluba.ee-s, süsteem eeltäidab andmed ja teeb taustakontrollid, määratakse kohapealne kontroll (OKAS-2), PTA ametnik teeb kontrolli tulemuste põhjal otsuse, positiivse otsuse korral väljastatakse tegevusluba, negatiivse korral lõpetatakse menetlus põhjendatud otsusega. Äriloogika <strong>ei muutu</strong>, muutub arhitektuur (kõik KALATUUM-is, ühtne töövoog).</p>
+<p><strong>Ainus piirang:</strong> vesiviljeluse tegevusloa materiaalõiguse akt ei ole repos (<a href="00-uldkontekst.html">A-32</a>). Seega ei ole automaatotsust. Taotluse väljad ja kontrollid on <strong>seadistatavad</strong> ja algsed väärtused tulevad wikist. Kui õigusakt tuleb, lisatakse kontrollid reeglina, ilma koodimuudatuseta.</p>
+<p><strong>Skeem puudub</strong> (wikis on pilt <code>KALATUUM_TO-BE.05</code>, mida selle epic&#39;u koostamisel ei kasutatud). Voog tuleneb tekstist: taotlus → eeltäide ja taustakontroll → kohapealse kontrolli aja määramine → kontroll → otsus → luba või keeldumine.</p>
+<p><strong>Task&#39;ide järjekord:</strong> T01 → T02 → T03.</p>
+<hr>
+<h3 id="kl-e7-t01-vesiviljeluse-tegevusloa-taotlus-esitamine-eeltäide-taustakontroll"><a class="anchor" href="#kl-e7-t01-vesiviljeluse-tegevusloa-taotlus-esitamine-eeltäide-taustakontroll">#</a>KL-E7-T01 Vesiviljeluse tegevusloa taotlus (esitamine, eeltäide, taustakontroll)</h3>
+<p><strong>Eesmärk.</strong> Ettevõtja esitab taotluse, mis on registriandmetega eeltäidetud ja taustakontrollitud.</p>
+<p><strong>Kontekst.</strong> TO-BE.05: „Taotluse koostamisel kasutatakse võimalusel olemasolevaid registriandmeid ning süsteem teostab automaatselt vajalikud taustakontrollid.“ Registrid: Rahvastikuregister (tuvastamine, esindusõigus), Äriregister (tegevusõigus), ReM kliendiportaal (kliendiandmete kontroll ja eeltäitmine), muud riiklikud registrid ja PTA andmekogud. KL_UC-08, E1-T02 (identiteet, esindusõigus, rolli valik), E1-T04 (kontrollimootor), MO_UC-01…05.</p>
+<p><strong>Tee.</strong></p>
+<ol>
+<li>Menetlustüüp <code>AQUACULTURE_LICENCE_APPLICATION</code> (MO): olekud <code>DRAFT</code>, <code>SUBMITTED</code>, <code>INSPECTION_SCHEDULED</code>, <code>INSPECTION_DONE</code>, <code>DECIDED_APPROVED</code>, <code>DECIDED_REFUSED</code>, <code>LICENCE_ISSUED</code>, <code>CANCELLED</code>. Üleminekud: <code>DRAFT→SUBMITTED→INSPECTION_SCHEDULED→INSPECTION_DONE→DECIDED_APPROVED→LICENCE_ISSUED</code> ja <code>INSPECTION_DONE→DECIDED_REFUSED</code>, <code>DRAFT→CANCELLED</code>, <code>SUBMITTED→CANCELLED</code> (taotleja tagasivõtmine kuni <code>INSPECTION_SCHEDULED</code>). Kasuta E1-T01 olekumasina mehhanismi (menetlustüübi konfiguratsioon).</li>
+<li>Identiteet, esindusõigus ja roll: kasuta E1-T02. Taotleja on ettevõte (Äriregister) või FIE (Rahvastikuregister).</li>
+<li><strong>Taotluse andmed (algne seadistatav väljakomplekt):</strong> taotleja (osapool), kontakt (e-post kohustuslik, telefon), tegevuskoha(d) (<code>site</code>: nimi, aadress, koordinaadid või katastritunnus, veekogu/veeala kood), vesiviljeluse liik (<code>aquaculture_type_code</code>, klassifikaator), kasvatatavad liigid (<code>species_code</code> loetelu), planeeritav tootmismaht (kogus + ühik aastas), kasutatavad rajatised/vahendid (vabatekst + loetelu), taotluse lisad (<code>application_document</code>, <code>document_type</code> seadistatav). Väljade nõutavus on seadistuses <code>form_definition</code> (JSON, versioonitud), mitte koodis.</li>
+<li><strong>Eeltäide:</strong> KOT (osapooled) ja ReM kliendiportaal (olemasolevad kliendiandmed, adapter <code>ClientPortalPort</code>, mock arenduseks). Kui kliendiportaal ei vasta, eeltäidet ei tehta, taotleja täidab käsitsi (mitteblokeeriv, A-10).</li>
+<li><strong>Taustakontrollid</strong> (kasuta E1-T04 mootorit uue kataloogiga <code>AQUACULTURE</code>):<ul>
+<li><code>AQ-01</code> ettevõte on Äriregistris aktiivne ja esindaja esindusõiguslik (sama CHK-02);</li>
+<li><code>AQ-02</code> Taotleja isik on elus (CHK-01);</li>
+<li><code>AQ-03</code> taotleja ei ole tegevusloa andmisest välja suletud (PTA andmekogu <code>PtaRegistry.getRestrictions(party)</code>, adapter, mock). <code>FAIL</code> kui piirang kehtib;</li>
+<li><code>AQ-04</code> samal tegevuskohal ei ole juba kehtivat tegevusluba (LTO päring); <code>NEEDS_OFFICER</code> kui on;</li>
+<li><code>AQ-05</code> vajalikud dokumendid on lisatud (<code>form_definition</code> järgi): <code>NEEDS_DOCUMENT</code>;</li>
+<li><code>AQ-06</code> kohustuslikud väljad täidetud: <code>FAIL</code> <code>ERR_VALIDATION</code>.</li>
+</ul>
+</li>
+<li>Esitamine: kontrollid kõik korraga (nagu E1-T05), <code>DRAFT→SUBMITTED</code>, kinnituskiri, PTA ülesanne „Planeeri kohapealne kontroll“ (E7-T02 loob selle automaatselt).</li>
+<li>Taotleja näeb staatust ja menetlusetappe reaalajas (KL_UC-09, sama API muster kui E1-T06).</li>
+<li>Esitatud taotlusi ei saa pärast <code>INSPECTION_SCHEDULED</code> taotleja poolt muuta. Parandused toimuvad ametniku ülesande kaudu.</li>
+</ol>
+<p><strong>AC.</strong></p>
+<pre><code class="lang-gherkin">Scenario: Edukas esitamine
+  Given esindusõiguslik kasutaja, kõik AQ kontrollid PASS
+  When  ta esitab
+  Then  olek SUBMITTED, kinnituskiri saadetud ja PTA ülesanne „Planeeri kohapealne kontroll“ loodud
+
+Scenario: Piirang
+  Given AQ-03 FAIL
+  Then  esitamine blokeeritud ja põhjus nähtav
+
+Scenario: Sama tegevuskoht
+  Given tegevuskohal on juba kehtiv luba
+  Then  AQ-04 on NEEDS_OFFICER ja esitamine õnnestub, ülesanne ametnikule
+
+Scenario: Eeltäide
+  Given ReM kliendiportaalis on kontaktandmed
+  Then  vorm on eeltäidetud
+
+Scenario: Kliendiportaal maas
+  Then  eeltäide jääb tegemata ja esitamine ei ole blokeeritud
+
+Scenario: Vorm seadistuses
+  When  PTA_ADMIN muudab form_definition-is välja nõutavuse
+  Then  kehtib järgmisest taotlusest ilma koodimuudatuseta
+
+Scenario: Tagasivõtmine
+  Given SUBMITTED
+  When  taotleja võtab tagasi
+  Then  CANCELLED</code></pre>
+<p><strong>Eeldused.</strong> A-08, A-10, A-12, A-32. <strong>Sõltub:</strong> E1-T01, E1-T02, E1-T04 (mehhanismid).</p>
+<hr>
+<h3 id="kl-e7-t02-kohapealse-kontrolli-planeerimine-ja-okas-2-integratsioon"><a class="anchor" href="#kl-e7-t02-kohapealse-kontrolli-planeerimine-ja-okas-2-integratsioon">#</a>KL-E7-T02 Kohapealse kontrolli planeerimine ja OKAS-2 integratsioon</h3>
+<p><strong>Eesmärk.</strong> Pärast esitamist määratakse kohapealne kontroll, ametnik viib selle läbi OKAS-2-s ja tulemus jõuab menetlusse.</p>
+<p><strong>Kontekst.</strong> TO-BE.05: „määratakse kohapealse kontrolli aeg ning PTA ametnik viib läbi kontrolli, mille käigus hinnatakse tegevuskoha vastavust“. OKAS-2: „planeeritakse kontrollid, koostatakse kontrolliandmeobjektid, fikseeritakse kontrolli tulemused“. OKAS-2 <span class="ext" title="Viide repo dokumendile, mida siin ei avaldata">TO-BE kontekstis</span>, probleemikoht „kohapealse kontrolli eraldatus menetlusest“ (kontroll ja menetlus on seotud).</p>
+<p><strong>Tee.</strong></p>
+<ol>
+<li>Liides <code>InspectionPort</code> (OKAS-2): <code>planInspection(application_ref, site, requested_window) → {inspection_id}</code>, <code>getInspection(inspection_id) → {state, date, result, findings[], protocol_doc_ref}</code>. Realiseeri HTTP-adapter ja mock. <strong>Konkreetsed OKAS-2 API-d on väljaspool ulatust.</strong> Port on lepingu pind: sündmus <code>InspectionResultReceived {inspection_id, result: COMPLIANT|NON_COMPLIANT|PARTIAL, findings[], protocol_doc_ref}</code> võetakse vastu REST-lõpp-punktis <code>POST /integrations/inspections/result</code> (autentimine ühiskasutatava saladuse või allkirjaga, idempotentne <code>inspection_id</code> + <code>event_id</code>).</li>
+<li><strong>Planeerimine:</strong> <code>SUBMITTED</code> taotlusele luuakse automaatselt PTA ülesanne (MO_UC-09), ametnik valib kontrolli kuupäeva (<code>POST /admin/aquaculture/{id}/schedule</code>, <code>date</code>, <code>inspector_id</code>) → <code>planInspection</code>, <code>SUBMITTED→INSPECTION_SCHEDULED</code>. Taotleja saab teavituse kuupäevaga.</li>
+<li><strong>Ajapiirang:</strong> kui kuupäev on varasem kui täna või kontrolli planeerimine ebaõnnestub OKAS-2 poolel, tagastatakse vastav viga (<code>ERR_DEPENDENCY_UNAVAILABLE</code> või <code>ERR_VALIDATION</code>), olek ei muutu.</li>
+<li><strong>Tulemuse vastuvõtt:</strong> <code>InspectionResultReceived</code> → salvesta tulemus ja protokoll (DF-i viide), <code>INSPECTION_SCHEDULED→INSPECTION_DONE</code>. Kui tulemus tuleb teisest allikast (ametnik sisestab portaalis käsitsi, kuni integratsioon ei ole valmis): <code>POST /admin/aquaculture/{id}/inspection-result</code> sama sisuga (roll <code>PTA_OFFICER</code>), sama olekumuutus. Kumbki tee ei tohi teist üle kirjutada, teine annab <code>ERR_INVALID_STATE_TRANSITION</code>.</li>
+<li>Taotleja ei pääse OKAS-2 sisemistele andmetele. Ta näeb ainult kontrolli kuupäeva ja tulemuse üldseisu.</li>
+<li>Kui kontrolli kuupäev möödub ilma tulemuseta 14 päeva, loob süsteem PTA ülesande „Kontrolli tulemus puudub“.</li>
+</ol>
+<p><strong>AC.</strong></p>
+<pre><code class="lang-gherkin">Scenario: Planeerimine
+  Given SUBMITTED
+  When  ametnik valib kuupäeva 2027-03-10
+  Then  OKAS-2-s on planeeritud kontroll, olek INSPECTION_SCHEDULED ja taotleja on teavitatud
+
+Scenario: OKAS-2 maas
+  When  planeerimine ebaõnnestub
+  Then  olek jääb SUBMITTED ja ametnik saab vea
+
+Scenario: Tulemus integratsioonist
+  When  tuleb InspectionResultReceived COMPLIANT
+  Then  INSPECTION_DONE ja protokoll DF-s
+
+Scenario: Idempotentsus
+  When  sama sündmus tuleb kaks korda
+  Then  teine on no-op
+
+Scenario: Käsitsi tulemus
+  When  ametnik sisestab tulemuse käsitsi
+  Then  sama olekumuutus ja audit
+
+Scenario: Tulemus puudub
+  Given kontrolli kuupäevast on 14 päeva ja tulemust pole
+  Then  PTA ülesanne</code></pre>
+<p><strong>Eeldused.</strong> A-10, A-12. <strong>Sõltub:</strong> KL-E7-T01.</p>
+<hr>
+<h3 id="kl-e7-t03-otsus-tegevusloa-väljastamine-või-keeldumine"><a class="anchor" href="#kl-e7-t03-otsus-tegevusloa-väljastamine-või-keeldumine">#</a>KL-E7-T03 Otsus: tegevusloa väljastamine või keeldumine</h3>
+<p><strong>Eesmärk.</strong> PTA ametnik teeb põhjendatud otsuse, luba väljastatakse või menetlus lõpeb keeldumisega.</p>
+<p><strong>Kontekst.</strong> TO-BE.05: „Positiivse otsuse korral väljastatakse vesiviljeluse tegevusluba ning taotluse staatus muudetakse kinnitatuks. Negatiivse otsuse korral lõpetatakse menetlus põhjendatud otsusega.“ LTO_UC-01/02/15, MO_UC-15…18, A-31, A-32.</p>
+<p><strong>Tee.</strong></p>
+<ol>
+<li>API (<code>PTA_OFFICER</code>): <code>GET /admin/aquaculture/{id}/decision-pack</code> (taotlus, kontrollitulemused, kohapealse kontrolli tulemus ja leiud, ajalugu), <code>POST …/decide</code> <code>{outcome: APPROVE|REFUSE, reasoning ≥ 100 märki, conditions[]?, valid_from, valid_to?}</code>.</li>
+<li><strong>Automaatotsust ei ole</strong> (A-32). <code>decide</code> nõuab inimest. Kui kohapealse kontrolli tulemus on <code>NON_COMPLIANT</code>, tagastab süsteem hoiatuse, aga ei keela otsust. Otsus peab sisaldama põhjenduse.</li>
+<li><code>APPROVE</code>: <code>INSPECTION_DONE→DECIDED_APPROVED→LICENCE_ISSUED</code>. Loo LTO-s luba (<code>kind=AQUACULTURE</code>, <code>licence_number</code> formaat <code>VVL-&lt;aasta&gt;-&lt;nr 6 kohta&gt;</code>, kehtivus: <code>valid_from</code> kohustuslik, <code>valid_to</code> tähtajatu kui puudub), seo osapoolega, tegevuskohaga ja otsusega; <code>status=ACTIVE</code>; dokument DF-i (otsus ja luba); registrikanne; teavitus. <code>conditions[]</code> kanduvad loale.</li>
+<li><code>REFUSE</code>: <code>INSPECTION_DONE→DECIDED_REFUSED</code>. Otsus sisaldab: kuupäev, õigusnorm (ametnik valib <code>legal_basis</code> tekstina, kohustuslik), sisu, põhjendus, ametniku nimi (HMS nõuded). Dokument DF-i, kiri taotlejale, vaide info.</li>
+<li>Kogu menetlus on auditis. Ajaloo säilitamine MO_UC-21.</li>
+<li><strong>Vaie</strong> pärast keeldumist käsitletakse HMS üldkorras väljaspool KALATUUM-it (ulatusest väljas, kuni E5 laiendatakse sellele menetlustüübile).</li>
+</ol>
+<p><strong>AC.</strong></p>
+<pre><code class="lang-gherkin">Scenario: Väljastamine
+  Given INSPECTION_DONE, kontroll COMPLIANT
+  When  ametnik APPROVE põhjendusega
+  Then  luba VVL-2027-000001 ACTIVE, dokument DF-s, olek LICENCE_ISSUED, teavitus saadetud
+
+Scenario: Keeldumine
+  When  REFUSE õigusnormi ja põhjendusega
+  Then  DECIDED_REFUSED, otsusedokument ja kiri taotlejale
+
+Scenario: Põhjenduseta
+  Then  ERR_VALIDATION
+
+Scenario: Vale olek
+  Given SUBMITTED
+  When  decide
+  Then  ERR_INVALID_STATE_TRANSITION
+
+Scenario: Tingimused
+  When  APPROVE koos conditions
+  Then  tingimused on loal ja dokumendil
+
+Scenario: Õigused
+  When  APPLICANT kutsub decide
+  Then  ERR_FORBIDDEN</code></pre>
+<p><strong>Eeldused.</strong> A-12, A-31, A-32. <strong>Sõltub:</strong> KL-E7-T02, LTO karkass.</p>
+</article>
+<div class="pn"><a href="E6-stsenaarium-2-delta.html">← E6 Alternatiivne stsenaarium: proaktiivne jaotus ja pakkumine (delta)</a><a href="E8-harrastuspuuk.html">E8 Harrastuspüük: püügivõimaluste haldus, kalastuskaart, püügiõigus (TO-BE.06–08) →</a></div>
+<footer>Ettepanek, mitte kinnitatud. Allikas: wiki leht 321262813.</footer></main>
+<aside class="toc"><b>Sellel lehel</b><ul><li><a href="#epic-39-u-kirjeldus">Epic&amp;#39;u kirjeldus</a></li></ul></aside></div>
+<script>(function(){
+var r=document.documentElement;try{var t=localStorage.getItem('th');if(t)r.dataset.theme=t}catch(e){}
+document.getElementById('theme').onclick=function(){var d=r.dataset.theme||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');d=d==='dark'?'light':'dark';r.dataset.theme=d;try{localStorage.setItem('th',d)}catch(e){}};
+document.getElementById('menu').onclick=function(){document.body.classList.toggle('nav')};
+var q=document.getElementById('q'),box=document.getElementById('results'),idx=null;
+function load(){return idx?Promise.resolve(idx):fetch('search.json').then(function(x){return x.json()}).then(function(j){return idx=j})}
+function esc(s){return s.replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})}
+q.addEventListener('input',function(){var v=q.value.trim().toLowerCase();if(v.length<2){box.hidden=true;return}
+load().then(function(d){var out=[];d.forEach(function(p){var x=p.x.toLowerCase(),i=x.indexOf(v);if(i<0&&p.t.toLowerCase().indexOf(v)<0)return;var c=0,j=i;while(j>=0){c++;j=x.indexOf(v,j+1)}
+var s=i>=0?esc(p.x.slice(Math.max(0,i-50),i+90)).replace(new RegExp(esc(v).replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'ig'),function(m){return'<mark>'+m+'</mark>'}):'';out.push({p:p,c:c,s:s})});
+out.sort(function(a,b){return b.c-a.c});box.innerHTML=out.length?out.map(function(o){return'<a href="'+o.p.u+'"><b>'+esc(o.p.t)+'</b> <small>'+o.c+' vastet</small><small>…'+o.s+'…</small></a>'}).join(''):'<a>Tulemusi pole</a>';box.hidden=false})});
+document.addEventListener('keydown',function(e){if(e.key==='/'&&document.activeElement!==q){e.preventDefault();q.focus()}if(e.key==='Escape'){box.hidden=true;q.blur()}});
+document.addEventListener('click',function(e){if(!box.contains(e.target)&&e.target!==q)box.hidden=true});
+var links=[].slice.call(document.querySelectorAll('.active .sub a'));
+if(links.length&&'IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){links.forEach(function(l){l.classList.toggle('cur',l.hash==='#'+en.target.id)})}})},{rootMargin:'-60px 0px -75% 0px'});
+links.forEach(function(l){var h=document.getElementById(l.hash.slice(1));if(h)io.observe(h)})}
+})();
+</script></body></html>

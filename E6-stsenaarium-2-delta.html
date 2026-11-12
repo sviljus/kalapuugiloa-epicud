@@ -1,0 +1,179 @@
+<!doctype html><html lang="et"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KL-E6 Alternatiivne stsenaarium: proaktiivne jaotus ja pakkumine (delta) · Kalapüügiloa Epic'ud</title><meta name="robots" content="noindex">
+<style>:root{--bg:#fff;--fg:#1c2430;--mut:#5b6675;--bd:#e2e6ec;--ac:#0b6bcb;--soft:#f4f7fb;--code:#f1f4f8}
+:root[data-theme=dark]{--bg:#10151c;--fg:#e4e9f0;--mut:#9aa6b6;--bd:#27303c;--ac:#6cb2ff;--soft:#171e28;--code:#1b2330}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#10151c;--fg:#e4e9f0;--mut:#9aa6b6;--bd:#27303c;--ac:#6cb2ff;--soft:#171e28;--code:#1b2330}}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+a{color:var(--ac)}
+.top{position:sticky;top:0;z-index:20;display:flex;gap:12px;align-items:center;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--bd)}
+.brand{font-weight:700;color:var(--fg);text-decoration:none}.brand small{font-weight:400;color:var(--mut);margin-left:6px}
+#q{margin-left:auto;width:min(320px,40vw);padding:7px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--soft);color:var(--fg)}
+button{background:var(--soft);color:var(--fg);border:1px solid var(--bd);border-radius:8px;padding:6px 10px;cursor:pointer}
+#menu{display:none}
+.shell{display:grid;grid-template-columns:270px minmax(0,1fr) 220px;max-width:1500px;margin:0 auto}
+.side{position:sticky;top:57px;align-self:start;height:calc(100vh - 57px);overflow:auto;padding:16px;border-right:1px solid var(--bd);font-size:14px}
+.side ul{list-style:none;margin:0;padding:0}.side>ul>li{margin-bottom:6px}.side>ul>li>a{font-weight:600;color:var(--fg);text-decoration:none;display:block;padding:4px 8px;border-radius:6px}
+.side li.active>a{background:var(--soft);color:var(--ac)}
+.sub{display:none;margin:2px 0 6px 10px!important;border-left:2px solid var(--bd)}.active .sub{display:block}
+.sub a{display:block;padding:2px 10px;color:var(--mut);text-decoration:none;font-size:13px}.sub a:hover,.sub a.cur{color:var(--ac)}
+main{padding:24px 40px 60px;min-width:0}article{max-width:860px}
+.toc{position:sticky;top:57px;align-self:start;padding:24px 16px;font-size:13px;max-height:calc(100vh - 57px);overflow:auto}
+.toc ul{list-style:none;padding:0}.toc a{display:block;color:var(--mut);text-decoration:none;padding:2px 0}.toc a:hover{color:var(--ac)}
+h1{font-size:2rem;line-height:1.2}h2{margin-top:2.4em;padding-top:.6em;border-top:1px solid var(--bd)}
+h3{margin-top:2.2em;padding:8px 12px;background:var(--soft);border-left:4px solid var(--ac);border-radius:4px}
+h4{margin-top:1.6em}
+.anchor{opacity:0;margin-left:-1.1em;padding-right:.3em;text-decoration:none}h2:hover .anchor,h3:hover .anchor,h4:hover .anchor{opacity:.6}
+code{background:var(--code);padding:1px 5px;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:14px;border-radius:8px;overflow:auto;border:1px solid var(--bd)}pre code{background:none;padding:0}
+.tw{overflow:auto;margin:1em 0}table{border-collapse:collapse;font-size:14px;min-width:100%}
+th,td{border:1px solid var(--bd);padding:6px 10px;vertical-align:top;text-align:left}th{background:var(--soft)}
+blockquote{margin:1em 0;padding:4px 16px;border-left:4px solid var(--bd);color:var(--mut)}
+.ext{border-bottom:1px dotted var(--mut);cursor:help}
+.hero{margin-bottom:2em}.lead{font-size:1.15rem;color:var(--mut)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin:20px 0}
+.card{display:flex;flex-direction:column;gap:6px;padding:16px;border:1px solid var(--bd);border-radius:12px;background:var(--soft);text-decoration:none;color:var(--fg);transition:.15s}
+.card:hover{border-color:var(--ac);transform:translateY(-2px)}.card .k{color:var(--ac);font-weight:700;font-size:13px}.card .m{color:var(--mut);font-size:13px}
+.card.valikuline{border-style:dashed}.card.blokeeritud{opacity:.7;border-style:dashed}
+.btn{display:inline-block;padding:10px 18px;background:var(--ac);color:var(--bg);border-radius:8px;text-decoration:none;font-weight:600}
+.pn{display:flex;justify-content:space-between;margin-top:3em;padding-top:1em;border-top:1px solid var(--bd)}
+footer{margin-top:2em;color:var(--mut);font-size:13px}
+#results{position:fixed;top:56px;right:16px;width:min(520px,calc(100vw - 32px));max-height:70vh;overflow:auto;background:var(--bg);border:1px solid var(--bd);border-radius:10px;box-shadow:0 12px 40px #0004;z-index:30}
+#results a{display:block;padding:10px 14px;border-bottom:1px solid var(--bd);text-decoration:none;color:var(--fg);font-size:14px}#results a:hover{background:var(--soft)}
+#results small{display:block;color:var(--mut)}mark{background:#ffd54a66;color:inherit}
+@media(max-width:1100px){.shell{grid-template-columns:250px minmax(0,1fr)}.toc{display:none}}
+@media(max-width:760px){#menu{display:block}.shell{display:block}.side{display:none;position:fixed;top:57px;left:0;width:84vw;max-width:320px;background:var(--bg);z-index:25;height:calc(100vh - 57px)}body.nav .side{display:block}main{padding:16px}.brand small{display:none}}
+</style></head><body>
+<header class="top"><button id="menu" aria-label="Menüü">☰</button><a class="brand" href="index.html">Kalapüügiloa väljastamine <small>Epic'ud ja Task'id</small></a>
+<input id="q" type="search" placeholder="Otsi (/)" autocomplete="off"><button id="theme" aria-label="Teema">◐</button></header>
+<div id="results" hidden></div>
+<div class="shell"><nav class="side"><ul><li class=""><a href="index.html">Ülevaade</a></li><li class=""><a href="00-uldkontekst.html">Üldkontekst</a></li><li class=""><a href="E1-taotluse-esitamine.html">E1 Kutselise kalapüügiloa taotluse esitamine</a><ul class="sub"><li><a href="E1-taotluse-esitamine.html#kl-e1-t01-taotlusmenetluse-tüüp-ja-olekumasin-mo">T01 Taotlusmenetluse tüüp ja olekumasin (MO)</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t02-taotleja-tuvastamine-esindusõigus-ja-rolli-valik">T02 Taotleja tuvastamine, esindusõigus ja rolli valik</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t03-taotluse-andmemudel-mustandi-api-ja-eeltäitmine">T03 Taotluse andmemudel, mustandi API ja eeltäitmine</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t04-taustakontrollide-mootor-registripõhine">T04 Taustakontrollide mootor (registripõhine)</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t05-taotluse-esitamine">T05 Taotluse esitamine</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t06-taotleja-vaated-minu-taotlused-ja-staatus">T06 Taotleja vaated: minu taotlused ja staatus</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t07-taotlusvooru-parameetrite-haldus-pta-admin">T07 Taotlusvooru parameetrite haldus (PTA_ADMIN)</a></li></ul></li><li class=""><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html">E2 Püügivõimaluste arvutamine ja jaotamine</a><ul class="sub"><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t01-pvt-andmemudel-jaotusüksus-jaotustulemus-jaotusotsus">T01 PVT andmemudel: jaotusüksus, jaotustulemus, jaotusotsus</a></li><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t03-ajalooliste-andmete-sisendi-adapter-ods-pvt">T03 Ajalooliste andmete sisendi adapter (ODS/PVT)</a></li><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t02-arvutusmootor-määrus-4-8">T02 Arvutusmootor (määrus § 4–§ 8)</a></li><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t04-jaotusarvutuse-käivitamine-ja-eelnõu-koostamine">T04 Jaotusarvutuse käivitamine ja eelnõu koostamine</a></li><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t05-pta-ülevaatus-parandus-ja-kinnitamine-ametnikuportaal">T05 PTA ülevaatus, parandus ja kinnitamine (Ametnikuportaal)</a></li><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t06-jaotusotsuse-väljastamine-avaldamine-ja-teavitamine">T06 Jaotusotsuse väljastamine, avaldamine ja teavitamine</a></li></ul></li><li class=""><a href="E3-tasu-ja-loa-valjastamine.html">E3 Püügivõimaluse vastuvõtt, püügiõiguse tasu ja kalapüügiloa väljastamine</a><ul class="sub"><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t01-taotleja-otsus-jaotuse-kohta-nõustu-loobu">T01 Taotleja otsus jaotuse kohta (nõustu, loobu)</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t02-püügiõiguse-tasu-arvutus-ja-tasumäärade-seadistus">T02 Püügiõiguse tasu arvutus ja tasumäärade seadistus</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t03-maksekorraldus-ja-makse-staatuse-vastuvõtt">T03 Maksekorraldus ja makse staatuse vastuvõtt</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t04-kalapüügiloa-loomine-ja-väljastamine-lto">T04 Kalapüügiloa loomine ja väljastamine (LTO)</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t05-fishinglicencechanged-sündmus-ja-flux-lepe">T05 FishingLicenceChanged sündmus ja FLUX-lepe</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t06-tasu-tähtaja-järelvalve-ja-taotluse-tühistamine">T06 Tasu tähtaja järelvalve ja taotluse tühistamine</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t07-teavituste-kataloog-e-post-e1-e3-jaoks">T07 Teavituste kataloog (e-post) E1–E3 jaoks</a></li></ul></li><li class=""><a href="E4-kasutamata-puugivoimaluste-umberjagamine.html">E4 Kasutamata püügivõimaluste jagamine (TO-BE.03)</a><ul class="sub"><li><a href="E4-kasutamata-puugivoimaluste-umberjagamine.html#kl-e4-t01-ümberjaotuse-käivitus-ja-pakkumiste-arvutus">T01 Ümberjaotuse käivitus ja pakkumiste arvutus</a></li><li><a href="E4-kasutamata-puugivoimaluste-umberjagamine.html#kl-e4-t02-pakkumise-vastuvõtt-tasu-ja-loa-uus-versioon">T02 Pakkumise vastuvõtt, tasu ja loa uus versioon</a></li><li><a href="E4-kasutamata-puugivoimaluste-umberjagamine.html#kl-e4-t03-lõplik-jaotusotsus-ja-tulemuste-edastus-ods">T03 Lõplik jaotusotsus ja tulemuste edastus (ODS)</a></li></ul></li><li class=""><a href="E5-vaidlustamine.html">E5 Jagatud püügivõimaluste vaidlustamine (TO-BE.04)</a><ul class="sub"><li><a href="E5-vaidlustamine.html#kl-e5-t01-vaide-esitamine">T01 Vaide esitamine</a></li><li><a href="E5-vaidlustamine.html#kl-e5-t02-vaide-menetlemine-pta-s-ja-otsus">T02 Vaide menetlemine PTA-s ja otsus</a></li><li><a href="E5-vaidlustamine.html#kl-e5-t03-vaide-tulemuse-teavitus-ja-tähtaegade-taastamine">T03 Vaide tulemuse teavitus ja tähtaegade taastamine</a></li></ul></li><li class="active"><a href="E6-stsenaarium-2-delta.html">E6 Alternatiivne stsenaarium: proaktiivne jaotus ja pakkumine (delta)</a><ul class="sub"><li><a href="E6-stsenaarium-2-delta.html#kl-e6-t01-proaktiivne-jaotus-jaotusüksuse-reeglistik-reserv-uutele-turuosalistele">T01 Proaktiivne jaotus (jaotusüksuse reeglistik, reserv uutele turuosalistele)</a></li><li><a href="E6-stsenaarium-2-delta.html#kl-e6-t02-pakkumine-ja-eeltäidetud-kinnitus-ilma-taotluseta">T02 Pakkumine ja eeltäidetud kinnitus (ilma taotluseta)</a></li><li><a href="E6-stsenaarium-2-delta.html#kl-e6-t03-taotlusvooru-väljalülitus-ja-üleminek">T03 Taotlusvooru väljalülitus ja üleminek</a></li></ul></li><li class=""><a href="E7-vesiviljelus.html">E7 Vesiviljeluse tegevusloa taotlemine ja väljastamine (TO-BE.05)</a><ul class="sub"><li><a href="E7-vesiviljelus.html#kl-e7-t01-vesiviljeluse-tegevusloa-taotlus-esitamine-eeltäide-taustakontroll">T01 Vesiviljeluse tegevusloa taotlus (esitamine, eeltäide, taustakontroll)</a></li><li><a href="E7-vesiviljelus.html#kl-e7-t02-kohapealse-kontrolli-planeerimine-ja-okas-2-integratsioon">T02 Kohapealse kontrolli planeerimine ja OKAS-2 integratsioon</a></li><li><a href="E7-vesiviljelus.html#kl-e7-t03-otsus-tegevusloa-väljastamine-või-keeldumine">T03 Otsus: tegevusloa väljastamine või keeldumine</a></li></ul></li><li class=""><a href="E8-harrastuspuuk.html">E8 Harrastuspüük: püügivõimaluste haldus, kalastuskaart, püügiõigus (TO-BE.06–08)</a><ul class="sub"><li><a href="E8-harrastuspuuk.html#kl-e8-t01-piirarvuga-kalastuskaardi-püügivõimaluste-lisamine-ja-avalikustamine-to-be-06">T01 Piirarvuga kalastuskaardi püügivõimaluste lisamine ja avalikustamine (TO-BE.06)</a></li><li><a href="E8-harrastuspuuk.html#kl-e8-t02-kalastuskaardi-soetamine-to-be-07">T02 Kalastuskaardi soetamine (TO-BE.07)</a></li><li><a href="E8-harrastuspuuk.html#kl-e8-t03-harrastuspüügiõiguse-soetamine-to-be-08">T03 Harrastuspüügiõiguse soetamine (TO-BE.08)</a></li></ul></li><li class=""><a href="E9-automaatotsusega-load.html">E9 Reeglipõhised load: eripüük, elektripüügivahendi tõend, asustamisluba (TO-BE.09–11)</a><ul class="sub"><li><a href="E9-automaatotsusega-load.html#kl-e9-t01-reeglipõhine-otsusemootor-ja-menetlus-ühine">T01 Reeglipõhine otsusemootor ja menetlus (ühine)</a></li><li><a href="E9-automaatotsusega-load.html#kl-e9-t02-eripüügiloa-taotlus-ja-reeglid-to-be-09">T02 Eripüügiloa taotlus ja reeglid (TO-BE.09)</a></li><li><a href="E9-automaatotsusega-load.html#kl-e9-t03-elektripüügivahendi-tõend-to-be-10">T03 Elektripüügivahendi tõend (TO-BE.10)</a></li><li><a href="E9-automaatotsusega-load.html#kl-e9-t04-asustamisloa-taotlus-ja-väljastamine-to-be-11">T04 Asustamisloa taotlus ja väljastamine (TO-BE.11)</a></li></ul></li></ul></nav>
+<main><article><h1 id="kl-e6-alternatiivne-stsenaarium-delta-baasstsenaariumi-suhtes"><a class="anchor" href="#kl-e6-alternatiivne-stsenaarium-delta-baasstsenaariumi-suhtes">#</a>KL-E6 Alternatiivne stsenaarium (delta baasstsenaariumi suhtes)</h1>
+<p>Loe enne: <a href="00-uldkontekst.html">ühine kontekst</a>, A-01, A-30, P-14.</p>
+<h2 id="epic-39-u-kirjeldus"><a class="anchor" href="#epic-39-u-kirjeldus">#</a>Epic&#39;u kirjeldus</h2>
+<p><strong>Miks blokeeritud.</strong> Wiki: „lõpliku valiku teeb tellija“. See stsenaarium eeldab õigusaktide muudatust (määrus § 2, § 3, § 12, § 14): jaotus ilma taotluseta, taotlus asendub pakkumise vastuvõtuga. Seni, kuni tellija ei ole valinud, <strong>ei alustata E6</strong>. E1…E3 on baas.</p>
+<p><strong>Nimede kokkupõrge wikis.</strong> Wiki kasutab selles jaotises samu tähiseid <code>TO-BE.01</code> ja <code>TO-BE.02</code> nagu baasstsenaariumis, aga teise sisuga. Selles repos kasutatakse neid kui <strong><code>TO-BE.S2.01</code></strong> (proaktiivne jaotus) ja <strong><code>TO-BE.S2.02</code></strong> (pakkumine ja luba). Skeemid viitavad üksteisele (<code>KALATUUM_TO-BE.01 Ajaloolise püügiõiguse arvutamine …</code>), mis näitab, et nimekonflikt on lihtsalt ümbernimetamata.</p>
+<p><strong>Taaskasutus (ei tehta uuesti):</strong> E2-T01/T02/T03 (andmemudel, mootor, ajalugu), E2-T05 (ülevaatus), E2-T06 (otsus ja avaldamine), E3-T02…T07 (tasu, makse, luba, sündmus, tähtaeg, teavitused), E4 (jäägid), E5 (vaie). <strong>Delta</strong> on allpool.</p>
+<p><strong>Skeemi erinevused (TO-BE.S2.02 võrreldes baasiga):</strong></p>
+<ul>
+<li>Protsess algab KALATUUM-i poolt: arvutus → „Püügivõimalused on jagatud“ → teavituse suunamine iseteenindusse (e-posti link, „Mõne aja pärast toimub lingi avamine“) → autentimine → isikuandmete ja esindusõiguse päring → valib rolli → tutvub ettevõttele jaotatud püügivõimalustega.</li>
+<li>Kas nõustub? JAH → „Kinnitab jaotatud püügivõimaluse saamise“ → andmete päring registritest ja <strong>taustakontroll</strong> → kas edukalt läbitud? JAH → püügiõiguse tasu maksmine → makse teostatud → kalapüügiloa loomine, „Kehtiv“ → FLUX sündmuse algatamine. EI (taustakontroll) → „Püügivõimaluse saamine ei ole võimalik“.</li>
+<li>EI → kas soovib vaidlustada? JAH → TO-BE.04. EI → kas lobub? JAH → „Kinnitab loobumise“; EI → püügiõiguse tasu tähtaja möödumisel → „Maksmata püügivõimaluste tühistamine“ → 1. jaanuaril TO-BE.03.</li>
+<li><strong>„Seadistatav parameeter“</strong> skeemil on tasu tähtaeg (P-05).</li>
+</ul>
+<p><strong>Task&#39;ide järjekord:</strong> T01 → T02 → T03.</p>
+<hr>
+<h3 id="kl-e6-t01-proaktiivne-jaotus-jaotusüksuse-reeglistik-reserv-uutele-turuosalistele"><a class="anchor" href="#kl-e6-t01-proaktiivne-jaotus-jaotusüksuse-reeglistik-reserv-uutele-turuosalistele">#</a>KL-E6-T01 Proaktiivne jaotus (jaotusüksuse reeglistik, reserv uutele turuosalistele)</h3>
+<p><strong>Eesmärk.</strong> Jaotus tehakse <strong>taotlusteta</strong>: kõigile õigustatud turuosalistele (ajalooliste omandite alusel) arvutatakse osakud ja püügivõimalused. Jaotusüksuse kaupa on seadistatav, kui suur osa jaotatakse ajaloo alusel ja kui suur osa jäetakse uutele turuosalistele.</p>
+<p><strong>Kontekst.</strong> TO-BE.S2.01 kirjeldus: „Seadistatavad ärireeglid… Näiteks 90% ajalooliste õiguste alusel ning 10% reserveeritakse uutele turule sisenejatele. Kui määratud tähtajaks jääb reserveeritud osa kasutamata, … ümber jagada olemasolevate õiguste omanike vahel“. PVT_UC-07 (riiklik reserv), PVT_DR-03, PVT_DR-12.</p>
+<p><strong>Tee.</strong></p>
+<ol>
+<li>Lisa <code>catch_opportunity.new_entrant_reserve_share</code> (decimal 0…1, vaikimisi P-14 = 0) ja <code>reserve_release_date</code> (tähtaeg, millal kasutamata reserv ümber jagatakse; vaikimisi puudub, st käsitsi).</li>
+<li>Mootor E2-T02 laiendus: <strong>mode <code>PROACTIVE</code></strong>: osalejad = kõik osapooled, kelle <code>T &gt; 0</code> selles jaotusüksuses (ei vaja taotlust), <code>requested</code> = piiramatu. <code>permitted&#39; = LPV × (1 − reserve_share)</code> (ümardatud <code>g</code> täisarvuni allapoole). Reserv <code>LPV − permitted&#39;</code> salvestatakse <code>released_opportunity</code> kirjena põhjusega <code>NEW_ENTRANT_RESERVE</code>, <code>status=AVAILABLE</code>. Taotlusvoorus ei ole <strong>lihtjaotust</strong>: § 4 lg 1 haru välistatud (wiki: „ei esine enam olukorda, … rakendatakse lihtjaotust“).</li>
+<li><strong>Reservi kasutus:</strong> uued turuosalised (kellel <code>T=0</code>) saavad reserveeritud osast pakkumise <strong>E6-T03 kaudu</strong>: PTA loob käsitsi jaotuse (<code>mode=MANUAL</code>) ülevaatuse käigus või rakendab seadistatavat reeglit (<code>reserve.allocation_rule = ON_REQUEST | EQUAL_SPLIT | MANUAL</code>, vaikimisi <code>MANUAL</code>). <code>ON_REQUEST</code> tähendab, et turuosaline esitab lühikese sooviavalduse (E6-T02 sooviavalduse lehe kaudu) ja see jaotatakse E2 mootoriga <code>T=0</code> korral võrdselt: igaüks sama osa, kuni reserv otsa saab, järjekord <code>submitted_at</code>. Vaikeväärtus ei ole tellijale kohustuslik.</li>
+<li><strong>Reservi jääk:</strong> kui <code>reserve_release_date</code> on käes ja osa on veel <code>AVAILABLE</code>, jaotatakse see <strong>olemasolevate õiguste omanike vahel</strong> (E4-T01 loogika, sama mootor).</li>
+<li>Käivitus: <code>SYSTEM</code> jaotusperioodi alguses (parameeter <code>proactive.allocation_start_date</code>, vaikimisi 1. november <code>Y−1</code>; PTA_ADMIN muudab). Ülevaatus ja kinnitus A-04 järgi (E2-T05). Otsus E2-T06 mallil, aga <strong>taotluse olekute asemel</strong> luuakse eeltäidetud <code>offer</code> kirjed (E6-T02).</li>
+<li>Taotlusvoorus puudub taotluspõhine sisend, seega <code>allocate()</code> koodis kasutatakse <code>requested = ∞</code>, ja omadustestis <code>final_i ≤ requested_i</code> kontrollitakse ainult <code>requested</code> olemasolul.</li>
+</ol>
+<p><strong>AC.</strong></p>
+<pre><code class="lang-gherkin">Scenario: 90/10
+  Given LPV=100 tükki, new_entrant_reserve_share=0.10, osalejad A(T=60), B(T=40)
+  When  PROACTIVE jaotus
+  Then  jaotatav=90: A=54, B=36 ja released_opportunity(NEW_ENTRANT_RESERVE)=10
+
+Scenario: Lihtjaotust ei ole
+  Given kogu nõudlus väiksem kui LPV, aga taotlusi ei ole
+  Then  jaotus põhineb ajalool, mitte nõudlusel
+
+Scenario: Reservi jääk
+  Given reserve_release_date on käes ja 10 on AVAILABLE
+  Then  need jaotatakse olemasolevatele omanikele E4 loogikaga
+
+Scenario: Reserv 0 %
+  Given P-14=0
+  Then  reservi ei teki ja kogu LPV jaotatakse
+
+Scenario: Determinism
+  Then  E2-T02 omadustestid kehtivad ka PROACTIVE režiimis</code></pre>
+<p><strong>Eeldused.</strong> A-01, A-03, A-04, A-16…A-20. <strong>Sõltub:</strong> E2-T01, T02, T03; tellija valik stsenaariumi kohta.</p>
+<hr>
+<h3 id="kl-e6-t02-pakkumine-ja-eeltäidetud-kinnitus-ilma-taotluseta"><a class="anchor" href="#kl-e6-t02-pakkumine-ja-eeltäidetud-kinnitus-ilma-taotluseta">#</a>KL-E6-T02 Pakkumine ja eeltäidetud kinnitus (ilma taotluseta)</h3>
+<p><strong>Eesmärk.</strong> Turuosaline saab teavituse, avab lingi, autentub ja kinnitab, loobub või vaidlustab talle jaotatud püügivõimaluse.</p>
+<p><strong>Kontekst.</strong> TO-BE.S2.02 kirjeldus ja skeem, määruse § 2 (taotlus asendub pakkumise vastuvõtuga), § 3 (eelkontroll enne pakkumist). A-30.</p>
+<p><strong>Tee.</strong></p>
+<ol>
+<li>Kinnitatud otsuse järel (E2-T06) loo iga osalejale <strong><code>application</code> tüübiga <code>OFFER_BASED</code></strong> olekusse <code>AWAITING_FEE_PAYMENT</code> (E1-T01 olekumasin kasutab sama; <strong>lisa üleminek <code>OFFER_BASED</code>: loomisel <code>AWAITING_ALLOCATION</code> jäetakse vahele</strong>). <code>requested_opportunity</code> ridu ei ole; <code>allocated_opportunity</code> on pakkumise sisu. Taotluse puuduolevad väljad (kontakt, laev/kalur) eeltäidetakse KOT-ist, LAEVIS-est ja eelmise aasta loast; puudu jääv küsitakse nõustumisel (E3-T01 <code>accept</code> sisend).</li>
+<li><strong>Eelkontroll (A-30):</strong> enne pakkumise loomist käivita CHK-01…CHK-05. <code>FAIL</code> → pakkumist ei looda, jaotus <code>exclusion_reason</code> ja PTA ülesanne. <strong>Järelkontroll:</strong> pärast <code>accept</code>&#39;i korratakse (E1-T04, E3-T04 punkt 3).</li>
+<li><strong>Teavituse link:</strong> teavitus (<code>offer.available</code>) sisaldab turvalist lingi (juhuslik ühekordne token, 30 päeva, seotud osapoolega). Link viib kalaluba.ee-sse ja nõuab autentimist; token ainult suunab, ei autendi. Linki avades pärast tähtaega: viimane seis.</li>
+<li>E3-T01 <code>accept</code>/<code>decline</code> ja E5 vaie kasutatakse muutmata. <strong>Lisandub:</strong> <code>POST …/offer/confirm</code> (= <code>accept</code>), mille eeldus on taustakontroll edukalt läbitud (E3-T04 punkt 3 jookseb juba nõustumise ajal): <code>FAIL</code> → vastuses <code>ERR_OFFER_NOT_POSSIBLE</code> („Püügivõimaluse saamine ei ole võimalik“) ja olek jääb <code>AWAITING_FEE_PAYMENT</code>, kuni PTA otsustab (ülesanne).</li>
+<li><strong>Maksmata püügivõimaluste tühistamine:</strong> E3-T06 töö kehtib ka <code>OFFER_BASED</code> taotlustele (tühistamise põhjus <code>FEE_NOT_PAID</code> või <code>OFFER_NOT_ACCEPTED</code>).</li>
+<li>Taotlustüüp <code>OFFER_BASED</code> on kõigis aruannetes eristatav.</li>
+</ol>
+<p><strong>AC.</strong></p>
+<pre><code class="lang-gherkin">Scenario: Pakkumise loomine
+  Given kinnitatud proaktiivne jaotus, osaleja X läbis eelkontrolli
+  Then  X-ile on loodud OFFER_BASED taotlus AWAITING_FEE_PAYMENT, allocated_opportunity täidetud ja e-kiri saadetud
+
+Scenario: Eelkontroll FAIL
+  Given X CHK-04 FAIL
+  Then  pakkumist ei looda ja PTA ülesanne on olemas
+
+Scenario: Järelkontroll FAIL nõustumisel
+  Given X läbis eelkontrolli, aga nõustumisel on LAEVIS-e omanik muutunud
+  When  confirm
+  Then  ERR_OFFER_NOT_POSSIBLE ja luba ei väljastata
+
+Scenario: Link
+  When  X avab lingi
+  Then  teda suunatakse autentimisele ja pärast seda tema pakkumisele
+
+Scenario: Tühistamine
+  Given X ei teinud midagi P-05-ks
+  Then  OFFER_BASED taotlus CANCELLED(OFFER_NOT_ACCEPTED) ja kogus on released_opportunity</code></pre>
+<p><strong>Eeldused.</strong> A-01, A-30. <strong>Sõltub:</strong> KL-E6-T01, E3-T01…T07.</p>
+<hr>
+<h3 id="kl-e6-t03-taotlusvooru-väljalülitus-ja-üleminek"><a class="anchor" href="#kl-e6-t03-taotlusvooru-väljalülitus-ja-üleminek">#</a>KL-E6-T03 Taotlusvooru väljalülitus ja üleminek</h3>
+<p><strong>Eesmärk.</strong> Süsteem toetab stsenaariumivalikut <strong>seadistusega</strong> <code>scenario = APPLICATION_BASED | PROACTIVE</code> aastate kaupa, nii et üleminek ei vaja koodimuudatust ega katkesta eelnevaid aastaid.</p>
+<p><strong>Tee.</strong></p>
+<ol>
+<li><code>fishing_year_config.scenario</code> (vaikimisi <code>APPLICATION_BASED</code>).</li>
+<li><code>PROACTIVE</code> aastal: <code>POST /fishing-licence-applications</code> (ANNUAL) annab <code>ERR_SCENARIO_NOT_APPLICABLE</code>, taotlusvooru kuupäevad ei kehti, E2-T04 ajastatud käivitus asendub E6-T01 käivitusega. <code>APPLICATION_BASED</code>: E6 ajastatud tööd ei käivitu.</li>
+<li>Andmemudelis ei ole kahe stsenaariumi vahel konflikti: <code>application_type</code> eristab. Aruanded filtreerivad seda.</li>
+<li>Üleminekujuhend dokumendis <code>docs/operations/scenario-switch.md</code>: kontrollnimekiri (õigusmuudatus jõus, parameetrid, test-käivitus enne aasta algust).</li>
+</ol>
+<p><strong>AC.</strong></p>
+<pre><code class="lang-gherkin">Scenario: Baasstsenaarium
+  Given scenario=APPLICATION_BASED
+  Then  taotluse esitamine on lubatud ja E6 töö ei käivitu
+
+Scenario: Proaktiivne aasta
+  Given scenario=PROACTIVE
+  When  taotleja proovib luua ANNUAL taotlust
+  Then  ERR_SCENARIO_NOT_APPLICABLE
+
+Scenario: Ajalugu
+  Given 2027 oli APPLICATION_BASED ja 2028 PROACTIVE
+  Then  2027 andmed ja aruanded on muutumata</code></pre>
+<p><strong>Eeldused.</strong> A-01. <strong>Sõltub:</strong> E1-T07, E6-T01, E6-T02.</p>
+</article>
+<div class="pn"><a href="E5-vaidlustamine.html">← E5 Jagatud püügivõimaluste vaidlustamine (TO-BE.04)</a><a href="E7-vesiviljelus.html">E7 Vesiviljeluse tegevusloa taotlemine ja väljastamine (TO-BE.05) →</a></div>
+<footer>Ettepanek, mitte kinnitatud. Allikas: wiki leht 321262813.</footer></main>
+<aside class="toc"><b>Sellel lehel</b><ul><li><a href="#epic-39-u-kirjeldus">Epic&amp;#39;u kirjeldus</a></li></ul></aside></div>
+<script>(function(){
+var r=document.documentElement;try{var t=localStorage.getItem('th');if(t)r.dataset.theme=t}catch(e){}
+document.getElementById('theme').onclick=function(){var d=r.dataset.theme||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');d=d==='dark'?'light':'dark';r.dataset.theme=d;try{localStorage.setItem('th',d)}catch(e){}};
+document.getElementById('menu').onclick=function(){document.body.classList.toggle('nav')};
+var q=document.getElementById('q'),box=document.getElementById('results'),idx=null;
+function load(){return idx?Promise.resolve(idx):fetch('search.json').then(function(x){return x.json()}).then(function(j){return idx=j})}
+function esc(s){return s.replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})}
+q.addEventListener('input',function(){var v=q.value.trim().toLowerCase();if(v.length<2){box.hidden=true;return}
+load().then(function(d){var out=[];d.forEach(function(p){var x=p.x.toLowerCase(),i=x.indexOf(v);if(i<0&&p.t.toLowerCase().indexOf(v)<0)return;var c=0,j=i;while(j>=0){c++;j=x.indexOf(v,j+1)}
+var s=i>=0?esc(p.x.slice(Math.max(0,i-50),i+90)).replace(new RegExp(esc(v).replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'ig'),function(m){return'<mark>'+m+'</mark>'}):'';out.push({p:p,c:c,s:s})});
+out.sort(function(a,b){return b.c-a.c});box.innerHTML=out.length?out.map(function(o){return'<a href="'+o.p.u+'"><b>'+esc(o.p.t)+'</b> <small>'+o.c+' vastet</small><small>…'+o.s+'…</small></a>'}).join(''):'<a>Tulemusi pole</a>';box.hidden=false})});
+document.addEventListener('keydown',function(e){if(e.key==='/'&&document.activeElement!==q){e.preventDefault();q.focus()}if(e.key==='Escape'){box.hidden=true;q.blur()}});
+document.addEventListener('click',function(e){if(!box.contains(e.target)&&e.target!==q)box.hidden=true});
+var links=[].slice.call(document.querySelectorAll('.active .sub a'));
+if(links.length&&'IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){links.forEach(function(l){l.classList.toggle('cur',l.hash==='#'+en.target.id)})}})},{rootMargin:'-60px 0px -75% 0px'});
+links.forEach(function(l){var h=document.getElementById(l.hash.slice(1));if(h)io.observe(h)})}
+})();
+</script></body></html>

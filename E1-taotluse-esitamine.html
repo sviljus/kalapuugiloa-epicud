@@ -1,0 +1,383 @@
+<!doctype html><html lang="et"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KL-E1 Kutselise kalapüügiloa taotluse esitamine · Kalapüügiloa Epic'ud</title><meta name="robots" content="noindex">
+<style>:root{--bg:#fff;--fg:#1c2430;--mut:#5b6675;--bd:#e2e6ec;--ac:#0b6bcb;--soft:#f4f7fb;--code:#f1f4f8}
+:root[data-theme=dark]{--bg:#10151c;--fg:#e4e9f0;--mut:#9aa6b6;--bd:#27303c;--ac:#6cb2ff;--soft:#171e28;--code:#1b2330}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#10151c;--fg:#e4e9f0;--mut:#9aa6b6;--bd:#27303c;--ac:#6cb2ff;--soft:#171e28;--code:#1b2330}}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+a{color:var(--ac)}
+.top{position:sticky;top:0;z-index:20;display:flex;gap:12px;align-items:center;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--bd)}
+.brand{font-weight:700;color:var(--fg);text-decoration:none}.brand small{font-weight:400;color:var(--mut);margin-left:6px}
+#q{margin-left:auto;width:min(320px,40vw);padding:7px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--soft);color:var(--fg)}
+button{background:var(--soft);color:var(--fg);border:1px solid var(--bd);border-radius:8px;padding:6px 10px;cursor:pointer}
+#menu{display:none}
+.shell{display:grid;grid-template-columns:270px minmax(0,1fr) 220px;max-width:1500px;margin:0 auto}
+.side{position:sticky;top:57px;align-self:start;height:calc(100vh - 57px);overflow:auto;padding:16px;border-right:1px solid var(--bd);font-size:14px}
+.side ul{list-style:none;margin:0;padding:0}.side>ul>li{margin-bottom:6px}.side>ul>li>a{font-weight:600;color:var(--fg);text-decoration:none;display:block;padding:4px 8px;border-radius:6px}
+.side li.active>a{background:var(--soft);color:var(--ac)}
+.sub{display:none;margin:2px 0 6px 10px!important;border-left:2px solid var(--bd)}.active .sub{display:block}
+.sub a{display:block;padding:2px 10px;color:var(--mut);text-decoration:none;font-size:13px}.sub a:hover,.sub a.cur{color:var(--ac)}
+main{padding:24px 40px 60px;min-width:0}article{max-width:860px}
+.toc{position:sticky;top:57px;align-self:start;padding:24px 16px;font-size:13px;max-height:calc(100vh - 57px);overflow:auto}
+.toc ul{list-style:none;padding:0}.toc a{display:block;color:var(--mut);text-decoration:none;padding:2px 0}.toc a:hover{color:var(--ac)}
+h1{font-size:2rem;line-height:1.2}h2{margin-top:2.4em;padding-top:.6em;border-top:1px solid var(--bd)}
+h3{margin-top:2.2em;padding:8px 12px;background:var(--soft);border-left:4px solid var(--ac);border-radius:4px}
+h4{margin-top:1.6em}
+.anchor{opacity:0;margin-left:-1.1em;padding-right:.3em;text-decoration:none}h2:hover .anchor,h3:hover .anchor,h4:hover .anchor{opacity:.6}
+code{background:var(--code);padding:1px 5px;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:14px;border-radius:8px;overflow:auto;border:1px solid var(--bd)}pre code{background:none;padding:0}
+.tw{overflow:auto;margin:1em 0}table{border-collapse:collapse;font-size:14px;min-width:100%}
+th,td{border:1px solid var(--bd);padding:6px 10px;vertical-align:top;text-align:left}th{background:var(--soft)}
+blockquote{margin:1em 0;padding:4px 16px;border-left:4px solid var(--bd);color:var(--mut)}
+.ext{border-bottom:1px dotted var(--mut);cursor:help}
+.hero{margin-bottom:2em}.lead{font-size:1.15rem;color:var(--mut)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin:20px 0}
+.card{display:flex;flex-direction:column;gap:6px;padding:16px;border:1px solid var(--bd);border-radius:12px;background:var(--soft);text-decoration:none;color:var(--fg);transition:.15s}
+.card:hover{border-color:var(--ac);transform:translateY(-2px)}.card .k{color:var(--ac);font-weight:700;font-size:13px}.card .m{color:var(--mut);font-size:13px}
+.card.valikuline{border-style:dashed}.card.blokeeritud{opacity:.7;border-style:dashed}
+.btn{display:inline-block;padding:10px 18px;background:var(--ac);color:var(--bg);border-radius:8px;text-decoration:none;font-weight:600}
+.pn{display:flex;justify-content:space-between;margin-top:3em;padding-top:1em;border-top:1px solid var(--bd)}
+footer{margin-top:2em;color:var(--mut);font-size:13px}
+#results{position:fixed;top:56px;right:16px;width:min(520px,calc(100vw - 32px));max-height:70vh;overflow:auto;background:var(--bg);border:1px solid var(--bd);border-radius:10px;box-shadow:0 12px 40px #0004;z-index:30}
+#results a{display:block;padding:10px 14px;border-bottom:1px solid var(--bd);text-decoration:none;color:var(--fg);font-size:14px}#results a:hover{background:var(--soft)}
+#results small{display:block;color:var(--mut)}mark{background:#ffd54a66;color:inherit}
+@media(max-width:1100px){.shell{grid-template-columns:250px minmax(0,1fr)}.toc{display:none}}
+@media(max-width:760px){#menu{display:block}.shell{display:block}.side{display:none;position:fixed;top:57px;left:0;width:84vw;max-width:320px;background:var(--bg);z-index:25;height:calc(100vh - 57px)}body.nav .side{display:block}main{padding:16px}.brand small{display:none}}
+</style></head><body>
+<header class="top"><button id="menu" aria-label="Menüü">☰</button><a class="brand" href="index.html">Kalapüügiloa väljastamine <small>Epic'ud ja Task'id</small></a>
+<input id="q" type="search" placeholder="Otsi (/)" autocomplete="off"><button id="theme" aria-label="Teema">◐</button></header>
+<div id="results" hidden></div>
+<div class="shell"><nav class="side"><ul><li class=""><a href="index.html">Ülevaade</a></li><li class=""><a href="00-uldkontekst.html">Üldkontekst</a></li><li class="active"><a href="E1-taotluse-esitamine.html">E1 Kutselise kalapüügiloa taotluse esitamine</a><ul class="sub"><li><a href="E1-taotluse-esitamine.html#kl-e1-t01-taotlusmenetluse-tüüp-ja-olekumasin-mo">T01 Taotlusmenetluse tüüp ja olekumasin (MO)</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t02-taotleja-tuvastamine-esindusõigus-ja-rolli-valik">T02 Taotleja tuvastamine, esindusõigus ja rolli valik</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t03-taotluse-andmemudel-mustandi-api-ja-eeltäitmine">T03 Taotluse andmemudel, mustandi API ja eeltäitmine</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t04-taustakontrollide-mootor-registripõhine">T04 Taustakontrollide mootor (registripõhine)</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t05-taotluse-esitamine">T05 Taotluse esitamine</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t06-taotleja-vaated-minu-taotlused-ja-staatus">T06 Taotleja vaated: minu taotlused ja staatus</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t07-taotlusvooru-parameetrite-haldus-pta-admin">T07 Taotlusvooru parameetrite haldus (PTA_ADMIN)</a></li></ul></li><li class=""><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html">E2 Püügivõimaluste arvutamine ja jaotamine</a><ul class="sub"><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t01-pvt-andmemudel-jaotusüksus-jaotustulemus-jaotusotsus">T01 PVT andmemudel: jaotusüksus, jaotustulemus, jaotusotsus</a></li><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t03-ajalooliste-andmete-sisendi-adapter-ods-pvt">T03 Ajalooliste andmete sisendi adapter (ODS/PVT)</a></li><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t02-arvutusmootor-määrus-4-8">T02 Arvutusmootor (määrus § 4–§ 8)</a></li><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t04-jaotusarvutuse-käivitamine-ja-eelnõu-koostamine">T04 Jaotusarvutuse käivitamine ja eelnõu koostamine</a></li><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t05-pta-ülevaatus-parandus-ja-kinnitamine-ametnikuportaal">T05 PTA ülevaatus, parandus ja kinnitamine (Ametnikuportaal)</a></li><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t06-jaotusotsuse-väljastamine-avaldamine-ja-teavitamine">T06 Jaotusotsuse väljastamine, avaldamine ja teavitamine</a></li></ul></li><li class=""><a href="E3-tasu-ja-loa-valjastamine.html">E3 Püügivõimaluse vastuvõtt, püügiõiguse tasu ja kalapüügiloa väljastamine</a><ul class="sub"><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t01-taotleja-otsus-jaotuse-kohta-nõustu-loobu">T01 Taotleja otsus jaotuse kohta (nõustu, loobu)</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t02-püügiõiguse-tasu-arvutus-ja-tasumäärade-seadistus">T02 Püügiõiguse tasu arvutus ja tasumäärade seadistus</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t03-maksekorraldus-ja-makse-staatuse-vastuvõtt">T03 Maksekorraldus ja makse staatuse vastuvõtt</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t04-kalapüügiloa-loomine-ja-väljastamine-lto">T04 Kalapüügiloa loomine ja väljastamine (LTO)</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t05-fishinglicencechanged-sündmus-ja-flux-lepe">T05 FishingLicenceChanged sündmus ja FLUX-lepe</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t06-tasu-tähtaja-järelvalve-ja-taotluse-tühistamine">T06 Tasu tähtaja järelvalve ja taotluse tühistamine</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t07-teavituste-kataloog-e-post-e1-e3-jaoks">T07 Teavituste kataloog (e-post) E1–E3 jaoks</a></li></ul></li><li class=""><a href="E4-kasutamata-puugivoimaluste-umberjagamine.html">E4 Kasutamata püügivõimaluste jagamine (TO-BE.03)</a><ul class="sub"><li><a href="E4-kasutamata-puugivoimaluste-umberjagamine.html#kl-e4-t01-ümberjaotuse-käivitus-ja-pakkumiste-arvutus">T01 Ümberjaotuse käivitus ja pakkumiste arvutus</a></li><li><a href="E4-kasutamata-puugivoimaluste-umberjagamine.html#kl-e4-t02-pakkumise-vastuvõtt-tasu-ja-loa-uus-versioon">T02 Pakkumise vastuvõtt, tasu ja loa uus versioon</a></li><li><a href="E4-kasutamata-puugivoimaluste-umberjagamine.html#kl-e4-t03-lõplik-jaotusotsus-ja-tulemuste-edastus-ods">T03 Lõplik jaotusotsus ja tulemuste edastus (ODS)</a></li></ul></li><li class=""><a href="E5-vaidlustamine.html">E5 Jagatud püügivõimaluste vaidlustamine (TO-BE.04)</a><ul class="sub"><li><a href="E5-vaidlustamine.html#kl-e5-t01-vaide-esitamine">T01 Vaide esitamine</a></li><li><a href="E5-vaidlustamine.html#kl-e5-t02-vaide-menetlemine-pta-s-ja-otsus">T02 Vaide menetlemine PTA-s ja otsus</a></li><li><a href="E5-vaidlustamine.html#kl-e5-t03-vaide-tulemuse-teavitus-ja-tähtaegade-taastamine">T03 Vaide tulemuse teavitus ja tähtaegade taastamine</a></li></ul></li><li class=""><a href="E6-stsenaarium-2-delta.html">E6 Alternatiivne stsenaarium: proaktiivne jaotus ja pakkumine (delta)</a><ul class="sub"><li><a href="E6-stsenaarium-2-delta.html#kl-e6-t01-proaktiivne-jaotus-jaotusüksuse-reeglistik-reserv-uutele-turuosalistele">T01 Proaktiivne jaotus (jaotusüksuse reeglistik, reserv uutele turuosalistele)</a></li><li><a href="E6-stsenaarium-2-delta.html#kl-e6-t02-pakkumine-ja-eeltäidetud-kinnitus-ilma-taotluseta">T02 Pakkumine ja eeltäidetud kinnitus (ilma taotluseta)</a></li><li><a href="E6-stsenaarium-2-delta.html#kl-e6-t03-taotlusvooru-väljalülitus-ja-üleminek">T03 Taotlusvooru väljalülitus ja üleminek</a></li></ul></li><li class=""><a href="E7-vesiviljelus.html">E7 Vesiviljeluse tegevusloa taotlemine ja väljastamine (TO-BE.05)</a><ul class="sub"><li><a href="E7-vesiviljelus.html#kl-e7-t01-vesiviljeluse-tegevusloa-taotlus-esitamine-eeltäide-taustakontroll">T01 Vesiviljeluse tegevusloa taotlus (esitamine, eeltäide, taustakontroll)</a></li><li><a href="E7-vesiviljelus.html#kl-e7-t02-kohapealse-kontrolli-planeerimine-ja-okas-2-integratsioon">T02 Kohapealse kontrolli planeerimine ja OKAS-2 integratsioon</a></li><li><a href="E7-vesiviljelus.html#kl-e7-t03-otsus-tegevusloa-väljastamine-või-keeldumine">T03 Otsus: tegevusloa väljastamine või keeldumine</a></li></ul></li><li class=""><a href="E8-harrastuspuuk.html">E8 Harrastuspüük: püügivõimaluste haldus, kalastuskaart, püügiõigus (TO-BE.06–08)</a><ul class="sub"><li><a href="E8-harrastuspuuk.html#kl-e8-t01-piirarvuga-kalastuskaardi-püügivõimaluste-lisamine-ja-avalikustamine-to-be-06">T01 Piirarvuga kalastuskaardi püügivõimaluste lisamine ja avalikustamine (TO-BE.06)</a></li><li><a href="E8-harrastuspuuk.html#kl-e8-t02-kalastuskaardi-soetamine-to-be-07">T02 Kalastuskaardi soetamine (TO-BE.07)</a></li><li><a href="E8-harrastuspuuk.html#kl-e8-t03-harrastuspüügiõiguse-soetamine-to-be-08">T03 Harrastuspüügiõiguse soetamine (TO-BE.08)</a></li></ul></li><li class=""><a href="E9-automaatotsusega-load.html">E9 Reeglipõhised load: eripüük, elektripüügivahendi tõend, asustamisluba (TO-BE.09–11)</a><ul class="sub"><li><a href="E9-automaatotsusega-load.html#kl-e9-t01-reeglipõhine-otsusemootor-ja-menetlus-ühine">T01 Reeglipõhine otsusemootor ja menetlus (ühine)</a></li><li><a href="E9-automaatotsusega-load.html#kl-e9-t02-eripüügiloa-taotlus-ja-reeglid-to-be-09">T02 Eripüügiloa taotlus ja reeglid (TO-BE.09)</a></li><li><a href="E9-automaatotsusega-load.html#kl-e9-t03-elektripüügivahendi-tõend-to-be-10">T03 Elektripüügivahendi tõend (TO-BE.10)</a></li><li><a href="E9-automaatotsusega-load.html#kl-e9-t04-asustamisloa-taotlus-ja-väljastamine-to-be-11">T04 Asustamisloa taotlus ja väljastamine (TO-BE.11)</a></li></ul></li></ul></nav>
+<main><article><h1 id="kl-e1-kutselise-kalapüügiloa-taotluse-esitamine"><a class="anchor" href="#kl-e1-kutselise-kalapüügiloa-taotluse-esitamine">#</a>KL-E1 Kutselise kalapüügiloa taotluse esitamine</h1>
+<p>Loe enne: <a href="00-uldkontekst.html">ühine kontekst</a> (eeldused A-nn, parameetrid P-nn, olekumudel 3.1).</p>
+<h2 id="epic-39-u-kirjeldus"><a class="anchor" href="#epic-39-u-kirjeldus">#</a>Epic&#39;u kirjeldus</h2>
+<p><strong>Eesmärk.</strong> Kaluri või kalalaeva omanik saab kalaluba.ee kaudu esitada järgmise aasta kutselise kalapüügi loa taotluse, mis on registriandmetega eeltäidetud ja enne esitamist automaatselt kontrollitud. Puudulik taotlus ei jõua menetlusse.</p>
+<p><strong>Piir.</strong> Epic lõpeb hetkel, kui taotlus on olekus <code>AWAITING_ALLOCATION</code>. Jaotus on <a href="E2-puugivoimaluste-arvutus-ja-jaotus.html">E2</a>, tasu ja loa väljastamine on <a href="E3-tasu-ja-loa-valjastamine.html">E3</a>.</p>
+<p><strong>Protsessi samm skeemil (TO-BE.01 taotleja rada):</strong> Soovib esitada taotlust → valib „Kaluri kalapüügiluba“ → kas kasutaja on autenditud? (ei → autentimine) → isikuandmete ja esindusõiguse päring (Rahvastikuregister, Äriregister, Pääsuke) → valib rolli → täidab või muudab taotluse vormi ja kinnitab → andmete päring teistest registritest ja taustakontroll (Kutsetunnistuste register, Karistusregister, klassifikaatorid sh FLUX-i omad, LAEVIS) → kas kõik kohustuslikud andmed on täidetud? (ei → „Taotluse esitamine ei ole võimalik“) → esitab → staatus „Püügivõimaluste jaotuse ootel“. Märkus skeemil: „Taotlejat, kalalaeva ja püügivõimalusi kontrollitakse täitmisel kindlate ärireeglite alusel“ ja „Varem esitatud taotluse olemasolul saab uue taotluse eeltäita samade andmetega“.</p>
+<p><strong>Väljaspool Epic&#39;ut:</strong> kalastuskaardid, harrastuspüük, eripüük (vt E8, E9), taotlused jooksva aasta täiendavaks püügivõimaluseks (määrus § 2 lg 3–6). Nende jaoks ei looda siin eraldi voogu. Taotluse andmemudel peab neid siiski mitte takistama (väli <code>application_type</code> vaikimisi <code>ANNUAL</code>).</p>
+<p><strong>Task&#39;ide järjekord:</strong> T01 → T02 → T03 → T04 → T05 → T06. T07 võib toimuda paralleelselt T03-ga.</p>
+<hr>
+<h3 id="kl-e1-t01-taotlusmenetluse-tüüp-ja-olekumasin-mo"><a class="anchor" href="#kl-e1-t01-taotlusmenetluse-tüüp-ja-olekumasin-mo">#</a>KL-E1-T01 Taotlusmenetluse tüüp ja olekumasin (MO)</h3>
+<p><strong>Eesmärk.</strong> Luua MO-s menetlustüüp <code>FISHING_LICENCE_APPLICATION</code> olekumasinaga, mida kõik E1–E3 Task&#39;id kasutavad.</p>
+<p><strong>Kontekst ja allikad.</strong> <a href="00-uldkontekst.html">Ühine kontekst 3.1</a>, MO_UC-01 (algatamine), MO_UC-02 (registreerimine, unikaalne ID), MO_UC-03 (staatuse haldamine), MO_DR-04, MO_DR-12, MO_DR-13, MO_DR-15 (menetlustüübi konfiguratsioon ilma andmemudelit muutmata).</p>
+<p><strong>Tee.</strong></p>
+<ol>
+<li>Registreeri menetlustüüp <code>FISHING_LICENCE_APPLICATION</code> menetlustüüpide konfiguratsioonis. Olekud ja lubatud üleminekud on täpselt <a href="00-uldkontekst.html">3.1 tabelis</a>. Üleminekuid kontrollib olekumasin serveris, klient ei saa olekut otse kirjutada.</li>
+<li>Iga olekumuutus on üks tehing (olek + olekuajalugu + auditisündmus <code>AL_UC-01</code> + sündmus <code>ApplicationStateChanged</code>). Kui ükskõik milline neist ebaõnnestub, ei muutu midagi.</li>
+<li>Olekuajalugu on lisamisel-ainult: <code>application_id</code>, <code>from_state</code>, <code>to_state</code>, <code>changed_at</code>, <code>changed_by</code> (kasutaja või <code>SYSTEM</code>), <code>reason_code</code>, <code>reason_text</code>.</li>
+<li>Menetlus saab unikaalse inimloetava numbri formaadis <code>KL-&lt;aasta&gt;-&lt;järjenumber 6 kohta&gt;</code> (aasta on püügiaasta, mitte esitamise aasta). Numbrid ei kordu ega jäta kunagi tühja numbrit transaktsiooni ebaõnnestumisel.</li>
+<li>Pärast lõppseisu (<code>LICENCE_ISSUED</code>, <code>CANCELLED</code>) on menetlus muutumatu (MO_DR-12). Katse seda muuta annab <code>ERR_INVALID_STATE_TRANSITION</code>.</li>
+</ol>
+<p><strong>Liides.</strong> Sisemine teenusliides <code>ApplicationStateMachine.transition(application_id, to_state, actor, reason_code, expected_version)</code>. Sündmus <code>ApplicationStateChanged {application_id, from, to, at, actor, reason_code}</code>.</p>
+<p><strong>AC.</strong></p>
+<pre><code class="lang-gherkin">Scenario: Lubatud üleminek
+  Given taotlus olekus DRAFT
+  When  SYSTEM kutsub transition(to=AWAITING_ALLOCATION)
+  Then  olek on AWAITING_ALLOCATION ja olekuajaloos on üks uus rida
+  And   AL_UC-01 sündmus on loodud ja viitab taotluse ID-le
+  And   sündmus ApplicationStateChanged on avaldatud
+
+Scenario: Keelatud üleminek
+  Given taotlus olekus CONFIRMED
+  When  keegi kutsub transition(to=DRAFT)
+  Then  vastus on ERR_INVALID_STATE_TRANSITION ja olek ei muutu ega ajalugu ei kasva
+
+Scenario: Lõppseisu muutumatus
+  Given taotlus olekus CANCELLED
+  When  proovitakse muuta mistahes taotluse välja
+  Then  ERR_INVALID_STATE_TRANSITION
+
+Scenario: Samaaegne muutmine
+  Given kaks päringut sama expected_version-iga
+  Then  üks õnnestub, teine saab ERR_CONFLICT_VERSION
+
+Scenario: Numbrid
+  When  luuakse 100 taotlust paralleelselt
+  Then  numbrid on unikaalsed ja järjestikused</code></pre>
+<p><strong>Eeldused.</strong> A-01, A-12, A-14. <strong>Sõltub:</strong> MO teenuse karkass (MO_DR-01) peab olemas olema. Kui ei ole, loo minimaalne karkass selle Task&#39;i raames ainult selle menetlustüübi jaoks.</p>
+<p><strong>Ei kuulu ulatusse.</strong> Teised menetlustüübid, ametniku töölaud.</p>
+<hr>
+<h3 id="kl-e1-t02-taotleja-tuvastamine-esindusõigus-ja-rolli-valik"><a class="anchor" href="#kl-e1-t02-taotleja-tuvastamine-esindusõigus-ja-rolli-valik">#</a>KL-E1-T02 Taotleja tuvastamine, esindusõigus ja rolli valik</h3>
+<p><strong>Eesmärk.</strong> Taotleja autenditakse, tema esindatavad isikud/ettevõtted selgitatakse välja registritest ja ta valib, kelle nimel ja millise loaliigi taotlust ta esitab.</p>
+<p><strong>Kontekst.</strong> KL_UC-01 (autentimine), KL_UC-02 (rolli ja esinduskonteksti vahetamine), KL_UC-12 (kaluri kalapüügiloa soetamine), KL_UC-13 (kalalaeva kalapüügiloa soetamine), KOT_UC-01 (osapoole tuvastamine), KOT_UC-12 (osapoole andmete uuendamine alusregistrite põhjal). Skeemi sammud: „Valib ‚Kaluri kalapüügiluba‘“, autentimine (alamprotsess), „Isikuandmete ja esindusõiguse päring“, „Valib rolli“. Registrid: Rahvastikuregister (füüsiline isik), Äriregister (ettevõte ja esindusõigus), Pääsuke (volitused).</p>
+<p><strong>Tee.</strong></p>
+<ol>
+<li>Kui kasutaja ei ole autenditud, suuna olemasolevasse autentimisvoogu (KL_UC-01) ja naase samale sammule. Autentimist siin <strong>ei realiseerita uuesti</strong>. Kui KL_UC-01 teenust veel ei ole, loo adapter liidese <code>IdentityProvider.currentSubject()</code> taha ja mock arenduseks.</li>
+<li>Autentimise järel päri registritest (adapterite kaudu, A-10 kordusloogikaga):<ul>
+<li>Rahvastikuregister: isikukood, nimi, elus-staatus. Kui isik ei ole elus → <code>ERR_APPLICANT_NOT_ELIGIBLE</code>.</li>
+<li>Äriregister: ettevõtted, kus isik on esindusõiguslik, ning ettevõtte staatus. Ettevõte, mis on kustutatud või pankrotis, ei ole valitav.</li>
+<li>Pääsuke: volitused, mille alusel isik võib esindada teisi isikuid.</li>
+</ul>
+</li>
+<li>Koosta <strong>esinduskontekstide loetelu</strong>: iga kirje on <code>(osapool, esindusalus, roll)</code>, kus esindusalus on <code>SELF</code>, <code>BUSINESS_REPRESENTATION</code> või <code>POWER_OF_ATTORNEY</code>. Loo või uuenda osapool KOT-is (KOT_UC-01/12) ja salvesta viide.</li>
+<li>Kasutaja valib esinduskonteksti ja seejärel loaliigi: <code>FISHERMAN_LICENCE</code> (kaluri kalapüügiluba) või <code>VESSEL_LICENCE</code> (kalalaeva kalapüügiluba). Valik salvestatakse mustandile. Kui esinduskontekste on 1 ja loaliik tuleneb ainsast võimalusest, näita valiku sammu ikkagi (läbipaistvus), eeltäidetud.</li>
+<li>Kui esinduskontekste ei ole ühtegi, näita viga <code>ERR_NO_REPRESENTATION</code> koos juhistega.</li>
+<li>Seansi jooksul vahetatav (KL_UC-02) ilma taotluse andmeid kaotamata: vahetus mustandi pealt toob kasutaja tagasi vahetatud konteksti mustandite loendisse.</li>
+</ol>
+<p><strong>Liides.</strong> <code>GET /api/v1/me/representations</code> → <code>[{party_id, party_name, basis, roles}]</code>. <code>POST /api/v1/fishing-licence-applications</code> (body: <code>party_id</code>, <code>licence_kind</code>, <code>fishing_year</code>) loob mustandi (vt T03). KL UI vorm on osa Task&#39;ist ainult niivõrd, et API-d tarbib (A-01: KL on ainult kasutajaliides).</p>
+<p><strong>AC.</strong></p>
+<pre><code class="lang-gherkin">Scenario: Füüsilisest isikust kalur
+  Given autenditud kasutaja, kes on elus ja kellel ei ole ettevõtteid
+  When  GET /me/representations
+  Then  vastuses on ühe kirjena SELF ja osapool on KOT-is olemas
+
+Scenario: Ettevõtte esindaja
+  Given kasutaja on Äriregistri järgi ettevõtte A juhatuse liige
+  Then  loetelus on SELF ja BUSINESS_REPRESENTATION(A)
+
+Scenario: Kustutatud ettevõte
+  Given ettevõte B on Äriregistris kustutatud
+  Then  B ei ole loetelus
+
+Scenario: Volitus Pääsukese kaudu
+  Given Pääsuke ütleb, et kasutajal on volitus esindada isikut C kutselise kalapüügi loa taotlemisel
+  Then  loetelus on POWER_OF_ATTORNEY(C)
+
+Scenario: Registri ajutine viga
+  Given Äriregister vastab 503 kolm korda
+  Then  loetelu päring annab ERR_DEPENDENCY_UNAVAILABLE ja ei tagasta osalist loetelu
+
+Scenario: Mitteesindatav osapool
+  When  kasutaja loob mustandi osapoolele, mida ta ei esinda
+  Then  ERR_FORBIDDEN
+
+Scenario: Audit
+  Then  iga registripäring on loonud AL_UC-04 integratsioonisündmuse ilma isikukoodita tekstis</code></pre>
+<p><strong>Eeldused.</strong> A-10, A-11, A-12. <strong>Sõltub:</strong> KL-E1-T01.</p>
+<p><strong>Ei kuulu ulatusse.</strong> Autentimise enda realiseerimine, e-Residendi autentimisviisid.</p>
+<hr>
+<h3 id="kl-e1-t03-taotluse-andmemudel-mustandi-api-ja-eeltäitmine"><a class="anchor" href="#kl-e1-t03-taotluse-andmemudel-mustandi-api-ja-eeltäitmine">#</a>KL-E1-T03 Taotluse andmemudel, mustandi API ja eeltäitmine</h3>
+<p><strong>Eesmärk.</strong> Taotleja saab luua, muuta ja kustutada mustandi. Vorm on eeltäidetud registritest ja eelmise aasta taotlusest.</p>
+<p><strong>Kontekst.</strong> Määrus § 3 lg 1–2 (taotluse vormid lisa 1 laevale, lisa 2 kalurile, dokumentide loetelu), § 9 lg 6 (e-posti aadress), TO-BE märkus „Varem esitatud taotluse olemasolul saab uue taotluse eeltäita“. MO_UC-01, DF_UC-01/02/06, KOT_UC-16.</p>
+<p><strong>Andmemudel (loogiline).</strong></p>
+<ul>
+<li><code>application</code>: <code>id</code>, <code>number</code>, <code>application_type</code> (vaikimisi <code>ANNUAL</code>), <code>fishing_year</code> (aasta, mille püügiks luba taotletakse), <code>licence_kind</code> (<code>FISHERMAN_LICENCE</code>|<code>VESSEL_LICENCE</code>), <code>party_id</code>, <code>contact_email</code> (kohustuslik, § 9 lg 6), <code>contact_phone</code> (valikuline), <code>paper_copy_requested</code> (bool), <code>state</code>, <code>version</code>, <code>submitted_at</code>, <code>created_at</code>, <code>created_by</code>.</li>
+<li><code>application_vessel</code> (ainult <code>VESSEL_LICENCE</code>): <code>application_id</code>, <code>laevis_vessel_id</code>, <code>owner_party_id</code>, <code>possession_basis</code> (<code>OWNER</code>|<code>OTHER_LAWFUL_POSSESSION</code>).</li>
+<li><code>application_fisherman</code> (ainult <code>FISHERMAN_LICENCE</code>): <code>application_id</code>, <code>person_party_id</code>, <code>gear_type_code</code>, <code>licence_period</code> (valikuline).</li>
+<li><code>requested_opportunity</code> (taotleja soov): <code>id</code>, <code>application_id</code>, <code>species_code</code>, <code>water_area_code</code>, <code>gear_type_code</code>, <code>quantity</code>, <code>unit</code> (<code>TONNE</code>|<code>PIECE</code>|<code>FISHING_DAY</code>|<code>GEAR_COUNT</code>), <code>fishing_purpose</code> (valikuline). <strong>Taotletud kogus jääb alles ka pärast jaotust</strong> (skeem: „taotlusel esitatud püügivõimalused jäävad alles“). Jaotuse tulemus on eraldi olem (E2).</li>
+<li><code>application_document</code>: <code>application_id</code>, <code>document_type</code> (<code>SEAWORTHINESS_CERT</code>|<code>VESSEL_CONFORMITY_CERT</code>|<code>POSSESSION_PROOF</code>|<code>HISTORICAL_RIGHT_PROOF</code>|<code>FOREIGN_FISHING_RIGHT_PROOF</code>|<code>EU_2017_2403_DOC</code>|<code>OTHER</code>), <code>dms_document_id</code> (DF viide). Fail ise elab DF-s.</li>
+</ul>
+<p><strong>Tee.</strong></p>
+<ol>
+<li>API: <code>POST /fishing-licence-applications</code>, <code>GET /{id}</code>, <code>PATCH /{id}</code> (osaline uuendus, nõuab <code>If-Match</code>/<code>version</code>), <code>DELETE /{id}</code> (ainult <code>DRAFT</code>, viib olekusse <code>CANCELLED</code> põhjusega <code>DRAFT_DELETED</code>), <code>GET /?party_id=&amp;state=&amp;fishing_year=</code>.</li>
+<li>Kogu taotluse andmeid saab muuta ainult olekus <code>DRAFT</code>. Ühe osapoole kohta võib püügiaastal olla <strong>üks aktiivne</strong> (<code>DRAFT</code> või edasine, mitte <code>CANCELLED</code>) <code>ANNUAL</code> taotlus loaliigi ja (vessel/fisherman) objekti kohta. Teine annab <code>ERR_DUPLICATE_APPLICATION</code>.</li>
+<li><strong>Eeltäitmine</strong> mustandi loomisel:<ul>
+<li>Taotleja andmed ja kontakt KOT-ist.</li>
+<li>Kalalaeva andmed LAEVIS-est (nimi, registrinumber, pardanumber, omanik, merekõlblikkuse tunnistus kehtivus). Kasutaja valib laeva loetelust, mille omanik on valitud osapool või millel on tema valdus.</li>
+<li>Kui sama osapoole eelmise aasta taotlus on olemas (olek ≠ <code>CANCELLED</code>/<code>DRAFT</code>), pakub süsteem „Kopeeri eelmise aasta taotlusest“. Kopeeritakse <code>requested_opportunity</code>, <code>contact_*</code>, <code>paper_copy_requested</code>. <strong>Ei kopeerita</strong> dokumente, mis on kehtivusest väljas, ega jaotuse tulemusi.</li>
+</ul>
+</li>
+<li><strong>Dokumendid</strong> (<code>application_document</code>): dokumenti nõutakse <strong>ainult siis, kui seda ei saa registrist</strong> (<span class="ext" title="Viide repo dokumendile, mida siin ei avaldata">määrus § 3 lg 1 p 2</span>: merekõlblikkuse tunnistus nõutav, kui seda ei ole LAEVIS-es). Nõutavad dokumendid määratakse T04 kontrolli tulemusest. Üleslaadimine DF_UC-01, seos DF_UC-06.</li>
+<li>Valideerimine PATCH-il on <strong>mittetakistav</strong> (mustandit võib salvestada poolikuna). Täielik valideerimine on T05.</li>
+</ol>
+<p><strong>Liides.</strong> OpenAPI <code>fishing-licence-applications</code> ressurss, kolm alamressurssi (<code>requested-opportunities</code>, <code>documents</code>, <code>vessel</code>/<code>fisherman</code>). Loetelud: klassifikaatorid <code>species</code>, <code>water_area</code>, <code>gear_type</code>, <code>unit</code> tulevad klassifikaatorite teenusest. Kui seda ei ole, hoia neid seadistustabelis <code>classifier</code> koos FLUX-i koodidega (skeem: „Klassifikaatorid, sh FLUX-i omad“).</p>
+<p><strong>AC.</strong></p>
+<pre><code class="lang-gherkin">Scenario: Mustandi loomine eelmise aasta alusel
+  Given osapoolel on eelmise aasta taotlus kolme taotletud püügivõimalusega
+  When  ta loob uue mustandi ja valib „Kopeeri eelmise aasta taotlusest“
+  Then  uues mustandis on samad kolm requested_opportunity rida uue ID-ga ja fishing_year on järgmine
+
+Scenario: Dubleeriv taotlus
+  Given osapoolel on aktiivne ANNUAL taotlus laevale L aastaks 2027
+  When  ta proovib luua teist samale laevale ja aastale
+  Then  ERR_DUPLICATE_APPLICATION
+
+Scenario: Poolik mustand salvestatakse
+  When  PATCH ilma contact_email-ita
+  Then  200 ja mustand salvestub (valideerimine toimub esitamisel)
+
+Scenario: Muutmine pärast esitamist
+  Given taotlus AWAITING_ALLOCATION
+  When  PATCH
+  Then  ERR_INVALID_STATE_TRANSITION
+
+Scenario: Kustutamine
+  Given DRAFT
+  When  DELETE
+  Then  olek CANCELLED, põhjus DRAFT_DELETED, audit loodud
+
+Scenario: Võõra taotluse lugemine
+  Given kasutaja, kes ei esinda taotluse osapoolt
+  When  GET /{id}
+  Then  ERR_NOT_FOUND (mitte 403, et mitte avaldada olemasolu)</code></pre>
+<p><strong>Eeldused.</strong> A-02, A-12, A-13. <strong>Sõltub:</strong> KL-E1-T01, KL-E1-T02.</p>
+<p><strong>Ei kuulu ulatusse.</strong> Jooksva aasta täiendavad taotlused (§ 2 lg 3–6), maksete algatamine.</p>
+<hr>
+<h3 id="kl-e1-t04-taustakontrollide-mootor-registripõhine"><a class="anchor" href="#kl-e1-t04-taustakontrollide-mootor-registripõhine">#</a>KL-E1-T04 Taustakontrollide mootor (registripõhine)</h3>
+<p><strong>Eesmärk.</strong> Esitamisel ja vajadusel mustandi pealt saab käivitada kontrollid, mis annavad kindla loetelu tulemustest (läbitud, ebaõnnestunud, vajab dokumenti, vajab ametnikku).</p>
+<p><strong>Kontekst.</strong> Skeemi sammud „Andmete päring teistest registritest ja taustakontroll“ ning „Kas kõik kohustuslikud andmed on täidetud?“. Registrid: Kutsetunnistuste register, Karistusregister, klassifikaatorid, LAEVIS (LTO_IF-04, LTO_IF-05, LTO_IF-06, LTO_UC-16 Väliste tingimuste kontrollimine, MO_UC-13 Menetluse andmete kontrollimine). Wiki TO-BE.01 kirjeldus: kontrollitakse taotleja, kalalaeva ja püügivõimalustega seotud andmete vastavust nõuetele.</p>
+<p><strong>Kontrollide kataloog</strong> (iga kontroll on eraldi klass/reegel <code>CHK-nn</code>, ühise liidesega <code>Check.run(application) → CheckResult</code>):</p>
+<div class="tw"><table><thead><tr><th>ID</th><th>Kontroll</th><th>Kehtib</th><th>Allikas</th><th>Tulemus ebaõnnestumisel</th></tr></thead><tbody><tr><td>CHK-01</td><td>Taotleja on elus ja teovõimeline</td><td>kõik</td><td>Rahvastikuregister</td><td><code>FAIL</code> <code>ERR_APPLICANT_NOT_ELIGIBLE</code></td></tr><tr><td>CHK-02</td><td>Ettevõte on aktiivne ja esindaja on esindusõiguslik</td><td>ettevõtte nimel</td><td>Äriregister, Pääsuke</td><td><code>FAIL</code> <code>ERR_NO_REPRESENTATION</code></td></tr><tr><td>CHK-03</td><td>Kaluri kutsetunnistus kehtib, kui loaliik/püügivahend seda nõuab</td><td><code>FISHERMAN_LICENCE</code></td><td>Kutsetunnistuste register (LTO_IF-04)</td><td><code>FAIL</code> <code>ERR_QUALIFICATION_MISSING</code></td></tr><tr><td>CHK-04</td><td>Taotlejal ei ole kehtivaid karistusi, mis keelavad kutselise kalapüügi loa andmise</td><td>kõik</td><td>Karistusregister (LTO_IF-05)</td><td><code>FAIL</code> <code>ERR_PENALTY_RESTRICTION</code></td></tr><tr><td>CHK-05</td><td>Kalalaev on LAEVIS-es registreeritud ja kalalaevana kantud, seaduslik valdus on tõendatud</td><td><code>VESSEL_LICENCE</code></td><td>LAEVIS (LTO_IF-06)</td><td><code>FAIL</code> <code>ERR_VESSEL_NOT_ELIGIBLE</code></td></tr><tr><td>CHK-06</td><td>Merekõlblikkuse tunnistus või kalalaeva vastavuse tunnistus on olemas</td><td><code>VESSEL_LICENCE</code></td><td>LAEVIS, muidu <code>application_document</code></td><td><code>NEEDS_DOCUMENT</code> (<code>SEAWORTHINESS_CERT</code> või <code>VESSEL_CONFORMITY_CERT</code>)</td></tr><tr><td>CHK-07</td><td>Valdusõiguse tõend, kui taotleja ei ole laeva omanik</td><td><code>VESSEL_LICENCE</code></td><td>LAEVIS omanik vs taotleja</td><td><code>NEEDS_DOCUMENT</code> (<code>POSSESSION_PROOF</code>)</td></tr><tr><td>CHK-08</td><td>Ajaloolise püügiõiguse tõend, kui taotleja väidab seda omavat ja see ei ole PVT-s</td><td>kui ajalooline õigus taotluses märgitud</td><td>PVT / ODS</td><td><code>NEEDS_DOCUMENT</code> (<code>HISTORICAL_RIGHT_PROOF</code>)</td></tr><tr><td>CHK-09</td><td>Püügiõiguse omandamise dokument väljaspool EV jurisdiktsiooni</td><td>kui valitud veeala on väljaspool</td><td>klassifikaator</td><td><code>NEEDS_DOCUMENT</code> (<code>FOREIGN_FISHING_RIGHT_PROOF</code>)</td></tr><tr><td>CHK-10</td><td>EL 2017/2403 või 734/2008 nõutud dokument, kui püük väljaspool Läänemerd</td><td>kui valitud veeala on väljaspool Läänemerd</td><td>klassifikaator</td><td><code>NEEDS_DOCUMENT</code> (<code>EU_2017_2403_DOC</code>)</td></tr><tr><td>CHK-11</td><td>Taotletud püügivõimalused on kehtestatud ja valitud püügiaastaks olemas (liik × veeala × vahend)</td><td>kõik</td><td>PVT (PVT_UC-19 otsimine)</td><td><code>FAIL</code> <code>ERR_OPPORTUNITY_NOT_ESTABLISHED</code>, vea tekst nimetab rea</td></tr><tr><td>CHK-12</td><td>Püügivahendi ja laeva sobivus (nt laeva segment lubab vahendit)</td><td><code>VESSEL_LICENCE</code></td><td>LAEVIS + klassifikaatorid</td><td><code>FAIL</code> <code>ERR_GEAR_NOT_ALLOWED</code></td></tr><tr><td>CHK-13</td><td>Kohustuslikud väljad on täidetud (kontakt, vähemalt üks taotletud püügivõimalus, laev/kalur)</td><td>kõik</td><td>enda andmed</td><td><code>FAIL</code> <code>ERR_VALIDATION</code> väljade loeteluga</td></tr></tbody></table></div>
+<p><strong>Tee.</strong></p>
+<ol>
+<li>Realiseeri kontrollid kataloogi järgi. Iga kontroll tagastab <code>PASS</code>, <code>FAIL</code> (blokeerib esitamise), <code>NEEDS_DOCUMENT</code> (blokeerib, kuni dokument lisatud) või <code>NEEDS_OFFICER</code> (A-08: ei saa masinaga otsustada, ei blokeeri esitamist, loob PTA ülesande pärast esitamist).</li>
+<li>Väline viga (A-10) → tulemus <code>UNAVAILABLE</code>, mis <strong>blokeerib</strong> esitamise ajutise veaga, ei ole <code>FAIL</code>.</li>
+<li>Kontrolli tulemused salvestatakse (<code>check_result</code>: <code>application_id</code>, <code>check_id</code>, <code>result</code>, <code>details</code>, <code>evaluated_at</code>, <code>source_snapshot_ref</code>) ja kuvatakse taotlejale arusaadavalt (mis tuleb parandada). Karistusregistri andmeid <strong>ei salvestata</strong>, salvestatakse ainult tulemus (<code>PASS</code>/<code>FAIL</code>) ja kontrolli aeg (andmete minimaalsus, LTO_DR-18).</li>
+<li>API: <code>POST /fishing-licence-applications/{id}/checks</code> käivitab kõik asjakohased kontrollid ja tagastab loetelu. Idempotentne.</li>
+<li>Uus reegel tuleb lisada <strong>ilma muu koodi muutmata</strong>: kontrollid registreeritakse kataloogi.</li>
+</ol>
+<p><strong>AC.</strong></p>
+<pre><code class="lang-gherkin">Scenario: Kõik läbitud
+  Given kalalaeva taotlus, kus laev on LAEVIS-es, tunnistus LAEVIS-es, omanik = taotleja, karistusi pole
+  When  käivitatakse kontrollid
+  Then  kõik asjakohased tulemused on PASS ja blokeerivaid pole
+
+Scenario: Tunnistust LAEVIS-es pole
+  Given tunnistus puudub LAEVIS-est ja pole lisatud
+  Then  CHK-06 on NEEDS_DOCUMENT(SEAWORTHINESS_CERT)
+  When  taotleja lisab dokumendi
+  Then  CHK-06 on PASS
+
+Scenario: Karistusregistri keeld
+  Given karistus keelab loa andmise
+  Then  CHK-04 on FAIL ja vea tekst ei sisalda karistuse sisu
+
+Scenario: Karistusregister ei vasta
+  Given Karistusregister ei vasta pärast kolme kordust
+  Then  CHK-04 on UNAVAILABLE ja esitamine on blokeeritud, kuid FAIL-i ei ole
+
+Scenario: Võõras veeala
+  Given taotletud püügivõimalus on NAFO veealal
+  Then  CHK-09 ja CHK-10 on NEEDS_DOCUMENT
+
+Scenario: Püügivõimalust pole kehtestatud
+  Given taotletud rida (liik×veeala×vahend) puudub PVT-s aastaks 2027
+  Then  CHK-11 on FAIL ja nimetab rea
+
+Scenario: Kontrolli lisamine
+  When  lisatakse uus Check klass kataloogi
+  Then  ta jooksutatakse ilma mootori koodi muutmata</code></pre>
+<p><strong>Eeldused.</strong> A-08, A-10, A-12. <strong>Sõltub:</strong> KL-E1-T03.</p>
+<p><strong>Ei kuulu ulatusse.</strong> Eripüügi, vesiviljeluse ja asustamise kontrollid (E7, E9).</p>
+<hr>
+<h3 id="kl-e1-t05-taotluse-esitamine"><a class="anchor" href="#kl-e1-t05-taotluse-esitamine">#</a>KL-E1-T05 Taotluse esitamine</h3>
+<p><strong>Eesmärk.</strong> Taotleja esitab täieliku, kontrollitud taotluse. Taotlus läheb olekusse <code>AWAITING_ALLOCATION</code> ja jääb jaotust ootama.</p>
+<p><strong>Kontekst.</strong> Skeemi sammud „Esitab taotluse“, „Taotluse staatuse muutmine ‚Püügivõimaluste jaotuse ootel‘ staatuseks“, ots „Taotluse esitamine ei ole võimalik“. Määrus § 2 lg 1 (esitamise ajaaken).</p>
+<p><strong>Tee.</strong></p>
+<ol>
+<li><code>POST /fishing-licence-applications/{id}/submit</code> (nõuab <code>version</code>):<ol>
+<li>Kontrolli taotleja õigust (esindus, T02).</li>
+<li>Kontrolli, et <strong>esitamise ajaaken on avatud</strong>: <code>P-01 ≤ täna ≤ P-02</code> aastale <code>fishing_year − 1</code>. Väljaspool: <code>ERR_SUBMISSION_WINDOW_CLOSED</code> koos aken-kuupäevadega kasutajale.</li>
+<li>Käivita T04 kontrollid. Kui mõni on <code>FAIL</code>, <code>NEEDS_DOCUMENT</code> või <code>UNAVAILABLE</code>, siis taotlust ei esitata ja vastuses on kõikide mitteläbitud kontrollide loetelu (<strong>kõik korraga</strong>, mitte esimene).</li>
+<li>Üleminek <code>DRAFT→AWAITING_ALLOCATION</code> (T01), <code>submitted_at</code> = praegu.</li>
+<li>Loo PTA ülesanded (MO_UC-09) igale <code>NEEDS_OFFICER</code> kontrollile (A-08). Need ei blokeeri jaotust.</li>
+<li>Saada kinnitus e-postiga <code>contact_email</code> aadressile: „Taotlus nr … on esitatud“.</li>
+</ol>
+</li>
+<li><strong>Taotlusvooru lõpuni võib taotleja esitatud taotlust tagasi võtta</strong> (<code>POST /{id}/withdraw</code>: <code>AWAITING_ALLOCATION→DRAFT</code>, ainult kuni P-02, ja ainult kui jaotust pole alustatud). Pärast P-02 muutmine ei ole võimalik.</li>
+<li>Pärast P-02 on taotlused lukus, <code>AWAITING_ALLOCATION</code> jääb kuni E2 jaotuseni.</li>
+<li>Esitatud taotlus on loetav taotleja ja PTA poolt. Taotleja näeb kontrolli tulemusi ja ajalugu.</li>
+</ol>
+<p><strong>AC.</strong></p>
+<pre><code class="lang-gherkin">Scenario: Edukas esitamine
+  Given DRAFT, kõik kontrollid PASS, täna on 2026-10-15 (aken 2026-09-01…2026-12-01, aasta 2027)
+  When  taotleja esitab
+  Then  olek AWAITING_ALLOCATION, submitted_at täidetud, kinnitus-e-kiri saadetud, audit loodud
+
+Scenario: Aken suletud
+  Given täna on 2026-12-02
+  When  esitatakse
+  Then  ERR_SUBMISSION_WINDOW_CLOSED ja olek jääb DRAFT
+
+Scenario: Aken pikendatud
+  Given PTA_ADMIN on P-02 muutnud 2026-12-15-le
+  And   täna on 2026-12-10
+  Then  esitamine õnnestub
+
+Scenario: Mitu viga korraga
+  Given CHK-04 FAIL ja CHK-06 NEEDS_DOCUMENT
+  When  esitatakse
+  Then  vastuses on mõlemad ja olek ei muutu
+
+Scenario: NEEDS_OFFICER ei blokeeri
+  Given CHK-xx tagastab NEEDS_OFFICER
+  When  esitatakse
+  Then  esitamine õnnestub ja PTA-le on loodud ülesanne
+
+Scenario: Tagasivõtmine
+  Given AWAITING_ALLOCATION ja täna enne P-02
+  When  withdraw
+  Then  olek DRAFT
+
+Scenario: Tagasivõtmine pärast akent
+  Given täna on pärast P-02
+  Then  ERR_INVALID_STATE_TRANSITION</code></pre>
+<p><strong>Eeldused.</strong> A-07, A-08, A-12, A-14. <strong>Sõltub:</strong> KL-E1-T01, T03, T04, E1-T07 (parameetrid).</p>
+<p><strong>Ei kuulu ulatusse.</strong> Jaotus.</p>
+<hr>
+<h3 id="kl-e1-t06-taotleja-vaated-minu-taotlused-ja-staatus"><a class="anchor" href="#kl-e1-t06-taotleja-vaated-minu-taotlused-ja-staatus">#</a>KL-E1-T06 Taotleja vaated: minu taotlused ja staatus</h3>
+<p><strong>Eesmärk.</strong> Taotleja näeb oma taotluste loendit, ühe taotluse olekut, menetlusetappe ja järgmist sammu reaalajas (probleemikoht „Läbipaistmatu menetlus ja piiratud staatusinfo“).</p>
+<p><strong>Kontekst.</strong> KL_UC-09 (menetluste ja otsuste jälgimine), MO_UC-21 (menetluse ajaloo vaatamine), MO_IF-05, TO-BE.01 probleemikohad.</p>
+<p><strong>Tee.</strong></p>
+<ol>
+<li>API: <code>GET /fishing-licence-applications?party_id=…</code> (loend: number, aasta, loaliik, olek, olekusilt, <code>next_action</code>, <code>deadline</code>), <code>GET /{id}/timeline</code> (olekuajalugu kasutajale arusaadavate tekstidega, ilma sisemiste põhjuskoodideta).</li>
+<li><code>next_action</code> on arvutatud väli: <code>DRAFT</code> → „Täida ja esita (tähtaeg P-02)“; <code>AWAITING_ALLOCATION</code> → „Ootab jaotust“; <code>AWAITING_FEE_PAYMENT</code> → „Tutvu jaotatud püügivõimalustega ja otsusta (tähtaeg P-05)“; jne. Tekstid on i18n võtmetega.</li>
+<li>Loendis on filtrid olek ja aasta, järjestus uuemad ees, lehitsemine (<code>page</code>, <code>size</code> ≤ 100).</li>
+<li>Loend näitab ainult taotlejale lubatud osapoolte taotlusi. Osapoole vahetamine T02 konteksti kaudu.</li>
+</ol>
+<p><strong>AC.</strong></p>
+<pre><code class="lang-gherkin">Scenario: Loend
+  Given osapoolel on 3 taotlust erinevates olekutes
+  When  GET loend
+  Then  tagastatakse 3 rida, igaühel olekusilt ja next_action
+
+Scenario: Ajajoon
+  Given taotlus on käinud DRAFT→AWAITING_ALLOCATION→AWAITING_FEE_PAYMENT
+  Then  timeline sisaldab kolme kirjet kronoloogiliselt, igaühel kasutajatekst ja aeg
+
+Scenario: Õigused
+  Given kasutaja ei esinda osapoolt
+  Then  loend on tühi (mitte viga) ja GET /{id}/timeline annab ERR_NOT_FOUND</code></pre>
+<p><strong>Eeldused.</strong> A-13. <strong>Sõltub:</strong> KL-E1-T01, T03.</p>
+<hr>
+<h3 id="kl-e1-t07-taotlusvooru-parameetrite-haldus-pta-admin"><a class="anchor" href="#kl-e1-t07-taotlusvooru-parameetrite-haldus-pta-admin">#</a>KL-E1-T07 Taotlusvooru parameetrite haldus (PTA_ADMIN)</h3>
+<p><strong>Eesmärk.</strong> PTA haldab aastapõhiseid parameetreid P-01…P-09, ilma koodi muutmata.</p>
+<p><strong>Kontekst.</strong> <a href="00-uldkontekst.html">Ühine kontekst 4</a>. Määrus § 2 lg 2 (minister pikendab tähtaega), A-07.</p>
+<p><strong>Tee.</strong></p>
+<ol>
+<li>Andmemudel <code>fishing_year_config</code>: <code>fishing_year</code> (unikaalne), P-01…P-09 väärtused, <code>valid_from</code>, <code>changed_by</code>, <code>changed_at</code>, <code>change_reason</code>. Muudatused on versioonitud (vana kirje jääb alles).</li>
+<li>API (roll <code>PTA_ADMIN</code>): <code>GET/PUT /admin/fishing-year-config/{year}</code>. Kui kirjet aastaks ei ole, kasutatakse vaikeväärtusi 00-uldkontekst 4 järgi, kuupäevad kohandatud aastale.</li>
+<li>Valideerimine: P-01 &lt; P-02 ≤ P-03 ≤ P-05; P-04 ≥ 0; P-09 ∈ (0, 1]. Vigased väärtused: <code>ERR_VALIDATION</code>.</li>
+<li><strong>Muutmine mõjutab ainult tulevasi kontrolle.</strong> Juba tehtud otsuseid ja tähtaegu ei arvutata tagasiulatuvalt ümber, välja arvatud P-02 pikendamine, mis kehtib kohe.</li>
+<li>Iga muudatus loob auditisündmuse ja teavituse kõigile <code>PTA_ADMIN</code> rolli kasutajatele.</li>
+<li>Kõik teised Task&#39;id loevad parameetreid ainult siit teenusest (<code>FishingYearConfig.get(year)</code>), mitte ei kopeeri vaikeväärtusi.</li>
+</ol>
+<p><strong>AC.</strong></p>
+<pre><code class="lang-gherkin">Scenario: Vaikeväärtused
+  Given 2027. aasta jaoks kirjet pole
+  Then  P-02 = 2026-12-01 ja P-05 = 2026-12-31
+
+Scenario: Pikendamine
+  When  PTA_ADMIN seab P-02 = 2026-12-15
+  Then  esitamine on lubatud kuni 2026-12-15 23:59:59 Europe/Tallinn ja muutus on versioonitud
+
+Scenario: Vigane järjekord
+  When  P-02 &lt; P-01
+  Then  ERR_VALIDATION
+
+Scenario: Õigused
+  When  APPLICANT kutsub PUT
+  Then  ERR_FORBIDDEN</code></pre>
+<p><strong>Eeldused.</strong> A-07, A-12, A-14. <strong>Sõltub:</strong> ei ole (alustatav kohe).</p>
+</article>
+<div class="pn"><a href="00-uldkontekst.html">← Üldkontekst</a><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html">E2 Püügivõimaluste arvutamine ja jaotamine →</a></div>
+<footer>Ettepanek, mitte kinnitatud. Allikas: wiki leht 321262813.</footer></main>
+<aside class="toc"><b>Sellel lehel</b><ul><li><a href="#epic-39-u-kirjeldus">Epic&amp;#39;u kirjeldus</a></li></ul></aside></div>
+<script>(function(){
+var r=document.documentElement;try{var t=localStorage.getItem('th');if(t)r.dataset.theme=t}catch(e){}
+document.getElementById('theme').onclick=function(){var d=r.dataset.theme||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');d=d==='dark'?'light':'dark';r.dataset.theme=d;try{localStorage.setItem('th',d)}catch(e){}};
+document.getElementById('menu').onclick=function(){document.body.classList.toggle('nav')};
+var q=document.getElementById('q'),box=document.getElementById('results'),idx=null;
+function load(){return idx?Promise.resolve(idx):fetch('search.json').then(function(x){return x.json()}).then(function(j){return idx=j})}
+function esc(s){return s.replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})}
+q.addEventListener('input',function(){var v=q.value.trim().toLowerCase();if(v.length<2){box.hidden=true;return}
+load().then(function(d){var out=[];d.forEach(function(p){var x=p.x.toLowerCase(),i=x.indexOf(v);if(i<0&&p.t.toLowerCase().indexOf(v)<0)return;var c=0,j=i;while(j>=0){c++;j=x.indexOf(v,j+1)}
+var s=i>=0?esc(p.x.slice(Math.max(0,i-50),i+90)).replace(new RegExp(esc(v).replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'ig'),function(m){return'<mark>'+m+'</mark>'}):'';out.push({p:p,c:c,s:s})});
+out.sort(function(a,b){return b.c-a.c});box.innerHTML=out.length?out.map(function(o){return'<a href="'+o.p.u+'"><b>'+esc(o.p.t)+'</b> <small>'+o.c+' vastet</small><small>…'+o.s+'…</small></a>'}).join(''):'<a>Tulemusi pole</a>';box.hidden=false})});
+document.addEventListener('keydown',function(e){if(e.key==='/'&&document.activeElement!==q){e.preventDefault();q.focus()}if(e.key==='Escape'){box.hidden=true;q.blur()}});
+document.addEventListener('click',function(e){if(!box.contains(e.target)&&e.target!==q)box.hidden=true});
+var links=[].slice.call(document.querySelectorAll('.active .sub a'));
+if(links.length&&'IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){links.forEach(function(l){l.classList.toggle('cur',l.hash==='#'+en.target.id)})}})},{rootMargin:'-60px 0px -75% 0px'});
+links.forEach(function(l){var h=document.getElementById(l.hash.slice(1));if(h)io.observe(h)})}
+})();
+</script></body></html>

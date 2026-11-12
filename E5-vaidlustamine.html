@@ -1,0 +1,186 @@
+<!doctype html><html lang="et"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KL-E5 Jagatud püügivõimaluste vaidlustamine (TO-BE.04) · Kalapüügiloa Epic'ud</title><meta name="robots" content="noindex">
+<style>:root{--bg:#fff;--fg:#1c2430;--mut:#5b6675;--bd:#e2e6ec;--ac:#0b6bcb;--soft:#f4f7fb;--code:#f1f4f8}
+:root[data-theme=dark]{--bg:#10151c;--fg:#e4e9f0;--mut:#9aa6b6;--bd:#27303c;--ac:#6cb2ff;--soft:#171e28;--code:#1b2330}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#10151c;--fg:#e4e9f0;--mut:#9aa6b6;--bd:#27303c;--ac:#6cb2ff;--soft:#171e28;--code:#1b2330}}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+a{color:var(--ac)}
+.top{position:sticky;top:0;z-index:20;display:flex;gap:12px;align-items:center;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--bd)}
+.brand{font-weight:700;color:var(--fg);text-decoration:none}.brand small{font-weight:400;color:var(--mut);margin-left:6px}
+#q{margin-left:auto;width:min(320px,40vw);padding:7px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--soft);color:var(--fg)}
+button{background:var(--soft);color:var(--fg);border:1px solid var(--bd);border-radius:8px;padding:6px 10px;cursor:pointer}
+#menu{display:none}
+.shell{display:grid;grid-template-columns:270px minmax(0,1fr) 220px;max-width:1500px;margin:0 auto}
+.side{position:sticky;top:57px;align-self:start;height:calc(100vh - 57px);overflow:auto;padding:16px;border-right:1px solid var(--bd);font-size:14px}
+.side ul{list-style:none;margin:0;padding:0}.side>ul>li{margin-bottom:6px}.side>ul>li>a{font-weight:600;color:var(--fg);text-decoration:none;display:block;padding:4px 8px;border-radius:6px}
+.side li.active>a{background:var(--soft);color:var(--ac)}
+.sub{display:none;margin:2px 0 6px 10px!important;border-left:2px solid var(--bd)}.active .sub{display:block}
+.sub a{display:block;padding:2px 10px;color:var(--mut);text-decoration:none;font-size:13px}.sub a:hover,.sub a.cur{color:var(--ac)}
+main{padding:24px 40px 60px;min-width:0}article{max-width:860px}
+.toc{position:sticky;top:57px;align-self:start;padding:24px 16px;font-size:13px;max-height:calc(100vh - 57px);overflow:auto}
+.toc ul{list-style:none;padding:0}.toc a{display:block;color:var(--mut);text-decoration:none;padding:2px 0}.toc a:hover{color:var(--ac)}
+h1{font-size:2rem;line-height:1.2}h2{margin-top:2.4em;padding-top:.6em;border-top:1px solid var(--bd)}
+h3{margin-top:2.2em;padding:8px 12px;background:var(--soft);border-left:4px solid var(--ac);border-radius:4px}
+h4{margin-top:1.6em}
+.anchor{opacity:0;margin-left:-1.1em;padding-right:.3em;text-decoration:none}h2:hover .anchor,h3:hover .anchor,h4:hover .anchor{opacity:.6}
+code{background:var(--code);padding:1px 5px;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:14px;border-radius:8px;overflow:auto;border:1px solid var(--bd)}pre code{background:none;padding:0}
+.tw{overflow:auto;margin:1em 0}table{border-collapse:collapse;font-size:14px;min-width:100%}
+th,td{border:1px solid var(--bd);padding:6px 10px;vertical-align:top;text-align:left}th{background:var(--soft)}
+blockquote{margin:1em 0;padding:4px 16px;border-left:4px solid var(--bd);color:var(--mut)}
+.ext{border-bottom:1px dotted var(--mut);cursor:help}
+.hero{margin-bottom:2em}.lead{font-size:1.15rem;color:var(--mut)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin:20px 0}
+.card{display:flex;flex-direction:column;gap:6px;padding:16px;border:1px solid var(--bd);border-radius:12px;background:var(--soft);text-decoration:none;color:var(--fg);transition:.15s}
+.card:hover{border-color:var(--ac);transform:translateY(-2px)}.card .k{color:var(--ac);font-weight:700;font-size:13px}.card .m{color:var(--mut);font-size:13px}
+.card.valikuline{border-style:dashed}.card.blokeeritud{opacity:.7;border-style:dashed}
+.btn{display:inline-block;padding:10px 18px;background:var(--ac);color:var(--bg);border-radius:8px;text-decoration:none;font-weight:600}
+.pn{display:flex;justify-content:space-between;margin-top:3em;padding-top:1em;border-top:1px solid var(--bd)}
+footer{margin-top:2em;color:var(--mut);font-size:13px}
+#results{position:fixed;top:56px;right:16px;width:min(520px,calc(100vw - 32px));max-height:70vh;overflow:auto;background:var(--bg);border:1px solid var(--bd);border-radius:10px;box-shadow:0 12px 40px #0004;z-index:30}
+#results a{display:block;padding:10px 14px;border-bottom:1px solid var(--bd);text-decoration:none;color:var(--fg);font-size:14px}#results a:hover{background:var(--soft)}
+#results small{display:block;color:var(--mut)}mark{background:#ffd54a66;color:inherit}
+@media(max-width:1100px){.shell{grid-template-columns:250px minmax(0,1fr)}.toc{display:none}}
+@media(max-width:760px){#menu{display:block}.shell{display:block}.side{display:none;position:fixed;top:57px;left:0;width:84vw;max-width:320px;background:var(--bg);z-index:25;height:calc(100vh - 57px)}body.nav .side{display:block}main{padding:16px}.brand small{display:none}}
+</style></head><body>
+<header class="top"><button id="menu" aria-label="Menüü">☰</button><a class="brand" href="index.html">Kalapüügiloa väljastamine <small>Epic'ud ja Task'id</small></a>
+<input id="q" type="search" placeholder="Otsi (/)" autocomplete="off"><button id="theme" aria-label="Teema">◐</button></header>
+<div id="results" hidden></div>
+<div class="shell"><nav class="side"><ul><li class=""><a href="index.html">Ülevaade</a></li><li class=""><a href="00-uldkontekst.html">Üldkontekst</a></li><li class=""><a href="E1-taotluse-esitamine.html">E1 Kutselise kalapüügiloa taotluse esitamine</a><ul class="sub"><li><a href="E1-taotluse-esitamine.html#kl-e1-t01-taotlusmenetluse-tüüp-ja-olekumasin-mo">T01 Taotlusmenetluse tüüp ja olekumasin (MO)</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t02-taotleja-tuvastamine-esindusõigus-ja-rolli-valik">T02 Taotleja tuvastamine, esindusõigus ja rolli valik</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t03-taotluse-andmemudel-mustandi-api-ja-eeltäitmine">T03 Taotluse andmemudel, mustandi API ja eeltäitmine</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t04-taustakontrollide-mootor-registripõhine">T04 Taustakontrollide mootor (registripõhine)</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t05-taotluse-esitamine">T05 Taotluse esitamine</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t06-taotleja-vaated-minu-taotlused-ja-staatus">T06 Taotleja vaated: minu taotlused ja staatus</a></li><li><a href="E1-taotluse-esitamine.html#kl-e1-t07-taotlusvooru-parameetrite-haldus-pta-admin">T07 Taotlusvooru parameetrite haldus (PTA_ADMIN)</a></li></ul></li><li class=""><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html">E2 Püügivõimaluste arvutamine ja jaotamine</a><ul class="sub"><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t01-pvt-andmemudel-jaotusüksus-jaotustulemus-jaotusotsus">T01 PVT andmemudel: jaotusüksus, jaotustulemus, jaotusotsus</a></li><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t03-ajalooliste-andmete-sisendi-adapter-ods-pvt">T03 Ajalooliste andmete sisendi adapter (ODS/PVT)</a></li><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t02-arvutusmootor-määrus-4-8">T02 Arvutusmootor (määrus § 4–§ 8)</a></li><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t04-jaotusarvutuse-käivitamine-ja-eelnõu-koostamine">T04 Jaotusarvutuse käivitamine ja eelnõu koostamine</a></li><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t05-pta-ülevaatus-parandus-ja-kinnitamine-ametnikuportaal">T05 PTA ülevaatus, parandus ja kinnitamine (Ametnikuportaal)</a></li><li><a href="E2-puugivoimaluste-arvutus-ja-jaotus.html#kl-e2-t06-jaotusotsuse-väljastamine-avaldamine-ja-teavitamine">T06 Jaotusotsuse väljastamine, avaldamine ja teavitamine</a></li></ul></li><li class=""><a href="E3-tasu-ja-loa-valjastamine.html">E3 Püügivõimaluse vastuvõtt, püügiõiguse tasu ja kalapüügiloa väljastamine</a><ul class="sub"><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t01-taotleja-otsus-jaotuse-kohta-nõustu-loobu">T01 Taotleja otsus jaotuse kohta (nõustu, loobu)</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t02-püügiõiguse-tasu-arvutus-ja-tasumäärade-seadistus">T02 Püügiõiguse tasu arvutus ja tasumäärade seadistus</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t03-maksekorraldus-ja-makse-staatuse-vastuvõtt">T03 Maksekorraldus ja makse staatuse vastuvõtt</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t04-kalapüügiloa-loomine-ja-väljastamine-lto">T04 Kalapüügiloa loomine ja väljastamine (LTO)</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t05-fishinglicencechanged-sündmus-ja-flux-lepe">T05 FishingLicenceChanged sündmus ja FLUX-lepe</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t06-tasu-tähtaja-järelvalve-ja-taotluse-tühistamine">T06 Tasu tähtaja järelvalve ja taotluse tühistamine</a></li><li><a href="E3-tasu-ja-loa-valjastamine.html#kl-e3-t07-teavituste-kataloog-e-post-e1-e3-jaoks">T07 Teavituste kataloog (e-post) E1–E3 jaoks</a></li></ul></li><li class=""><a href="E4-kasutamata-puugivoimaluste-umberjagamine.html">E4 Kasutamata püügivõimaluste jagamine (TO-BE.03)</a><ul class="sub"><li><a href="E4-kasutamata-puugivoimaluste-umberjagamine.html#kl-e4-t01-ümberjaotuse-käivitus-ja-pakkumiste-arvutus">T01 Ümberjaotuse käivitus ja pakkumiste arvutus</a></li><li><a href="E4-kasutamata-puugivoimaluste-umberjagamine.html#kl-e4-t02-pakkumise-vastuvõtt-tasu-ja-loa-uus-versioon">T02 Pakkumise vastuvõtt, tasu ja loa uus versioon</a></li><li><a href="E4-kasutamata-puugivoimaluste-umberjagamine.html#kl-e4-t03-lõplik-jaotusotsus-ja-tulemuste-edastus-ods">T03 Lõplik jaotusotsus ja tulemuste edastus (ODS)</a></li></ul></li><li class="active"><a href="E5-vaidlustamine.html">E5 Jagatud püügivõimaluste vaidlustamine (TO-BE.04)</a><ul class="sub"><li><a href="E5-vaidlustamine.html#kl-e5-t01-vaide-esitamine">T01 Vaide esitamine</a></li><li><a href="E5-vaidlustamine.html#kl-e5-t02-vaide-menetlemine-pta-s-ja-otsus">T02 Vaide menetlemine PTA-s ja otsus</a></li><li><a href="E5-vaidlustamine.html#kl-e5-t03-vaide-tulemuse-teavitus-ja-tähtaegade-taastamine">T03 Vaide tulemuse teavitus ja tähtaegade taastamine</a></li></ul></li><li class=""><a href="E6-stsenaarium-2-delta.html">E6 Alternatiivne stsenaarium: proaktiivne jaotus ja pakkumine (delta)</a><ul class="sub"><li><a href="E6-stsenaarium-2-delta.html#kl-e6-t01-proaktiivne-jaotus-jaotusüksuse-reeglistik-reserv-uutele-turuosalistele">T01 Proaktiivne jaotus (jaotusüksuse reeglistik, reserv uutele turuosalistele)</a></li><li><a href="E6-stsenaarium-2-delta.html#kl-e6-t02-pakkumine-ja-eeltäidetud-kinnitus-ilma-taotluseta">T02 Pakkumine ja eeltäidetud kinnitus (ilma taotluseta)</a></li><li><a href="E6-stsenaarium-2-delta.html#kl-e6-t03-taotlusvooru-väljalülitus-ja-üleminek">T03 Taotlusvooru väljalülitus ja üleminek</a></li></ul></li><li class=""><a href="E7-vesiviljelus.html">E7 Vesiviljeluse tegevusloa taotlemine ja väljastamine (TO-BE.05)</a><ul class="sub"><li><a href="E7-vesiviljelus.html#kl-e7-t01-vesiviljeluse-tegevusloa-taotlus-esitamine-eeltäide-taustakontroll">T01 Vesiviljeluse tegevusloa taotlus (esitamine, eeltäide, taustakontroll)</a></li><li><a href="E7-vesiviljelus.html#kl-e7-t02-kohapealse-kontrolli-planeerimine-ja-okas-2-integratsioon">T02 Kohapealse kontrolli planeerimine ja OKAS-2 integratsioon</a></li><li><a href="E7-vesiviljelus.html#kl-e7-t03-otsus-tegevusloa-väljastamine-või-keeldumine">T03 Otsus: tegevusloa väljastamine või keeldumine</a></li></ul></li><li class=""><a href="E8-harrastuspuuk.html">E8 Harrastuspüük: püügivõimaluste haldus, kalastuskaart, püügiõigus (TO-BE.06–08)</a><ul class="sub"><li><a href="E8-harrastuspuuk.html#kl-e8-t01-piirarvuga-kalastuskaardi-püügivõimaluste-lisamine-ja-avalikustamine-to-be-06">T01 Piirarvuga kalastuskaardi püügivõimaluste lisamine ja avalikustamine (TO-BE.06)</a></li><li><a href="E8-harrastuspuuk.html#kl-e8-t02-kalastuskaardi-soetamine-to-be-07">T02 Kalastuskaardi soetamine (TO-BE.07)</a></li><li><a href="E8-harrastuspuuk.html#kl-e8-t03-harrastuspüügiõiguse-soetamine-to-be-08">T03 Harrastuspüügiõiguse soetamine (TO-BE.08)</a></li></ul></li><li class=""><a href="E9-automaatotsusega-load.html">E9 Reeglipõhised load: eripüük, elektripüügivahendi tõend, asustamisluba (TO-BE.09–11)</a><ul class="sub"><li><a href="E9-automaatotsusega-load.html#kl-e9-t01-reeglipõhine-otsusemootor-ja-menetlus-ühine">T01 Reeglipõhine otsusemootor ja menetlus (ühine)</a></li><li><a href="E9-automaatotsusega-load.html#kl-e9-t02-eripüügiloa-taotlus-ja-reeglid-to-be-09">T02 Eripüügiloa taotlus ja reeglid (TO-BE.09)</a></li><li><a href="E9-automaatotsusega-load.html#kl-e9-t03-elektripüügivahendi-tõend-to-be-10">T03 Elektripüügivahendi tõend (TO-BE.10)</a></li><li><a href="E9-automaatotsusega-load.html#kl-e9-t04-asustamisloa-taotlus-ja-väljastamine-to-be-11">T04 Asustamisloa taotlus ja väljastamine (TO-BE.11)</a></li></ul></li></ul></nav>
+<main><article><h1 id="kl-e5-jagatud-püügivõimaluste-vaidlustamine"><a class="anchor" href="#kl-e5-jagatud-püügivõimaluste-vaidlustamine">#</a>KL-E5 Jagatud püügivõimaluste vaidlustamine</h1>
+<p>Loe enne: <a href="00-uldkontekst.html">ühine kontekst</a>, eriti A-26…A-29, P-12, P-13.</p>
+<h2 id="epic-39-u-kirjeldus"><a class="anchor" href="#epic-39-u-kirjeldus">#</a>Epic&#39;u kirjeldus</h2>
+<p><strong>Eesmärk.</strong> Taotleja saab jaotusotsust vaidlustada digitaalselt (vaie HMS alusel) ning PTA menetleb vaiet jälgitavalt. Menetlus ei peata teiste jaotust.</p>
+<p><strong>Valikulisus ja märkus.</strong> Wiki: „Märkus: protsessi realiseerimise vajadus ja ulatus tuleks täiendavalt hinnata õigusvaldkonna ekspertidega.“ Kui Epic jäetakse tegemata, jätkub vaidlustamine e-posti/kirja kaudu ja DHS-is registreerimisega (AS-IS), mille vastu E1–E3 ei sõltu. E3-T01 sisaldab siiski „vaidlusta“ sammu ühe nupuna. Kuni E5 puudub, kuvatakse selle asemel viide vaide esitamise juhendile (seadistatav tekst <code>dispute.fallback_text</code>).</p>
+<p><strong>Skeem:</strong> Taotleja ei nõustu ja ei loobu → kas soovib vaidlustada? JAH → TO-BE.04 → protsess lõpeb (vaie menetletakse eraldi).</p>
+<p><strong>Task&#39;ide järjekord:</strong> T01 → T02 → T03.</p>
+<hr>
+<h3 id="kl-e5-t01-vaide-esitamine"><a class="anchor" href="#kl-e5-t01-vaide-esitamine">#</a>KL-E5-T01 Vaide esitamine</h3>
+<p><strong>Eesmärk.</strong> Taotleja esitab kalaluba.ee-s vaide konkreetse jaotusotsuse vastu põhjenduse ja tõenditega.</p>
+<p><strong>Kontekst.</strong> TO-BE.04 kirjeldus ja „Mida võiks tulevikus täpsustada“: vaide esitamine otse infosüsteemis, seotud konkreetse jaotuse otsusega, staatused ja tähtajad süsteemis. KL_UC-09, DF_UC-01/06, MO_UC-01/02, A-26, A-27.</p>
+<p><strong>Tee.</strong></p>
+<ol>
+<li>Menetlustüüp <code>ALLOCATION_DISPUTE</code> (MO): olekud <code>SUBMITTED</code>, <code>UNDER_REVIEW</code>, <code>RESOLVED_ACCEPTED</code>, <code>RESOLVED_PARTIALLY</code>, <code>RESOLVED_REJECTED</code>, <code>WITHDRAWN</code>.</li>
+<li><code>POST /allocation-decisions/{decision_id}/disputes</code> (esindusõigusega taotleja, olek taotlusel <code>AWAITING_FEE_PAYMENT</code>):<pre><code class="lang-json">{&quot;application_id&quot;:&quot;…&quot;,&quot;grounds&quot;:[{&quot;type&quot;:&quot;WRONG_HISTORICAL_DATA|METHODOLOGY_ERROR|OTHER&quot;,&quot;catch_opportunity_id&quot;:&quot;…&quot;,&quot;description&quot;:&quot;≥ 50 märki&quot;}],
+ &quot;claimed_quantity&quot;: 6, &quot;document_ids&quot;: [&quot;…&quot;]}</code></pre>
+Kontrollid: tähtaeg <code>decision.published_at + P-12 päeva</code> (kuni 23:59:59 Europe/Tallinn); ühe taotluse ja otsuse kohta üks aktiivne vaie (<code>ERR_DUPLICATE_DISPUTE</code>); põhjendus pikkuse nõue; tõendid DF-i kaudu. Tähtaja ületamisel <code>ERR_DISPUTE_WINDOW_CLOSED</code> ja viide kohtusse pöördumise infole (HMS, üldjuhend tekst seadistatud).</li>
+<li><strong>Mõju:</strong> taotlus <code>AWAITING_FEE_PAYMENT→ALLOCATION_DISPUTED</code>; vaidlustaja <code>allocated_opportunity</code> read <code>dispute_hold=true</code>; <code>released_opportunity</code>-d, mis tekiksid temast, <code>dispute_hold=true</code>. <strong>Tasu tähtaega E3-T06 töös enam ei kohaldata</strong> (A-26). Teiste taotluste menetlus jätkub.</li>
+<li>Kinnitus-e-kiri vaidlustajale, ülesanne PTA-le (MO_UC-09) „Menetle vaie“.</li>
+<li>Taotleja saab vaide tagasi võtta (<code>WITHDRAWN</code>) enne lahendamist: taotlus tagasi <code>AWAITING_FEE_PAYMENT</code>, <code>dispute_hold=false</code>, tähtaeg A-28.</li>
+<li><code>GET /disputes?party_id=</code>, <code>GET /disputes/{id}</code> (staatus, ajalugu, tähtajad: kuidas menetlus edeneb).</li>
+</ol>
+<p><strong>AC.</strong></p>
+<pre><code class="lang-gherkin">Scenario: Vaide esitamine
+  Given taotlus AWAITING_FEE_PAYMENT, otsus avaldati 10 päeva tagasi
+  When  taotleja esitab vaide põhjendusega 80 märki
+  Then  dispute SUBMITTED, taotlus ALLOCATION_DISPUTED, dispute_hold=true, PTA ülesanne ja kinnituskiri
+
+Scenario: Tähtaeg möödas
+  Given otsus avaldati 31 päeva tagasi
+  Then  ERR_DISPUTE_WINDOW_CLOSED
+
+Scenario: Topeltvaie
+  Given aktiivne vaie
+  Then  ERR_DUPLICATE_DISPUTE
+
+Scenario: Teiste menetlus jätkub
+  Then  teise taotleja taotlus saab tasuda ja luba väljastada
+
+Scenario: Tagasivõtmine
+  When  vaie WITHDRAWN
+  Then  taotlus AWAITING_FEE_PAYMENT, dispute_hold=false, tasu tähtaeg = max(P-05, täna + P-13)
+
+Scenario: Põhjendus liiga lühike
+  Then  ERR_VALIDATION</code></pre>
+<p><strong>Eeldused.</strong> A-26, A-27, A-28. <strong>Sõltub:</strong> KL-E2-T06, KL-E3-T01.</p>
+<hr>
+<h3 id="kl-e5-t02-vaide-menetlemine-pta-s-ja-otsus"><a class="anchor" href="#kl-e5-t02-vaide-menetlemine-pta-s-ja-otsus">#</a>KL-E5-T02 Vaide menetlemine PTA-s ja otsus</h3>
+<p><strong>Eesmärk.</strong> PTA ametnik hindab vaiet, vajadusel parandab arvutuse sisendit ja teeb põhjendatud otsuse.</p>
+<p><strong>Kontekst.</strong> TO-BE.04: „PTA ametnik hindab esitatud argumente ning otsustab, kas … arvutust või jaotust korrigeerida. Vajadusel arvutatakse püügivõimalus ümber.“ MO_UC-08, 15…18, MO_UC-21, PVT_UC-18, A-29.</p>
+<p><strong>Tee.</strong></p>
+<ol>
+<li>Töölaua API (<code>PTA_OFFICER</code>): <code>GET /admin/disputes?state=</code>, <code>GET …/{id}</code> (vaie, tõendid, arvutuse väljad <code>allocation_result</code>, <code>historical_sum_t</code> ja selle allikad), <code>POST …/{id}/start-review</code> (<code>SUBMITTED→UNDER_REVIEW</code>, ametnik määratakse).</li>
+<li><strong>Otsuse tegemine</strong> <code>POST …/{id}/resolve</code> body <code>{outcome: ACCEPTED|PARTIALLY|REJECTED, reasoning (≥ 100 märki), corrected_input: {party_id, catch_opportunity_id, historical_sum_t}?, corrected_quantity}</code>:<ul>
+<li><code>REJECTED</code>: esialgne jaotus kinnitatud, ei muutu.</li>
+<li><code>ACCEPTED</code>/<code>PARTIALLY</code>: ametnik sisestab <code>corrected_input</code> (nt parandatud <code>T</code>). Süsteem arvutab vaidlustaja uue koguse mootoriga (E2-T02 ühe taotleja variandis, <code>S</code> kohandatud erinevuse võrra), <strong>ilma teisi taotlejaid ümber arvutamata</strong> (A-29). Erinevus <code>Δ = uus − vana &gt; 0</code> kaetakse samas jaotusüksuses <code>released_opportunity</code> <code>AVAILABLE</code> kogusest (vana ostetud järjekord). Kui <code>Δ</code> ei ole kaetav, on <code>resolve</code> blokeeritud <code>ERR_INSUFFICIENT_RELEASED</code> ja ametnik valib: vähendada <code>corrected_quantity</code> kättesaadavale või suunata erijuhtumina käsitsi otsuseks (PTA ülesanne ja põhjendus). Kui <code>Δ &lt; 0</code> (vähenemine), vabanenud osa → <code>released_opportunity</code> (<code>OFFICER</code>).</li>
+</ul>
+</li>
+<li>Salvesta uus <code>allocated_opportunity</code> versioon (eelmine jääb ajalukku), uus otsusedokument (E2-T06 mall, märge „vaide alusel muudetud“), seo vaide otsusega (MO_UC-15…18).</li>
+<li>Neli silma: vaide lahendaja ≠ jaotuse kinnitaja (<code>ERR_FOUR_EYES</code>).</li>
+<li>Taotleja <strong>vaidluse tulemus</strong> teavitus T03. Vaie lõppeb: <code>RESOLVED_*</code>.</li>
+<li><strong>Kohtusse pöördumise info</strong> (kui <code>REJECTED</code> või <code>PARTIALLY</code>): otsusedokument sisaldab HMS/halduskohtu viidet (seadistatav tekst).</li>
+</ol>
+<p><strong>AC.</strong></p>
+<pre><code class="lang-gherkin">Scenario: Vaie rahuldatud
+  Given vaidlustaja T oli 10, õige on 14 ja released AVAILABLE kogus on 2
+  When  ametnik resolve ACCEPTED corrected T=14
+  Then  vaidlustaja kogus tõuseb Δ võrra (kuni 2), released_opportunity väheneb sama võrra ja uus otsusedokument on loodud
+
+Scenario: Δ ei ole kaetav
+  Given Δ=3 ja released=1
+  Then  ERR_INSUFFICIENT_RELEASED
+
+Scenario: Rahuldamata
+  When  REJECTED põhjendusega
+  Then  jaotus ei muutu ja otsus sisaldab kohtusse pöördumise infot
+
+Scenario: Teisi ei puututa
+  Then  teiste taotlejate allocated_opportunity versioonid on muutumata
+
+Scenario: Neli silma
+  Given sama ametnik kinnitas jaotuse
+  Then  ERR_FOUR_EYES
+
+Scenario: Audit
+  Then  iga samm (algus, otsus, parandus) on auditis, tõendid DF-s seotud vaidega</code></pre>
+<p><strong>Eeldused.</strong> A-12, A-29. <strong>Sõltub:</strong> KL-E5-T01, KL-E2-T02, KL-E3-T06.</p>
+<hr>
+<h3 id="kl-e5-t03-vaide-tulemuse-teavitus-ja-tähtaegade-taastamine"><a class="anchor" href="#kl-e5-t03-vaide-tulemuse-teavitus-ja-tähtaegade-taastamine">#</a>KL-E5-T03 Vaide tulemuse teavitus ja tähtaegade taastamine</h3>
+<p><strong>Eesmärk.</strong> Pärast vaide lahendamist taotleja teab tulemust ja saab jätkata (tasuda) või loobuda.</p>
+<p><strong>Kontekst.</strong> TO-BE.04 „teavitatakse menetluse tulemusest kõiki asjaosalisi“, A-28, E3-T06, E3-T07.</p>
+<p><strong>Tee.</strong></p>
+<ol>
+<li>Pärast <code>resolve</code>: taotlus <code>ALLOCATION_DISPUTED→AWAITING_FEE_PAYMENT</code> ja uus tasu tähtaeg <code>max(P-05, resolved_at + P-13 päeva)</code> (salvesta <code>application.fee_deadline_override</code>; E3-T06 töö peab selle eelistama P-05-le).</li>
+<li><code>dispute_hold=false</code> kõigil seotud ridadel. Uue koguse korral arvutatakse tasu uuesti (E3-T02) ja <code>licence_draft</code> kustutatakse, taotleja peab uuesti <code>accept</code> tegema.</li>
+<li>Teavitus (<code>dispute.resolved</code>): tulemus, uus kogus, tähtaeg, kohtusse pöördumise info.</li>
+<li>Kui taotleja loobub (<code>decline</code>), kehtib E3 loogika.</li>
+<li><strong>Kõik asjaosalised:</strong> kui <code>Δ</code> võeti teise taotleja vabanenud kogusest, ei teavitata teda eraldi (ta ei ole kogust enam endale saanud), aga PTA ülesanne ei teki.</li>
+</ol>
+<p><strong>AC.</strong></p>
+<pre><code class="lang-gherkin">Scenario: Taotleja jätkab
+  Given vaie RESOLVED_ACCEPTED 2027-01-05, P-05=2026-12-31, P-13=14
+  Then  fee_deadline_override=2027-01-19 ja E3-T06 ei tühista enne seda
+
+Scenario: Uus tasu
+  Given kogus muutus 5→7
+  Then  tasu arvutatakse uuesti ja licence_draft tühistatakse
+
+Scenario: Rahuldamata
+  Then  taotleja saab teavituse ja jätkab esialgse koguse alusel
+
+Scenario: Teavitus
+  Then  dispute.resolved e-kiri sisaldab tulemust, tähtaega ja kohtusse pöördumise infot</code></pre>
+<p><strong>Eeldused.</strong> A-28. <strong>Sõltub:</strong> KL-E5-T02, KL-E3-T06/T07.</p>
+</article>
+<div class="pn"><a href="E4-kasutamata-puugivoimaluste-umberjagamine.html">← E4 Kasutamata püügivõimaluste jagamine (TO-BE.03)</a><a href="E6-stsenaarium-2-delta.html">E6 Alternatiivne stsenaarium: proaktiivne jaotus ja pakkumine (delta) →</a></div>
+<footer>Ettepanek, mitte kinnitatud. Allikas: wiki leht 321262813.</footer></main>
+<aside class="toc"><b>Sellel lehel</b><ul><li><a href="#epic-39-u-kirjeldus">Epic&amp;#39;u kirjeldus</a></li></ul></aside></div>
+<script>(function(){
+var r=document.documentElement;try{var t=localStorage.getItem('th');if(t)r.dataset.theme=t}catch(e){}
+document.getElementById('theme').onclick=function(){var d=r.dataset.theme||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');d=d==='dark'?'light':'dark';r.dataset.theme=d;try{localStorage.setItem('th',d)}catch(e){}};
+document.getElementById('menu').onclick=function(){document.body.classList.toggle('nav')};
+var q=document.getElementById('q'),box=document.getElementById('results'),idx=null;
+function load(){return idx?Promise.resolve(idx):fetch('search.json').then(function(x){return x.json()}).then(function(j){return idx=j})}
+function esc(s){return s.replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})}
+q.addEventListener('input',function(){var v=q.value.trim().toLowerCase();if(v.length<2){box.hidden=true;return}
+load().then(function(d){var out=[];d.forEach(function(p){var x=p.x.toLowerCase(),i=x.indexOf(v);if(i<0&&p.t.toLowerCase().indexOf(v)<0)return;var c=0,j=i;while(j>=0){c++;j=x.indexOf(v,j+1)}
+var s=i>=0?esc(p.x.slice(Math.max(0,i-50),i+90)).replace(new RegExp(esc(v).replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'ig'),function(m){return'<mark>'+m+'</mark>'}):'';out.push({p:p,c:c,s:s})});
+out.sort(function(a,b){return b.c-a.c});box.innerHTML=out.length?out.map(function(o){return'<a href="'+o.p.u+'"><b>'+esc(o.p.t)+'</b> <small>'+o.c+' vastet</small><small>…'+o.s+'…</small></a>'}).join(''):'<a>Tulemusi pole</a>';box.hidden=false})});
+document.addEventListener('keydown',function(e){if(e.key==='/'&&document.activeElement!==q){e.preventDefault();q.focus()}if(e.key==='Escape'){box.hidden=true;q.blur()}});
+document.addEventListener('click',function(e){if(!box.contains(e.target)&&e.target!==q)box.hidden=true});
+var links=[].slice.call(document.querySelectorAll('.active .sub a'));
+if(links.length&&'IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){links.forEach(function(l){l.classList.toggle('cur',l.hash==='#'+en.target.id)})}})},{rootMargin:'-60px 0px -75% 0px'});
+links.forEach(function(l){var h=document.getElementById(l.hash.slice(1));if(h)io.observe(h)})}
+})();
+</script></body></html>
