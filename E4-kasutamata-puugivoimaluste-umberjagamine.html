@@ -94,6 +94,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   Q -- jah --&gt; P[&quot;Osalejad: aktiivse loaga selles üksuses&quot;]
   P --&gt; ENG[&quot;Proportsioonid mootoriga E2-T02&quot;]
   ENG --&gt; RO[(&quot;reoffer + teavitus&quot;)]</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>CronManager</td><td><code>reoffer-run.yml</code></td><td>P-06 kell 00:10, kutsub Ruuteri</td></tr><tr><td>Ruuter</td><td><code>Ruuter.private/pvt/reoffer/POST/run.yml</code></td><td>kogub vabanenud kogused, leiab osalejad, kutsub mootorit, loob pakkumised, teavitab</td></tr><tr><td>Resql</td><td><code>pvt/GET/released-available.sql</code>, <code>lto/GET/active-licences-by-pool.sql</code>, <code>pvt/POST/reoffer-create.sql</code></td><td>andmepääs</td></tr><tr><td>Teenusemoodul</td><td><code>allocation-engine</code></td><td>proportsioonid E2-T02 mootoriga</td></tr><tr><td>DataMapper</td><td><code>notify/reoffer-created.hbs</code></td><td>pakkumisteade</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Ajastatud töö <code>SYSTEM</code> P-06 kell 00:10 (või käsitsi <code>PTA_ADMIN</code>). Kogub kõik <code>released_opportunity</code> kirjed <code>status=AVAILABLE</code> ja <code>dispute_hold=false</code> aastale <code>Y</code>, summeerib jaotusüksuse kaupa <code>V = Σ quantity</code>. Kui <code>V &lt; g</code> (jaotusühik), märgi <code>FINAL_REMAINDER</code> ja liigu edasi.</li>
@@ -127,6 +129,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   PAID --&gt; [*]: loa uus versioon
   DECLINED --&gt; [*]
   EXPIRED --&gt; [*]</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Ruuter</td><td>`Ruuter.private/pvt/reoffer/GET</td><td>POST/*.yml`</td></tr><tr><td>Resql</td><td><code>pvt/POST/reoffer-set-state.sql</code>, <code>lto/POST/licence-version-create.sql</code></td><td>olek ja loa uus versioon</td></tr><tr><td>DataMapper</td><td><code>lto/fishing-licence-changed-v1.hbs</code></td><td><code>AMENDED</code> sündmus (sama mall mis E3-T05)</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li><code>GET /reoffers?party_id=</code> ja <code>GET /reoffers/{id}</code>: kogus, tasu, tähtaeg.</li>
@@ -162,6 +166,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   MO-&gt;&gt;MO: REALLOCATION_DECISION
   MO-&gt;&gt;DF: dokument
   MO-&gt;&gt;ODS: released, reoffer, jääk, ajalugu</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>CronManager</td><td><code>reoffer-finalize.yml</code></td><td>kontrollib, kas kõik pakkumised on lõppseisus</td></tr><tr><td>Ruuter</td><td><code>Ruuter.private/mo/reallocation/POST/finalize.yml</code></td><td>lõplik otsus, dokument DF-i, ODS-i edastus</td></tr><tr><td>DataMapper</td><td><code>mo/reallocation-decision-data.hbs</code>, <code>ods/reallocation-export.hbs</code></td><td>otsuse andmed ja ODS-i formaat</td></tr><tr><td>Resql</td><td><code>pvt/GET/reoffer-summary.sql</code></td><td>kokkuvõte</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Töö <code>SYSTEM</code>: kui kõik <code>reoffer</code> kirjed aastale <code>Y</code> on lõppseisus (<code>PAID</code>, <code>DECLINED</code>, <code>EXPIRED</code>), koosta lõplik <strong>ümberjaotusotsus</strong> (MO otsus tüüp <code>REALLOCATION_DECISION</code>): iga jaotusüksuse jaoks vabanenud kogus, pakutud, vastu võetud, lõplik jääk. Dokument DF-i (E2-T06 mall). Lõplik jääk <code>FINAL_REMAINDER</code> kinnitub.</li>

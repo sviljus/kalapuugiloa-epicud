@@ -118,6 +118,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
     MO-&gt;&gt;MO: AWAITING_FEE_PAYMENT -&gt; CANCELLED
     MO-&gt;&gt;MO: released_opportunity
   end</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Ruuter</td><td>`Ruuter.private/mo/offer/GET</td><td>POST/offer.yml<code>, </code>accept.yml<code>, </code>decline.yml`</td></tr><tr><td>Resql</td><td><code>mo/GET/offer.sql</code>, <code>POST/licence-draft-save.sql</code>, <code>mo/POST/application-set-state.sql</code></td><td>andmepääs</td></tr><tr><td>DataMapper</td><td><code>mo/offer-view.hbs</code>, <code>mo/accept-input.hbs</code></td><td>pakkumise vaade ja nõustumise sisendi teisendus</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li><code>GET /fishing-licence-applications/{id}/offer</code> tagastab: otsuse number ja dokumendi link; iga <code>allocated_opportunity</code> rida koos <code>requested</code>, <code>allocated</code>, <code>changed_from_request</code>; arvutatud tasu (T02, kuvamiseks); tähtaeg P-05; vaide info.</li>
@@ -169,6 +171,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   SUM --&gt; MIN[&quot;minimum_cents = round(P-09 × total)&quot;]
   MIN --&gt; SNAP[&quot;snapshot (rate ID-d) arvutuse seletamiseks&quot;]
   CSV[&quot;CSV import (PTA_ADMIN)&quot;] --&gt; RATES</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Liquibase</td><td><code>lto/changelog/fee-rate.xml</code></td><td>tabel <code>fishing_right_fee_rate</code>; esimene laadimine <a href="fixtures/fee_rates_2027.csv" download>fixtures/fee_rates_2027.csv</a></td></tr><tr><td>Ruuter</td><td><code>Ruuter.private/lto/fee/POST/import-rates.yml</code>, <code>GET/calculate.yml</code></td><td>CSV import (<code>PTA_ADMIN</code>) ja arvutus</td></tr><tr><td>DataMapper</td><td><code>lto/fee-rates-csv-row.hbs</code></td><td>CSV rea teisendus tabelirea kujule</td></tr><tr><td>Resql</td><td><code>lto/POST/fee-rate-upsert.sql</code>, <code>GET/fee-rates.sql</code></td><td>kõik-või-mitte-midagi import</td></tr><tr><td>Teenusemoodul</td><td><code>fee-calculator</code></td><td><code>FeeCalculator.calculate</code>, decimal ümardus half up</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Seadistustabel <code>fishing_right_fee_rate</code>: <code>fishing_year</code>, <code>licence_kind</code>, <code>water_area_code</code>, <code>gear_type_code</code>, <code>species_code</code> (null = ei sõltu liigist), <code>unit</code>, <code>rate_eur</code> (decimal, 4 kohta), <code>source_annex</code> (nt „Lisa 1“), <code>valid_from</code>, <code>valid_to</code>. Iga aasta uus laadimine; vana jääb alles.</li>
@@ -220,6 +224,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   PG--&gt;&gt;MO: PAID
   MO-&gt;&gt;MO: AWAITING_FEE_PAYMENT -&gt; CONFIRMED
   MO--&gt;&gt;MO: sündmus FeePaid</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Teenusemoodul</td><td><code>payment-adapter</code></td><td><code>PaymentGatewayPort</code>: <code>mock</code> ja <code>http</code> adapterid</td></tr><tr><td>Ruuter</td><td><code>Ruuter.private/lto/payment/POST/create-order.yml</code>, <code>Ruuter.public/lto/payment/POST/notify.yml</code></td><td>tellimus ja makselahenduse tagasikutse</td></tr><tr><td>DataMapper</td><td><code>lto/payment-order.hbs</code>, <code>lto/payment-status.hbs</code></td><td>makselahenduse formaadi teisendus</td></tr><tr><td>Resql</td><td><code>lto/POST/payment-save.sql</code>, <code>POST/payment-set-state.sql</code></td><td><code>payment</code> olek</td></tr><tr><td>CronManager</td><td><code>payment-reconcile.yml</code></td><td><code>PENDING</code> maksete staatuse kontroll, kui tagasikutse jäi saabumata</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Liides <code>PaymentGatewayPort</code>: <code>createOrder(reference, amount_cents, currency, return_url, notify_url, description) → {payment_id, redirect_url}</code> ja <code>getStatus(payment_id)</code>. Realiseeri adapter olemasoleva kalaluba.ee makselahenduse vastu. Konkreetne lepe on sellest repost väljas, seega: tee port + <strong>mock-adapter</strong> + HTTP-adapteri karkass seadistuse taga (<code>payment.adapter=mock|http</code>), mis kasutab konfigureeritavat baas-URL-i. Mock-adapter peab toetama stsenaariume <code>PAID</code>, <code>FAILED</code>, <code>CANCELLED_BY_USER</code>, <code>PENDING</code>, <code>TIMEOUT</code>.</li>
@@ -260,6 +266,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   TX --&gt; ST[&quot;Taotlus -&gt; LICENCE_ISSUED&quot;]
   TX --&gt; EV[&quot;Outbox: FishingLicenceChanged&quot;]
   TX --&gt; N[&quot;Teavitus taotlejale&quot;]</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Ruuter</td><td><code>Ruuter.private/lto/licence/POST/issue.yml</code></td><td><code>FeePaid</code> → 3 päeva reegel → viimane kontroll → loa loomine ühe tehinguna</td></tr><tr><td>CronManager</td><td><code>licence-issue-retry.yml</code></td><td><code>scheduled_issue_at</code> saabudes proovib väljastamist uuesti</td></tr><tr><td>Resql</td><td><code>lto/POST/licence-create.sql</code>, <code>POST/licence-version-create.sql</code>, <code>POST/licence-lines-create.sql</code>, <code>POST/outbox-add.sql</code></td><td>loa, versiooni ja ridade loomine koos outbox-kirjega ühe CTE-lausega</td></tr><tr><td>Teenusemoodul</td><td><code>document-generator</code></td><td>loa PDF (A-23), ingliskeelne tõlge</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Käivitub sündmusest <code>FeePaid</code>.</li>
@@ -311,6 +319,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   FX-&gt;&gt;FX: dedupe event_id, koosta P1000-09
   FX-&gt;&gt;TL: edasta
   TL--&gt;&gt;FX: kinnitus</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>DataMapper</td><td><code>lto/fishing-licence-changed-v1.hbs</code></td><td><strong>sündmuse JSON</strong> loa andmetest (skeem <code>contracts/events/FishingLicenceChanged.v1.json</code>)</td></tr><tr><td>CronManager</td><td><code>outbox-publish.yml</code></td><td>outbox&#39;i regulaarne avaldamine (at-least-once)</td></tr><tr><td>Resql</td><td><code>lto/GET/outbox-pending.sql</code>, <code>POST/outbox-mark-sent.sql</code></td><td>avaldamata sündmused</td></tr><tr><td>Ruuter</td><td><code>Ruuter.private/lto/event/POST/publish.yml</code></td><td>edastus EE FLUX Serverile (teenus ise ei kuulu siia)</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Sündmuse skeem <code>FishingLicenceChanged</code> v1 (JSON Schema failina repos <code>contracts/events/</code>):<pre><code class="lang-json">{
@@ -353,6 +363,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   C --&gt; REL[&quot;released_opportunity kogu eraldatud kogusele&quot;]
   C --&gt; N[&quot;Teavitus taotlejale&quot;]
   C --&gt; AU[&quot;Audit&quot;]</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>CronManager</td><td><code>fee-deadline.yml</code></td><td>iga päev 00:05, kutsub Ruuteri route&#39;i</td></tr><tr><td>Ruuter</td><td><code>Ruuter.private/mo/offer/POST/cancel-unpaid.yml</code></td><td>tühistab, vabastab püügivõimalused, teavitab</td></tr><tr><td>Resql</td><td><code>mo/GET/unpaid-expired.sql</code>, <code>pvt/POST/released-opportunity-save.sql</code></td><td>valik (arvestab <code>fee_deadline_override</code>) ja vabastamine</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li><strong>Ajastatud töö</strong> (<code>SYSTEM</code>) iga päev 00:05: leia kõik taotlused, mille olek on <code>AWAITING_FEE_PAYMENT</code>, <code>now &gt; tähtaeg 23:59:59</code> ja mille <code>payment.state ∉ {PAID}</code>. <strong>Tähtaeg</strong> on <code>application.fee_deadline_override</code>, kui see on täidetud (seab <a href="E5-vaidlustamine.html">E5-T03</a>), muidu P-05. <strong>Välista</strong> olekud <code>ALLOCATION_DISPUTED</code> ning taotlused, millel on aktiivne vaie (E5), seega neid ei puututa („Ei puuduta vaidlustamisel olevaid püügivõimalusi“). Samuti ei puutu <code>PAID</code>, mille loa väljastamine ootab (3 päeva reegel või PTA blokk).</li>
@@ -384,6 +396,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   CAT --&gt; R[&quot;Adressaadi lahendus KOT-ist&quot;]
   R --&gt; MAIL[&quot;E-post&quot;]
   MAIL --&gt; LOG[&quot;Saatmise logi ja kordus&quot;]</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>DataMapper</td><td><code>notify/&lt;kood&gt;.hbs</code> (iga teavituse jaoks)</td><td>teavituse mallid ja i18n võtmed</td></tr><tr><td>Ruuter</td><td><code>Ruuter.private/notify/POST/send.yml</code></td><td>adressaadi lahendus KOT-ist, saatmine</td></tr><tr><td>Resql</td><td><code>notify/POST/log-save.sql</code></td><td>saatmise logi</td></tr><tr><td>CronManager</td><td><code>notify-retry.yml</code></td><td>ebaõnnestunud saatmiste kordus</td></tr></tbody></table></div>
 <p><strong>Tee.</strong> (1) <code>NotificationService.send(key, recipient, params)</code> ja mallid failidena (i18n <code>et</code>, valmis kohad <code>en</code>), muutujatega, HTML + plain text. (2) Adressaat on <code>contact_email</code>; kui puudub, osapoole peamine e-post KOT-ist; kui ka seda ei ole, <code>NOTIFICATION_NO_ADDRESS</code> auditisündmus ja PTA ülesanne. (3) Kõik teavitused salvestatakse (<code>notification_log</code>: võti, adressaat, saadetud, tulemus), sisu isikuandmeteta peale vajaliku. (4) Kordus 3 korda 1 h vahega. (5) Kõik teavitused sisaldavad taotluse numbrit ja linki, kuid mitte kunagi isikukoodi, maksekaardi ega karistusandmeid. (6) Taotleja ei saa teavitusi välja lülitada, mis on seadusest tulenevad (otsused, vaided).</p>
 <p><strong>Vastuvõtukriteeriumid.</strong></p>
 <div class="tw"><table><thead><tr><th>Olukord</th><th>Eeldus</th><th>Tegevus</th><th>Oodatud tulemus</th></tr></thead><tbody><tr><td><strong>Malli renderdamine</strong></td><td>–</td><td>send(&quot;licence.issued&quot;, …)</td><td>e-kiri sisaldab loa numbrit, kehtivust ja linki ning ei sisalda isikukoodi</td></tr><tr><td><strong>Aadress puudub</strong></td><td>contact_email on tühi ja KOT-is e-posti pole</td><td>–</td><td>kirjutatakse NOTIFICATION_NO_ADDRESS ja PTA ülesanne</td></tr><tr><td><strong>Tõrge</strong></td><td>SMTP ei vasta</td><td>–</td><td>kuni 3 korduskatset ja logi</td></tr><tr><td><strong>Kõik võtmed on kaetud</strong></td><td>–</td><td>–</td><td>kataloogi igal võtmel on et-mall (automaattest kontrollib)</td></tr></tbody></table></div>

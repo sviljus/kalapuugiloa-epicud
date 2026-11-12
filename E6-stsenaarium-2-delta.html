@@ -97,6 +97,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   PM --&gt; ENG
   ENG --&gt; OUT[&quot;allocation_result&quot;]
   RS --&gt; LATER[&quot;Reserv ümber reserve_release_date&quot;]</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Liquibase</td><td><code>pvt/changelog/new-entrant-reserve.xml</code></td><td><code>new_entrant_reserve_share</code>, <code>reserve_release_date</code></td></tr><tr><td>Teenusemoodul</td><td><code>allocation-engine</code></td><td>mode <code>PROACTIVE</code> (laiendus)</td></tr><tr><td>CronManager</td><td><code>proactive-run.yml</code></td><td>käivitus, kui <code>scenario = PROACTIVE</code></td></tr><tr><td>Ruuter</td><td><code>Ruuter.private/pvt/allocation-run/POST/start-proactive.yml</code></td><td>sama voog mis E2-T04, osalejad taotluseta</td></tr><tr><td>Resql</td><td><code>pvt/GET/participants-by-history.sql</code></td><td>osalejad ajaloo järgi</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Lisa <code>catch_opportunity.new_entrant_reserve_share</code> (decimal 0…1, vaikimisi P-14 = 0) ja <code>reserve_release_date</code> (tähtaeg, millal kasutamata reserv ümber jagatakse; vaikimisi puudub, st käsitsi).</li>
@@ -141,6 +143,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   else vaidlustab
     T-&gt;&gt;MO: dispute (E5)
   end</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Ruuter</td><td><code>Ruuter.private/mo/offer/POST/create-offer-based.yml</code>, <code>confirm.yml</code></td><td><code>OFFER_BASED</code> taotlus ja kinnitus</td></tr><tr><td>DataMapper</td><td><code>notify/proactive-offer.hbs</code>, <code>mo/offer-prefill.hbs</code></td><td>teade ja eeltäide</td></tr><tr><td>CronManager</td><td><code>offer-not-accepted.yml</code></td><td>P-05 möödudes <code>CANCELLED(OFFER_NOT_ACCEPTED)</code></td></tr><tr><td>Resql</td><td><code>mo/POST/application-create-offer-based.sql</code></td><td>taotluse loomine</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Kinnitatud otsuse järel (E2-T06) loo iga osalejale <strong><code>application</code> tüübiga <code>OFFER_BASED</code></strong> olekusse <code>AWAITING_FEE_PAYMENT</code> (E1-T01 olekumasin kasutab sama; <strong>lisa üleminek <code>OFFER_BASED</code>: loomisel <code>AWAITING_ALLOCATION</code> jäetakse vahele</strong>). <code>requested_opportunity</code> ridu ei ole; <code>allocated_opportunity</code> on pakkumise sisu. Taotluse puuduolevad väljad (kontakt, laev/kalur) eeltäidetakse KOT-ist, LAEVIS-est ja eelmise aasta loast; puudu jääv küsitakse nõustumisel (E3-T01 <code>accept</code> sisend).</li>
@@ -164,6 +168,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   C[&quot;fishing_year_config.scenario&quot;] --&gt; S{&quot;Väärtus&quot;}
   S -- APPLICATION_BASED --&gt; A[&quot;E1 taotlusvoor + E2-T04 käivitus&quot;]
   S -- PROACTIVE --&gt; B[&quot;E6-T01 käivitus, ANNUAL taotlus -&gt; ERR_SCENARIO_NOT_APPLICABLE&quot;]</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Liquibase</td><td><code>mo/changelog/scenario-config.xml</code></td><td>veerg <code>fishing_year_config.scenario</code></td></tr><tr><td>Ruuter</td><td><code>Ruuter.private/mo/application/POST/create.yml</code> (muudatus)</td><td><code>ERR_SCENARIO_NOT_APPLICABLE</code> PROACTIVE aastal</td></tr><tr><td>CronManager</td><td><code>allocation-run.yml</code>, <code>proactive-run.yml</code> (tingimus)</td><td>ainult õige stsenaariumi töö käivitub</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li><code>fishing_year_config.scenario</code> (vaikimisi <code>APPLICATION_BASED</code>).</li>

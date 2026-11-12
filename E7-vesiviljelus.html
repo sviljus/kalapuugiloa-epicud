@@ -110,6 +110,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   INSPECTION_DONE --&gt; DECIDED_APPROVED
   INSPECTION_DONE --&gt; DECIDED_REFUSED
   DECIDED_APPROVED --&gt; LICENCE_ISSUED</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Liquibase</td><td><code>mo/changelog/aquaculture.xml</code></td><td><code>aquaculture_application</code> ja seadistatav väljade kirjeldus</td></tr><tr><td>Ruuter</td><td><code>Ruuter.private/mo/aquaculture/*.yml</code></td><td>mustand, eeltäide, esitamine</td></tr><tr><td>Teenusemoodul</td><td><code>check-engine</code></td><td>seadistatavad kontrollid</td></tr><tr><td>Resql</td><td><code>mo/POST/aquaculture-create.sql</code>, <code>PATCH/aquaculture-patch.sql</code></td><td>andmepääs</td></tr><tr><td>DataMapper</td><td><code>mo/aquaculture-prefill.hbs</code></td><td>eeltäide</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Menetlustüüp <code>AQUACULTURE_LICENCE_APPLICATION</code> (MO): olekud <code>DRAFT</code>, <code>SUBMITTED</code>, <code>INSPECTION_SCHEDULED</code>, <code>INSPECTION_DONE</code>, <code>DECIDED_APPROVED</code>, <code>DECIDED_REFUSED</code>, <code>LICENCE_ISSUED</code>, <code>CANCELLED</code>. Üleminekud: <code>DRAFT→SUBMITTED→INSPECTION_SCHEDULED→INSPECTION_DONE→DECIDED_APPROVED→LICENCE_ISSUED</code> ja <code>INSPECTION_DONE→DECIDED_REFUSED</code>, <code>DRAFT→CANCELLED</code>, <code>SUBMITTED→CANCELLED</code> (taotleja tagasivõtmine kuni <code>INSPECTION_SCHEDULED</code>). Kasuta E1-T01 olekumasina mehhanismi (menetlustüübi konfiguratsioon).</li>
@@ -154,6 +156,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   OK--&gt;&gt;P: inspection_id
   OK-&gt;&gt;MO: InspectionResultReceived (result, findings, protokoll)
   MO-&gt;&gt;MO: INSPECTION_SCHEDULED -&gt; INSPECTION_DONE</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Teenusemoodul</td><td><code>inspection-adapter</code></td><td><code>InspectionPort</code> (OKAS-2) HTTP-adapter ja mock</td></tr><tr><td>Ruuter</td><td><code>Ruuter.private/mo/aquaculture/POST/plan-inspection.yml</code>, <code>Ruuter.public/mo/inspection/POST/result.yml</code></td><td>planeerimine ja tulemuse vastuvõtt</td></tr><tr><td>DataMapper</td><td><code>mo/inspection-request.hbs</code>, <code>mo/inspection-result.hbs</code></td><td>OKAS-2 formaatide teisendus</td></tr><tr><td>CronManager</td><td><code>inspection-poll.yml</code></td><td>tulemuse küsitlus, kui sündmust ei tule</td></tr><tr><td>Resql</td><td><code>mo/POST/inspection-save.sql</code></td><td>tulemuse salvestus</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Liides <code>InspectionPort</code> (OKAS-2): <code>planInspection(application_ref, site, requested_window) → {inspection_id}</code>, <code>getInspection(inspection_id) → {state, date, result, findings[], protocol_doc_ref}</code>. Realiseeri HTTP-adapter ja mock. <strong>Konkreetsed OKAS-2 API-d on väljaspool ulatust.</strong> Port on lepingu pind: sündmus <code>InspectionResultReceived {inspection_id, result: COMPLIANT|NON_COMPLIANT|PARTIAL, findings[], protocol_doc_ref}</code> võetakse vastu REST-lõpp-punktis <code>POST /integrations/inspections/result</code> (autentimine ühiskasutatava saladuse või allkirjaga, idempotentne <code>inspection_id</code> + <code>event_id</code>).</li>
@@ -182,6 +186,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   D -- REFUSE --&gt; R[&quot;Põhjendatud keeldumisotsus&quot;]
   L --&gt; N[&quot;Teavitus&quot;]
   R --&gt; N</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Ruuter</td><td>`Ruuter.private/mo/aquaculture/GET</td><td>POST/decision-pack.yml<code>, </code>decide.yml`</td></tr><tr><td>Resql</td><td><code>mo/GET/decision-pack.sql</code>, <code>lto/POST/licence-create.sql</code></td><td>andmepääs</td></tr><tr><td>DataMapper</td><td><code>notify/aquaculture-decision.hbs</code>, <code>mo/decision-document-data.hbs</code></td><td>teavitus ja dokument</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>API (<code>PTA_OFFICER</code>): <code>GET /admin/aquaculture/{id}/decision-pack</code> (taotlus, kontrollitulemused, kohapealse kontrolli tulemus ja leiud, ajalugu), <code>POST …/decide</code> <code>{outcome: APPROVE|REFUSE, reasoning ≥ 100 märki, conditions[]?, valid_from, valid_to?}</code>.</li>

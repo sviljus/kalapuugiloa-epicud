@@ -94,6 +94,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   MO-&gt;&gt;MO: dispute_hold seotud ridadel
   MO-&gt;&gt;PTA: ülesanne
   MO--&gt;&gt;T: kinnitus</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Liquibase</td><td><code>mo/changelog/dispute.xml</code></td><td><code>allocation_dispute</code>, tõendid, <code>dispute_hold</code></td></tr><tr><td>Ruuter</td><td><code>Ruuter.private/mo/dispute/POST/create.yml</code></td><td>esitamine, tõendid DF-i, taotluse olek, PTA ülesanne</td></tr><tr><td>Resql</td><td><code>mo/POST/dispute-create.sql</code>, <code>pvt/POST/dispute-hold-set.sql</code></td><td>andmepääs</td></tr><tr><td>DataMapper</td><td><code>notify/dispute-received.hbs</code></td><td>kinnitus</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Menetlustüüp <code>ALLOCATION_DISPUTE</code> (MO): olekud <code>SUBMITTED</code>, <code>UNDER_REVIEW</code>, <code>RESOLVED_ACCEPTED</code>, <code>RESOLVED_PARTIALLY</code>, <code>RESOLVED_REJECTED</code>, <code>WITHDRAWN</code>.</li>
@@ -134,6 +136,8 @@ Kontrollid: tähtaeg <code>decision.published_at + P-12 päeva</code> (kuni 23:5
   RESOLVED_PARTIALLY --&gt; [*]
   RESOLVED_REJECTED --&gt; [*]
   WITHDRAWN --&gt; [*]</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Ruuter</td><td>`Ruuter.private/mo/dispute/GET</td><td>POST/*.yml`</td></tr><tr><td>Resql</td><td><code>mo/POST/dispute-resolve.sql</code>, <code>pvt/PUT/result-correct.sql</code></td><td>otsus ja sisendi parandus (kaetakse <code>released_opportunity</code>-st)</td></tr><tr><td>Teenusemoodul</td><td><code>allocation-engine</code></td><td>ümberarvutus vaidlustaja sisendiga</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Töölaua API (<code>PTA_OFFICER</code>): <code>GET /admin/disputes?state=</code>, <code>GET …/{id}</code> (vaie, tõendid, arvutuse väljad <code>allocation_result</code>, <code>historical_sum_t</code> ja selle allikad), <code>POST …/{id}/start-review</code> (<code>SUBMITTED→UNDER_REVIEW</code>, ametnik määratakse).</li>
@@ -170,6 +174,8 @@ Kontrollid: tähtaeg <code>decision.published_at + P-12 päeva</code> (kuni 23:5
   Q -- jah --&gt; RE[&quot;Tasu uuesti, licence_draft kustutatakse, taotleja teeb accept uuesti&quot;]
   Q -- ei --&gt; KEEP[&quot;Sama pakkumine&quot;]
   DL --&gt; N[&quot;Teavitus dispute.resolved&quot;]</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Ruuter</td><td><code>Ruuter.private/mo/dispute/POST/finalize.yml</code></td><td>olek tagasi, <code>fee_deadline_override</code>, tasu uuesti</td></tr><tr><td>Resql</td><td><code>mo/POST/application-set-fee-deadline.sql</code>, <code>pvt/POST/dispute-hold-clear.sql</code></td><td>tähtaeg ja hold</td></tr><tr><td>DataMapper</td><td><code>notify/dispute-resolved.hbs</code></td><td>tulemuse teavitus</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Pärast <code>resolve</code>: taotlus <code>ALLOCATION_DISPUTED→AWAITING_FEE_PAYMENT</code> ja uus tasu tähtaeg <code>max(P-05, resolved_at + P-13 päeva)</code> (salvesta <code>application.fee_deadline_override</code>; E3-T06 töö peab selle eelistama P-05-le).</li>

@@ -98,6 +98,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   PVT-&gt;&gt;PVT: olek DRAFT
   S-&gt;&gt;PVT: õigusaktis määratud kuupäev
   PVT-&gt;&gt;P: avalikusta</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Liquibase</td><td><code>pvt/changelog/recreational-opportunity.xml</code></td><td><code>recreational_opportunity</code>, <code>opportunity_base</code></td></tr><tr><td>Ruuter</td><td>`Ruuter.private/pvt/recreational/POST</td><td>PUT/*.yml<code>, </code>Ruuter.public/pvt/recreational/GET/list.yml`</td></tr><tr><td>CronManager</td><td><code>recreational-publish.yml</code></td><td>avalikustamine määratud kuupäeval</td></tr><tr><td>Resql</td><td><code>pvt/GET/recreational-public.sql</code>, <code>POST/recreational-upsert.sql</code></td><td>andmepääs</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Andmemudel <code>recreational_opportunity</code> (PVT, teise tüübina E2-T01 <code>catch_opportunity</code> kõrval, ühise baastabeliga <code>opportunity_base</code> vastavalt PVT_DR-02): <code>id</code>, <code>season</code> (aasta või <code>valid_from</code>/<code>valid_to</code>), <code>product_code</code> (tootekood), <code>water_area_code</code>, <code>water_body_code</code> (veekogu, Eesti looduse infosüsteemi registrikood), <code>gear_type_code</code>, <code>gear_count_limit</code> (lubatud püügivahendite arv kaardi kohta), <code>angler_limit</code> (püüdjate piirarv; <code>null</code> = piirarvuta), <code>conditions</code> (tekst + koodid), <code>price_cents</code> (viide tasumäärale, T02), <code>publish_at</code> (avalikustamise aeg), <code>status</code> (<code>DRAFT</code>, <code>APPROVED</code>, <code>PUBLISHED</code>, <code>CLOSED</code>), <code>version</code>.</li>
@@ -135,6 +137,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   PAY--&gt;&gt;LTO: PAID
   LTO-&gt;&gt;LTO: kaart kehtivaks valid_from alusel
   LTO--&gt;&gt;K: elektrooniline kaart</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Ruuter</td><td><code>Ruuter.public/lto/fishing-card/POST/order.yml</code></td><td>tellimus; piirarvu kontroll; makse; kaart</td></tr><tr><td>Resql</td><td><code>pvt/POST/recreational-reserve.sql</code>, <code>lto/POST/fishing-card-create.sql</code></td><td>reserveerimine ja kaart</td></tr><tr><td>DataMapper</td><td><code>lto/fishing-card-document.hbs</code>, <code>notify/fishing-card.hbs</code></td><td>kaardi andmed ja teavitus</td></tr><tr><td>CronManager</td><td><code>fishing-card-reservation-expire.yml</code></td><td>vabastab maksmata reservatsioonid</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>API: <code>GET /public/recreational-opportunities</code> (T01), <code>POST /fishing-cards/orders</code> body <code>{opportunity_id, holder: {…}, valid_from, channel: &quot;KALALUBA&quot;}</code>. Autentimata ja autenditud kasutaja: autenditult eeltäidetakse isikuandmed (KL_UC-01, KOT), autentimata sisestatakse riik ja isikukood/muu tunnus ja nimi/sünniaeg (AS-IS.01_2.1.4.1). <code>holder</code>: nimi, sünniaeg, isikukood (või isikut tõendava dokumendi number välismaalasel), riik.</li>
@@ -168,6 +172,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   C --&gt; PAY[&quot;Makse&quot;]
   PAY --&gt; R[(&quot;Õigus LTO-s&quot;)]
   R --&gt; OUT[&quot;Kinnitus kanalisse&quot;]</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Teenusemoodul</td><td><code>hobby-right-service</code></td><td><code>HobbyRightService.purchase</code> (ühine tuum)</td></tr><tr><td>Ruuter</td><td><code>Ruuter.public/lto/hobby-right/POST/order.yml</code>, <code>Ruuter.public/lto/hobby-right/POST/sms.yml</code></td><td>veebi- ja SMS-kanal</td></tr><tr><td>DataMapper</td><td><code>lto/sms-input.hbs</code>, <code>lto/sms-output.hbs</code></td><td>SMS-operaatori formaat</td></tr><tr><td>Resql</td><td><code>lto/POST/hobby-right-create.sql</code></td><td>õigus</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li><strong>Ühine tuum</strong> <code>HobbyRightService.purchase(subject, duration_option, channel, payment_ref)</code>. Kanalid ainult kohandavad sisend- ja väljundkanalit.</li>

@@ -133,6 +133,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   CONFIRMED --&gt; LICENCE_ISSUED: luba loodud
   LICENCE_ISSUED --&gt; [*]
   CANCELLED --&gt; [*]</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Liquibase</td><td><code>mo/changelog/application.xml</code></td><td>tabelid <code>application</code>, <code>application_state_history</code>, number-järjend</td></tr><tr><td>Ruuter</td><td><code>Ruuter.private/mo/application/POST/transition.yml</code></td><td>sisemine route: kontrollib üleminekut tabelist, kutsub Resqli, audit (AL), avaldab sündmuse</td></tr><tr><td>Resql</td><td><code>mo/GET/allowed-transitions.sql</code>, <code>mo/POST/application-set-state.sql</code></td><td>lubatud üleminekute lugemine; olek + ajalugu ühe CTE-lausega (üks tehing)</td></tr><tr><td>DataMapper</td><td><code>mo/application-state-changed-event.hbs</code></td><td><code>ApplicationStateChanged</code> sündmuse payload</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Registreeri menetlustüüp <code>FISHING_LICENCE_APPLICATION</code> menetlustüüpide konfiguratsioonis. Olekud ja lubatud üleminekud on täpselt <a href="00-uldkontekst.html">3.1 tabelis</a>. Üleminekuid kontrollib olekumasin serveris, klient ei saa olekut otse kirjutada.</li>
@@ -174,6 +176,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   PA --&gt; E
   E --&gt; F[&quot;Kasutaja valib osapoole ja loaliigi&quot;]
   F --&gt; G[&quot;Kontekst salvestatakse sessiooni&quot;]</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Teenusemoodul</td><td><code>identity-adapter</code></td><td><code>IdentityProvider</code>, registriadapterid (RR, ÄR, Pääsuke) koos kordusloogikaga A-10 ja mockidega</td></tr><tr><td>Ruuter</td><td><code>Ruuter.private/kot/subject/GET/representation-context.yml</code></td><td>autentimise kontroll, adapterite kutse, esinduskonteksti koostamine</td></tr><tr><td>DataMapper</td><td><code>kot/registry-person.hbs</code>, <code>kot/registry-company.hbs</code>, <code>kot/registry-mandate.hbs</code></td><td>registrivastuste teisendus ühtsesse esinduskonteksti</td></tr><tr><td>Resql</td><td><code>kot/POST/context-save.sql</code></td><td>valitud osapoole ja loaliigi salvestus sessiooni</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Kui kasutaja ei ole autenditud, suuna olemasolevasse autentimisvoogu (KL_UC-01) ja naase samale sammule. Autentimist siin <strong>ei realiseerita uuesti</strong>. Kui KL_UC-01 teenust veel ei ole, loo adapter liidese <code>IdentityProvider.currentSubject()</code> taha ja mock arenduseks.</li>
@@ -221,6 +225,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   PVT[&quot;PVT: kehtestatud püügivõimalused&quot;] --&gt; M
   M --&gt; UI[&quot;Eeltäidetud vorm&quot;]
   UI --&gt;|&quot;PATCH koos version&quot;| M</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Liquibase</td><td><code>mo/changelog/application-draft.xml</code></td><td>taotluse väljad, <code>requested_opportunity</code>, <code>application_document</code></td></tr><tr><td>Ruuter</td><td>`Ruuter.private/mo/application/POST</td><td>GET</td></tr><tr><td>Resql</td><td><code>mo/POST/application-create.sql</code>, <code>application-patch.sql</code>, <code>application-delete.sql</code>, <code>GET/applications-by-party.sql</code></td><td>andmepääs</td></tr><tr><td>DataMapper</td><td><code>mo/prefill-from-laevis.hbs</code>, <code>mo/prefill-from-previous.hbs</code></td><td>eeltäite allikate teisendus taotluse vormi struktuuriks</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>API: <code>POST /fishing-licence-applications</code>, <code>GET /{id}</code>, <code>PATCH /{id}</code> (osaline uuendus, nõuab <code>If-Match</code>/<code>version</code>), <code>DELETE /{id}</code> (ainult <code>DRAFT</code>, viib olekusse <code>CANCELLED</code> põhjusega <code>DRAFT_DELETED</code>), <code>GET /?party_id=&amp;state=&amp;fishing_year=</code>.</li>
@@ -277,6 +283,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   BD --&gt; SAVE
   BU --&gt; SAVE
   TS --&gt; SAVE</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Teenusemoodul</td><td><code>check-engine</code></td><td><code>Check.run</code>, CHK-01…13 reeglid (välisregistrite päringud ja otsusloogika ei ole DSL-is)</td></tr><tr><td>Ruuter</td><td><code>Ruuter.private/mo/application/POST/run-checks.yml</code></td><td>kutsub kontrollimootorit, salvestab tulemused</td></tr><tr><td>Resql</td><td><code>mo/POST/check-result-save.sql</code>, <code>mo/GET/check-results.sql</code></td><td><code>check_result</code> salvestus ja lugemine</td></tr><tr><td>DataMapper</td><td><code>mo/check-result-view.hbs</code></td><td>tulemuste kuvamiseks arusaadav kuju (mis tuleb parandada)</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Realiseeri kontrollid kataloogi järgi. Iga kontroll tagastab <code>PASS</code>, <code>FAIL</code> (blokeerib esitamise), <code>NEEDS_DOCUMENT</code> (blokeerib, kuni dokument lisatud) või <code>NEEDS_OFFICER</code> (A-08: ei saa masinaga otsustada, ei blokeeri esitamist, loob PTA ülesande pärast esitamist).</li>
@@ -331,6 +339,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   else vähemalt üks ei läbinud
     MO--&gt;&gt;T: 422 koos kõigi mitteläbitud kontrollidega
   end</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Ruuter</td><td><code>Ruuter.private/mo/application/POST/submit.yml</code></td><td>järjestus: õigus → aken P-01..P-02 → kontrollid → üleminek → PTA ülesanded → teavitus</td></tr><tr><td>Resql</td><td><code>mo/GET/year-config.sql</code>, <code>mo/POST/application-set-state.sql</code>, <code>mo/POST/officer-task-create.sql</code></td><td>aken, olek, ülesanded</td></tr><tr><td>DataMapper</td><td><code>notify/application-submitted.hbs</code></td><td>kinnituskirja payload</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li><code>POST /fishing-licence-applications/{id}/submit</code> (nõuab <code>version</code>):<ol>
@@ -368,6 +378,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   V --&gt; T[&quot;GET /applications/id/timeline&quot;]
   L --&gt; UI[&quot;kalaluba.ee: Minu taotlused&quot;]
   T --&gt; UI</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Ruuter</td><td><code>Ruuter.private/mo/application/GET/list.yml</code>, <code>timeline.yml</code></td><td>loend ja ajajoon, <code>next_action</code> arvutus</td></tr><tr><td>Resql</td><td><code>mo/GET/applications-by-party-paged.sql</code>, <code>mo/GET/application-history.sql</code></td><td>lehitsemine ja filtrid</td></tr><tr><td>DataMapper</td><td><code>mo/next-action.hbs</code>, <code>mo/timeline-view.hbs</code></td><td>olekust i18n tekstid ja <code>next_action</code></td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>API: <code>GET /fishing-licence-applications?party_id=…</code> (loend: number, aasta, loaliik, olek, olekusilt, <code>next_action</code>, <code>deadline</code>), <code>GET /{id}/timeline</code> (olekuajalugu kasutajale arusaadavate tekstidega, ilma sisemiste põhjuskoodideta).</li>
@@ -394,6 +406,8 @@ footer{margin-top:2em;color:var(--mut);font-size:13px}
   V -- ok --&gt; C[(&quot;fishing_year_config versioonitud&quot;)]
   C --&gt; AL[&quot;Audit ja teavitus&quot;]
   C --&gt; U[&quot;Kasutavad: T05 aken, E2 käivitus, E3 tähtajad&quot;]</pre></div>
+<p><strong>Komponendid</strong> (jaotus A-37 järgi: kuhu mida panna).</p>
+<div class="tw"><table><thead><tr><th>Komponent</th><th>Artefakt</th><th>Ülesanne</th></tr></thead><tbody><tr><td>Liquibase</td><td><code>mo/changelog/fishing-year-config.xml</code></td><td>versioonitud tabel <code>fishing_year_config</code></td></tr><tr><td>Ruuter</td><td>`Ruuter.private/mo/admin/PUT</td><td>GET/fishing-year-config.yml`</td></tr><tr><td>Resql</td><td><code>mo/POST/year-config-save.sql</code>, <code>mo/GET/year-config.sql</code></td><td>versioonitud salvestus; vaikeväärtused puuduva rea korral</td></tr><tr><td>DataMapper</td><td><code>notify/year-config-changed.hbs</code></td><td>teavitus muudatusest</td></tr></tbody></table></div>
 <p><strong>Tee.</strong></p>
 <ol>
 <li>Andmemudel <code>fishing_year_config</code>: <code>fishing_year</code> (unikaalne), P-01…P-09 väärtused, <code>valid_from</code>, <code>changed_by</code>, <code>changed_at</code>, <code>change_reason</code>. Muudatused on versioonitud (vana kirje jääb alles).</li>
